@@ -1,35 +1,37 @@
-\documentclass[fontsize=14pt, DIV=calc, a4paper]{scrartcl}
+\documentclass[fontsize=12pt, DIV=calc, a4paper]{scrartcl}
 %\documentclass[12pt, DIV=calc, twosides=on, a4paper,twocolumn]{scrartcl}
 
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \usepackage{hyperref}
 \usepackage[modulo]{lineno}
-
-
+\usepackage{url}
 
 \setdefaultlanguage{french}
 %\setmainfont{Junicode}
 %\setsansfont{Junicode}
 
 
-\setmainfont{EB Garamond}
-\setsansfont{EB Garamond}
-\newfontface\smallcaps[RawFeature={+c2sc,+scmp}]{EB Garamond}
+%\setmainfont{EB Garamond}
+%\setsansfont{EB Garamond}
+%\newfontface\smallcaps[RawFeature={+c2sc,+scmp}]{EB Garamond}
 
 %\setmainfont[Ligatures=TeX]{Linux Libertine O}
 %\setsansfont{Linux Biolinum O}
 %\newfontface\sc[Letters=SmallCaps]{Linux Biolinum O}
 
 \title{\textsc{Hand Control}\\
-\Huge \textbf{}}
+ \textbf{Bibliographie}}
 
-\author{Luc Absil, Louis-Guillaume Dubois, Paul Janin\\
-\bigskip
-{\tt \small
-\href{mailto:luc.absil@supelec.fr}{luc.absil@supelec.fr}
-\href{mailto:louis-guillaume.dubois@supelec.fr}{louis-guillaume.dubois@supelec.fr}
-\href{mailto:paul.janin@supelec.fr}{paul.janin@supelec.fr}}}
+\author{Luc Absil\\
+\href{mailto:luc.absil@supelec.fr}{luc.absil@supelec.fr}\\
+~\\
+ Louis-Guillaume Dubois\\
+ \href{mailto:louis-guillaume.dubois@supelec.fr}{louis-guillaume.dubois@supelec.fr}\\
+ ~\\
+Paul Janin\\
+\href{mailto:paul.janin@supelec.fr}{paul.janin@supelec.fr}
+}
 \date{}
 
 \KOMAoptions{DIV=last}
@@ -57,17 +59,31 @@
 	\includegraphics[width=15cm]{#1}
 	\end{figure}
 }
-
+\bibliographystyle{plain}
 % pour les références
 \newcommand\rr[1]{\ref{#1} page~\pageref{#1}}
 \begin{document}
 \maketitle
-\section{Présentation de la synthèse}
-Cette synthèse documentaire s'intéresse à la plateforme de développement ROS pour le contrôle de systèmes automatisés, ainsi qu'au dispositif de détection de mouvement Kinect, 
-développé par Microsoft, et à son utilisation dans le cadre de notre projet de synthèse. On s'attachera notamment aux divers cadres d'utilisations possibles pour le Kinect.
-\bibliographystyle{plain}
-Je cite \cite{blagues}.
 
-Notre superbe biblio :
+\tableofcontents
+
+\section{Présentation}
+\subsection{Introduction}
+Cette synthèse documentaire s'intéresse à la plateforme de développement ROS pour le contrôle de systèmes automatisés, ainsi qu'au dispositif de détection de mouvement Kinect, développé par Microsoft, et à son utilisation dans le cadre de notre projet de synthèse. On s'attachera notamment aux divers cadres d'utilisations possibles pour le Kinect.
+
+\subsection{Présentation de la recherche documentaire}
+Notre sujet de synthèse portant sur des équipements récents (une kinect), aucun livre n'était répertorié sur le catalogue en ligne de la bibliothèque tricampus de Supélec. 
+
+Nous avons utilisé différents outils externes pour établir la bibliographie présentée dans ce document.
+
+\section{Inspection des bases de données}
+Nous avons utilisé la base de donnée \emph{Inspec} pour trouver les articles \cite{performance} \cite{Kinect-3D} \cite{Kinect-robotic}. Toutefois, les articles qui nous intéressaient n'étaient pas disponibles en accès libre. Sur la base de donnée \emph{Science Direct}, nous avons trouvé \cite{Alisher}.
+
+\section{Recherche des documentations des logiciels}
+Grâce à un moteur de recherche usuel, tel \emph{DuckDuckGo}, il nous a été facile de trouver la documentation officielle de ROS\cite{Tutoriels}, sur laquelle une page était consacrée aux drivers nécessaires\cite{ROS} pour utiliser une kinect, ainsi que nous projetons de le faire dans notre projet.
+
+Toujours en utilisant \emph{DuckDuckGo}, avec les mots clés « \emph{Kinect} » et « Microsoft », nous avons trouvé le site officiel de Microsoft sur le développement des kinects\cite{Kinectwindows}, ainsi que la documentation du projet \emph{OpenKinect} qui développe un pilote libre \emph{libfreenect}\cite{OpenKinect}, hébergé sur GitHub.
+
+
 \bibliography{biblio} 
 \end{document}
