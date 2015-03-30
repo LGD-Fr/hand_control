@@ -1,0 +1,66 @@
+\documentclass[fontsize=14pt, DIV=calc, a4paper]{scrartcl}
+%\documentclass[12pt, DIV=calc, twosides=on, a4paper,twocolumn]{scrartcl}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\usepackage{hyperref}
+\usepackage[modulo]{lineno}
+
+
+
+\setdefaultlanguage{french}
+%\setmainfont{Junicode}
+%\setsansfont{Junicode}
+
+
+%\setmainfont{EB Garamond}
+%\setsansfont{EB Garamond}
+%\newfontface\smallcaps[RawFeature={+c2sc,+scmp}]{EB Garamond}
+
+\setmainfont[Ligatures=TeX]{Linux Libertine O}
+\setsansfont{Linux Biolinum O}
+\newfontface\sc[Letters=SmallCaps]{Linux Biolinum O}
+
+\title{\textsc{Principes et composants de l'électronique\\
+\medskip
+\normalsize Partie I}\\
+\Huge \textbf{Étude du transformateur}}
+
+\author{Luc Absil, Emma Unucic\\
+\bigskip
+{\tt \small
+\href{mailto:luc.absil@supelec.fr}{luc.absil@supelec.fr}
+\href{mailto:emma.unucic@supelec.fr}{emma.unucic@supelec.fr}}}
+\date{Vendredi 13 mars 2015}
+
+\KOMAoptions{DIV=last}
+\KOMAoptions{DIV=10}
+
+% \figw{nomDuFichier.eps}{taille}{label}{ Mon beau titre.}
+\newcommand\figw[4
+]
+{
+	\begin{figure}[p]
+	\centering
+	\caption{\label{#3}  #4}
+	\includegraphics[#2]{#1}
+	\end{figure}
+}
+
+% \fig{nomDuFichier.eps}{label}{ Mon beau titre.}
+\newcommand\fig[3]
+{
+	\begin{figure}[h]
+	\centering
+
+
+	\caption{\label{#2}  #3}
+	\includegraphics[width=15cm]{#1}
+	\end{figure}
+}
+
+% pour les références
+\newcommand\rr[1]{\ref{#1} page~\pageref{#1}}
+\begin{document}
+\maketitle
+\end{document}
