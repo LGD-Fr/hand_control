@@ -12,11 +12,13 @@ Un etherpad est disponible à l'url suivante : [http://etherpad.rezometz.org/p/h
 ## Mail du responsable de projet (extrait) ##
 
 Donc sur le principe du projet :
+
 - on place une kinect pointant vers le haut de laquelle on va extraire un nuage de points (PointCloud) correspondant à une main placée au dessus. D'ailleurs, je pense qu'on prendre un gant de couleur unie bien criarde pour facilement filtrer les points d'intérêt et ne s'intéresse qu'à ceux de la main.
 - on régresse un plan sur le point cloud
 - on utilise les paramètres du plan pour définir le roll, pitch, altitude d'un drone;
 
-Il vous faut donc dans un premier temps: 
+Il vous faut donc dans un premier temps:
+ 
 - faire les tutoriels de ROS (jusqu'au tutoriel sur les publisher et subscribers en C++/Python); Pour installer ROS sur votre machine, c'est beaucoup plus simple à ma connaissance d'installer ubuntu (http://wiki.ros.org/)
 - regarder comment on définit/utilise des launch files sous ROS, ce qui facilite grandement le lancement de plusieurs noeuds (http://wiki.ros.org/roslaunch)
 - regarder et utiliser la kinect sous ROS en utilisant freenect;  Notamment regarder les nœuds et ce qu'ils publient sur leurs topics (http://wiki.ros.org/freenect_camera), il y a notamment une image de profondeur et une image RGB;
@@ -24,4 +26,4 @@ Il vous faut donc dans un premier temps:
 
 J'ai sorti une kinect, elle est posée sur un des bureaux de la smartroom.
 
-Pour rappel ,à la fin du projet, je vous demanderais de me remettre un rapport et de faire une soutenance. 
+Pour rappel ,à la fin du projet, je vous demanderais de me remettre un rapport et de faire une soutenance.
