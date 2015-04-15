@@ -9,6 +9,15 @@ Consulter le dossier /rechercheDoc
 
 Un etherpad est disponible à l'url suivante : [http://etherpad.rezometz.org/p/handcontrol](http://etherpad.rezometz.org/p/handcontrol)
 
+### Conclusion de la recherche ###
+
+Bibliothèques à regarder :
+
+- [OpenKinect / libfreenect](https://github.com/OpenKinect)
+- [PCL (PointCloud)](http://www.pointclouds.org/)
+
+Peut-être [Boost](http://www.boost.org/) et [GNU GSL](http://www.gnu.org/software/gsl/) si on ne trouve pas notre bonheur ci-dessus.
+
 ## Mail du responsable de projet (extrait) ##
 
 Donc sur le principe du projet :
