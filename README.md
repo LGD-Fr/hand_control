@@ -15,11 +15,10 @@ Bibliothèques à regarder :
 
 - [OpenKinect / libfreenect](https://github.com/OpenKinect)
 - [PCL (PointCloud)](http://www.pointclouds.org/) : beaucoup, beaucoup de choses...
-    * [pcl::NormalEstimation](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation.html)
-    * [pcl::NormalEstimationOMP](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation_o_m_p.html)
+    * [pcl::NormalEstimation](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation.html) & [pcl::NormalEstimationOMP](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation_o_m_p.html) pour régresser un plan
          - en particulier [computePointNormal](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation.html#afa0dd0bf400977f40eb91f08750bfa17) qui sert l’équation du plan sur un plateau
-    * [openni_wrapper::DeviceKinect](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_device_kinect.html)
-    * [openni_wrapper::OpenNIDevice](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_open_n_i_device.html)
+    * [pcl::ConditionalRemoval](http://docs.pointclouds.org/trunk/classpcl_1_1_conditional_removal.html) pour filtrer les points (critère de profondeur (plus simple a priori) ou couleur)
+    * [openni_wrapper::DeviceKinect](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_device_kinect.html) & [openni_wrapper::OpenNIDevice](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_open_n_i_device.html) pour parler à la Kinect
 
 Peut-être [GNU GSL](http://www.gnu.org/software/gsl/) si on ne trouve pas notre bonheur ci-dessus (peu probable).
 
