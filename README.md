@@ -14,7 +14,7 @@ Un etherpad est disponible à l'url suivante : [http://etherpad.rezometz.org/p/h
 Bibliothèques à regarder :
 
 - [OpenKinect / libfreenect](https://github.com/OpenKinect)
-- [PCL](PointCloud)](http://www.pointclouds.org/) : beaucoup, beaucoup de choses...
+- [PCL (PointCloud)](http://www.pointclouds.org/) : beaucoup, beaucoup de choses...
     * [pcl::NormalEstimation](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation.html)
     * [openni_wrapper::DeviceKinect](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_device_kinect.html)
     * [openni_wrapper::OpenNIDevice](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_open_n_i_device.html)
