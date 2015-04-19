@@ -23,7 +23,10 @@ Bibliothèques à regarder :
 Peut-être [GNU GSL](http://www.gnu.org/software/gsl/) si on ne trouve pas notre bonheur ci-dessus (peu probable).
 
 ### Important ###
-Avant de coder, regarder [les conventions d’écriture du code du projet ROS](http://wiki.ros.org/CppStyleGuide).
+Avant de coder, regarder :
+
+- [les conventions d’écriture du code du projet ROS](http://wiki.ros.org/CppStyleGuide)
+- [le guide du développeur](http://wiki.ros.org/DevelopersGuide)
 
 ## Mail du responsable de projet (extrait) ##
 
