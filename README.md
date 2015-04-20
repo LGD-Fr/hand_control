@@ -13,7 +13,7 @@ Un etherpad est disponible à l'url suivante : [http://etherpad.rezometz.org/p/h
 
 Bibliothèques à regarder :
 
-- [OpenKinect / libfreenect](https://github.com/OpenKinect)
+- [OpenKinect / libfreenect](https://github.com/OpenKinect), à ne pas utiliser directement, cf. openni_grabber de PCL
 - [PCL (PointCloud)](http://www.pointclouds.org/) : beaucoup, beaucoup de choses...
     * interface ROS [ici](http://wiki.ros.org/perception_pcl?distro=indigo) et [là](http://wiki.ros.org/pcl)
     * [les tutoriels](http://www.pointclouds.org/documentation/tutorials/)
