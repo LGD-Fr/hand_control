@@ -20,7 +20,9 @@ Bibliothèques à regarder :
          - en particulier [computePointNormal](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation.html#afa0dd0bf400977f40eb91f08750bfa17) qui sert l’équation du plan sur un plateau
          - explication [ici](http://www.pointclouds.org/documentation/tutorials/normal_estimation.php#normal-estimation)
     * [pcl::ConditionalRemoval](http://docs.pointclouds.org/trunk/classpcl_1_1_conditional_removal.html) pour filtrer les points (critère de profondeur (plus simple a priori) ou couleur)
-
+- AR Drone :
+    * [ardrone_autonomy](https://github.com/AutonomyLab/ardrone_autonomy/tree/master#sending-commands-to-ar-drone)
+    * [
 
 Pour l’interface Kinect on a le choix entre :
 
