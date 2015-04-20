@@ -24,8 +24,6 @@ Bibliothèques à regarder :
     * [openni_wrapper::DeviceKinect](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_device_kinect.html) & [openni_wrapper::OpenNIDevice](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_open_n_i_device.html) pour parler à la Kinect
     * [openni_grabber](http://www.pointclouds.org/documentation/tutorials/openni_grabber.php#openni-grabber) idem
 
-Peut-être [GNU GSL](http://www.gnu.org/software/gsl/) si on ne trouve pas notre bonheur ci-dessus (peu probable).
-
 ### Important ###
 Avant de coder, regarder :
 
