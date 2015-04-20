@@ -15,6 +15,7 @@ Bibliothèques à regarder :
 
 - [OpenKinect / libfreenect](https://github.com/OpenKinect)
 - [PCL (PointCloud)](http://www.pointclouds.org/) : beaucoup, beaucoup de choses...
+    * interface ROS [ici](http://wiki.ros.org/perception_pcl?distro=indigo) et [là](http://wiki.ros.org/pcl)
     * [les tutoriels](http://www.pointclouds.org/documentation/tutorials/)
     * [pcl::NormalEstimation](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation.html) & [pcl::NormalEstimationOMP](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation_o_m_p.html) pour régresser un plan
          - en particulier [computePointNormal](http://docs.pointclouds.org/trunk/classpcl_1_1_normal_estimation.html#afa0dd0bf400977f40eb91f08750bfa17) qui sert l’équation du plan sur un plateau
