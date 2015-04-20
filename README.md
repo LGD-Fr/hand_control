@@ -22,7 +22,6 @@ Bibliothèques à regarder :
     * [pcl::ConditionalRemoval](http://docs.pointclouds.org/trunk/classpcl_1_1_conditional_removal.html) pour filtrer les points (critère de profondeur (plus simple a priori) ou couleur)
 - AR Drone :
     * [ardrone_autonomy](https://github.com/AutonomyLab/ardrone_autonomy/tree/master#sending-commands-to-ar-drone)
-    * [
 
 Pour l’interface Kinect on a le choix entre :
 
