@@ -27,8 +27,10 @@ Pour l’interface Kinect on a le choix entre :
 - l’interface Kinect => pcl::PointCloud,  qui récupère directement un PointCloud utilisable par PCL à partir de la Kinect :
     * [openni_wrapper::DeviceKinect](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_device_kinect.html) & [openni_wrapper::OpenNIDevice](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_open_n_i_device.html) pour parler à la Kinect
     * [openni_grabber](http://www.pointclouds.org/documentation/tutorials/openni_grabber.php#openni-grabber) idem
-- l’interface  Kinect => sensor_msgs::Image, qui récupère l’information brute de la Kinect, à convertir ensuite en pcl::PointCloud avec le package [perception_pcl](http://wiki.ros.org/perception_pcl?distro=indigo) :
+- l’interface  Kinect => sensor_msgs::Image, qui récupère l’information brute de la Kinect, à convertir ensuite en pcl::PointCloud avec le package [perception_pcl](http://wiki.ros.org/perception_pcl?distro=indigo) ou [ros_pcl](http://wiki.ros.org/pcl_ros?distro=indigo) :
     * [OpenKinect / libfreenect](https://github.com/OpenKinect)
+
+Publication & Souscription à des topics de PointCloud avec [pcl_ros](http://wiki.ros.org/pcl_ros?distro=indigo)
 
 ### Important ###
 Avant de coder, regarder :
