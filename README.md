@@ -23,7 +23,20 @@ git clone git@bitbucket.org:_Luc_/handcontrol.git
 mv -t ~/hand_control_ws/src handcontrol/* handcontrol/.git
 rmdir handcontrol
 ```
-Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src».
+Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src». Il est ensuite possible de compiler :
+
+```
+#!sh
+cd ~/hand_control_ws
+catkin_make
+```
+
+Puis pour faciliter le développement : 
+```
+#!sh
+source ~/hand_control_ws/devel/setup.bash
+echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
+```
 
 Cf. le Wiki pour l’installation de ROS, PCL et des pilotes pour la Kinect et le drone.
 
