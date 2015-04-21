@@ -25,6 +25,8 @@ rmdir handcontrol
 ```
 Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src».
 
+Cf. le Wiki pour l’installation de ROS, PCL et des pilotes pour la Kinect et le drone.
+
 ## Recherche documentaire ##
 Consulter le dossier /rechercheDoc
 
