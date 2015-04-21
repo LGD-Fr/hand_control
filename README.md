@@ -29,7 +29,7 @@ Pour l’interface Kinect on a le choix entre :
     * [openni_wrapper::DeviceKinect](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_device_kinect.html) & [openni_wrapper::OpenNIDevice](http://docs.pointclouds.org/trunk/classopenni__wrapper_1_1_open_n_i_device.html) pour parler à la Kinect
     * openni_grabber : [tuto](http://www.pointclouds.org/documentation/tutorials/openni_grabber.php#openni-grabber), [doc](http://docs.pointclouds.org/trunk/classpcl_1_1_open_n_i_grabber.html)
 - l’interface fournie par les packages ROS :
-    * [OpenKinect / libfreenect](https://github.com/OpenKinect) qui publie des sensor_msgs::Image
+    * [OpenKinect / libfreenect](https://github.com/OpenKinect) avec [freenect_stack](http://wiki.ros.org/freenect_stack) qui publie des sensor_msgs::Image
     * puis conversion des sensor_msgs::Image en pcl::PCLPointCloud2 avec [pcl_conversions::moveToPCL](http://docs.ros.org/indigo/api/pcl_conversions/html/namespacepcl__conversions.html#a40366a910d7ce4ae63b121150381098d) du package [perception_pcl](http://wiki.ros.org/perception_pcl?distro=indigo), cf. [pcl_ros](http://wiki.ros.org/pcl_ros?distro=indigo)
     * puis utilisation avec [pcl_ros](http://wiki.ros.org/pcl_ros?distro=indigo) (conversion automatique std_msgs/PointCloud2 => PointCloud), sinon conversion manuelle avec [pcl::fromPCLPointCloud2](http://docs.pointclouds.org/trunk/namespacepcl.html#a89aca82e188e18a7c9a71324e9610ec9) ou [pcl::fromROSMsg](http://docs.pointclouds.org/trunk/namespacepcl.html#a22b3a98851964a79fafa7b9e543b3c75)
 
