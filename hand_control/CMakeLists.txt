@@ -7,8 +7,12 @@ project(hand_control)
 find_package(catkin REQUIRED COMPONENTS
   ardrone_autonomy
   pcl_ros
+  pcl_msgs
+  pcl_conversions
   roscpp
   std_msgs
+  freenect_camera
+  freenect_launch
 )
 
 ## System dependencies are found with CMake's conventions
