@@ -12,6 +12,7 @@ Après avoir créé un espace de travail catkin :
 #!sh
 mkdir -p ~/hand_control_ws/src
 cd ~/hand_control_ws/src
+source /opt/ros/indigo/setup.bash
 catkin_init_workspace
 
 ```
@@ -34,8 +35,11 @@ catkin_make
 Puis pour faciliter le développement : 
 ```
 #!sh
+source /opt/ros/indigo/setup.bash
 source ~/hand_control_ws/devel/setup.bash
+echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
+
 ```
 
 ### Important ###
