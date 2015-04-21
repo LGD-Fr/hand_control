@@ -21,6 +21,8 @@ vous devez cloner le dépôt de telle sorte que le dossier «hand_control» se s
 ```
 #!sh
 git clone git@bitbucket.org:_Luc_/handcontrol.git
+# ou bien : git clone https://Username@bitbucket.org/_Luc_/handcontrol.git
+# (changer Username)
 mv -t ~/hand_control_ws/src handcontrol/* handcontrol/.git
 rmdir handcontrol
 ```
