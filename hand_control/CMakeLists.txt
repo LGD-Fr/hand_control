@@ -6,9 +6,7 @@ project(hand_control)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   ardrone_autonomy
-  freenect_stack
   pcl_ros
-  perception_pcl
   roscpp
   std_msgs
 )
