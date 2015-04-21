@@ -38,4 +38,11 @@ source ~/hand_control_ws/devel/setup.bash
 echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 ```
 
-Cf. le Wiki pour l’installation de ROS, PCL et des pilotes pour la Kinect et le drone.
+### Important ###
+
+Avant de coder, regarder :
+
+- [les conventions d’écriture du code du projet ROS](http://wiki.ros.org/CppStyleGuide)
+- [le guide du développeur](http://wiki.ros.org/DevelopersGuide)
+
+Cf. le [Wiki](https://bitbucket.org/_Luc_/handcontrol/wiki/Home) pour le reste de la documentation et le résultat des recherches.
