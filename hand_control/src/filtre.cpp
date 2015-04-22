@@ -18,12 +18,24 @@ class Callback {
       // filtrage
       double zmax(0.);
       ros::param::getCached("zmax", zmax);
+      ROS_INFO("zmax : %f", zmax);
       z_filtre.setFilterLimits(0.0, zmax);
       z_filtre.setInputCloud(pcl);
       z_filtre.filter(*pcl);
       // publication
       publisher.publish(pcl);
       ROS_INFO("PointCloud published");
+      ROS_INFO("filtered cloud :");
+      for(int i = 0; i < pcl->points.size(); ++i)
+      {
+        ROS_INFO("\nx : %f\ny : %f\nz : %f\nr : %d\ng : %d\nb : %d",
+                pcl->points[i].x,
+                pcl->points[i].y,
+                pcl->points[i].z,
+                pcl->points[i].r,
+                pcl->points[i].g,
+                pcl->points[i].b);
+      }
     }
 
     Callback(ros::Publisher& pub) : publisher(pub), z_filtre()

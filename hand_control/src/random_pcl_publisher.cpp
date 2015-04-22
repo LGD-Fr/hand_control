@@ -14,7 +14,7 @@ class Generator
   public:
     Generator(int l) : length(l), cgen()
     {
-      UGenerator::Parameters params(-100, 100,-1);
+      UGenerator::Parameters params(0, 900, -1);
       cgen.setParameters(params);
     }
 
