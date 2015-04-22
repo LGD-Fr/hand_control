@@ -1,0 +1,9 @@
+<launch>
+  <param name="zmax" value="100." type="double" />
+  <node name="filtre_z" pkg="hand_control" type="filtre">
+    <remap from="filtre_input" to="random_pcl"/>
+  </node>
+  <node name="publisher" pkg="hand_control" type="random_pcl_publisher" >
+    <remap from="random_output" to="random_pcl"/>
+  </node>
+</launch>
