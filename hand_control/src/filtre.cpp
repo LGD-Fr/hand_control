@@ -2,7 +2,7 @@
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
 
-typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
+typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloud;
 
 class Callback {
   public:
