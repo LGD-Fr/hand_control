@@ -12,9 +12,9 @@ typedef pcl::common::UniformGenerator<float> UGenerator;
 class Generator
 {
   public:
-    Generator(int l) : length(l), cgen()
+    Generator(int len, double m, double M) : length(len), min(m), max(M), cgen()
     {
-      UGenerator::Parameters params(0, 900, -1);
+      UGenerator::Parameters params(min, max, -1);
       cgen.setParameters(params);
     }
 
@@ -40,16 +40,54 @@ class Generator
   private:
     pcl::common::CloudGenerator<pcl::PointXYZRGB, UGenerator> cgen;
     int length;
+    double min, max;
 };
 
 int
 main(int argc, char** argv)
 {
   ros::init(argc, argv, "random_pcl_publisher");
-  ros::NodeHandle node;
+  ros::NodeHandle node("random");
+  // paramètres
+  double freq;
+  if (node.getParam("freq", freq))
+  {
+    ROS_INFO("freq : %f" , freq);
+  } else {
+    node.setParam("freq", 10);
+    node.getParam("freq", freq);
+    ROS_INFO("freq : %f (default value)", freq);
+  }
+  double min, max;
+  if (node.getParam("min", min))
+  {
+    ROS_INFO("min : %f" , min);
+  } else {
+    node.setParam("min", 0.);
+    node.getParam("min", min);
+    ROS_INFO("min : %f (default value)", min);
+  }
+  if (node.getParam("max", max))
+  {
+    ROS_INFO("max : %f" , max);
+  } else {
+    node.setParam("max", 100.);
+    node.getParam("max", max);
+    ROS_INFO("max : %f (default value)", max);
+  }
+  int length;
+  if (node.getParam("length", length))
+  {
+    ROS_INFO("length : %d" , length);
+  } else {
+    node.setParam("length", 10);
+    node.getParam("length", length);
+    ROS_INFO("length : %d (default value)", length);
+  }
+  // initialisation
   ros::Publisher  publisher = node.advertise<PointCloud>("random_output", 1);
-  Generator generator(5);
-  ros::Rate loop_rate(0.5);
+  Generator generator(length, min, max);
+  ros::Rate loop_rate(freq);
   ROS_INFO("node started");
   while (ros::ok())
   {
