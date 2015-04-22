@@ -112,6 +112,9 @@ add_executable(filtre src/filtre.cpp)
 target_link_libraries(filtre ${catkin_LIBRARIES})
 add_dependencies(filtre ${catkin_EXPORTED_TARGETS})
 
+add_executable(random_pcl_publisher src/random_pcl_publisher.cpp)
+target_link_libraries(random_pcl_publisher ${catkin_LIBRARIES})
+add_dependencies(random_pcl_publisher ${catkin_EXPORTED_TARGETS})
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(hand_control_node hand_control_generate_messages_cpp)
