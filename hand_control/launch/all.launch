@@ -1,0 +1,5 @@
+
+<launch>
+  <include file="$(find hand_control)/launch/freenect-registered-xyzrgb.launch">
+  </include>
+</launch>
