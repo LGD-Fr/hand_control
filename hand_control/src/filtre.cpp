@@ -2,26 +2,32 @@
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
 
-class Filtre {
-  private:
-    typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloud;
-    ros::NodeHandle node;
-    ros::Subscriber sub;
-    void callback(PointCloud&);
+typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloud;
+
+class Callback
+{
   public:
-    Filtre()
+    operator()(const PointCloud::Ptr& msg)
     {
-      ros::init(argc, argv, "filtre");
-      callback(PointCloud& msg)
-      {
-        
-      }
-      subscriber = node.subscribe<PointCloud>("input", 1, callback);
-      ros::spin();
+      pub.publish(*msg);
     }
+
+    Callback(ros::NodeHandle& node)
+    {
+      pub = node.advertise<PointCloud>("output", 1);
+    }
+
+  private:
+    ros::Publisher pub;
 };
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
-  Filtre f();
+  ros::init(argc, argv, "filtre");
+  ros::NodeHandle node;
+  Callback callback(node);
+  ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
+  ros::spin();
+  return 0;
 }
