@@ -2,27 +2,26 @@
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
 
-typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloud;
+typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
 
-class Callback
-{
+class Callback {
   public:
-    operator()(const PointCloud::Ptr& msg)
-    {
-      pub.publish(*msg);
-    }
-
+    void operator()(const PointCloud::ConstPtr& msg)
+      {
+        // copie du nuage de point
+        PointCloud pcl = *msg;
+        // TODO : ôter les mauvais points
+        publisher.publish(pcl);
+      }
     Callback(ros::NodeHandle& node)
-    {
-      pub = node.advertise<PointCloud>("output", 1);
-    }
-
+      {
+        publisher = node.advertise<PointCloud>("output", 1);
+      }
   private:
-    ros::Publisher pub;
+    ros::Publisher publisher;
 };
 
-int
-main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "filtre");
   ros::NodeHandle node;

@@ -108,7 +108,9 @@ include_directories(
 # )
 
 ## Declare a cpp executable
-# add_executable(hand_control_node src/hand_control_node.cpp)
+add_executable(filtre src/filtre.cpp)
+target_link_libraries(filtre ${catkin_LIBRARIES})
+add_dependencies(filtre ${catkin_EXPORTED_TARGETS})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
