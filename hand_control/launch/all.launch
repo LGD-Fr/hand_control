@@ -1,5 +1,12 @@
 
 <launch>
-  <include file="$(find hand_control)/launch/freenect-registered-xyzrgb.launch">
-  </include>
+
+  <include file="$(find hand_control)/launch/freenect-registered-xyzrgb.launch"/>
+  
+  <param name="zmax" value="50.0" type="double"/>
+
+  <node name="filtre_z" pkg="hand_control" type="filtre">
+    <remap from="filtre_input" to="/camera/xyzrgb/points"/>
+  </node>
+
 </launch>

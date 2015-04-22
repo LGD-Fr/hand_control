@@ -14,7 +14,7 @@
     <arg name="hw_registered_processing"        value="true" />
 
     <!-- remapping -->
-    <arg name="depth_registered"                value="xyzrgb_pcl" />
+    <arg name="depth_registered"                value="xyzrgb"/>
 
   </include>
 </launch>
