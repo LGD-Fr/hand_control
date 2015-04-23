@@ -12,7 +12,8 @@ typedef pcl::common::UniformGenerator<float> UGenerator;
 class Generator
 {
   public:
-    Generator(int len, double m, double M) : length(len), min(m), max(M), cgen()
+    Generator(int len, double m, double M)
+    : length(len), min(m), max(M), cgen()
     {
       UGenerator::Parameters params(min, max, -1);
       cgen.setParameters(params);
@@ -23,16 +24,11 @@ class Generator
     {
       PointCloud::Ptr pcl(new PointCloud());
       cgen.fill(length, length, *pcl);
-      ROS_INFO("random cloud :");
-      for(int i = 0; i < pcl->points.size(); ++i)
+      for (int i = 0; i < pcl->points.size(); ++i)
       {
-        ROS_INFO("\nx : %f\ny : %f\nz : %f\nr : %d\ng : %d\nb : %d",
-                pcl->points[i].x,
-                pcl->points[i].y,
-                pcl->points[i].z,
-                pcl->points[i].r,
-                pcl->points[i].g,
-                pcl->points[i].b);
+        pcl->points[i].r = (uint8_t) 255;
+        pcl->points[i].g = (uint8_t) 255;
+        pcl->points[i].b = (uint8_t) 0;
       }
       return pcl;
     }

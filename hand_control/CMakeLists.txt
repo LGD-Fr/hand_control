@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(hand_control)
 
+#set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -116,6 +117,10 @@ add_dependencies(filtre ${catkin_EXPORTED_TARGETS})
 add_executable(random_pcl_publisher src/random_pcl_publisher.cpp)
 target_link_libraries(random_pcl_publisher ${catkin_LIBRARIES})
 add_dependencies(random_pcl_publisher ${catkin_EXPORTED_TARGETS})
+
+add_executable(pcl_displayer src/pcl_displayer.cpp)
+target_link_libraries(pcl_displayer ${catkin_LIBRARIES})
+add_dependencies(pcl_displayer ${catkin_EXPORTED_TARGETS})
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(hand_control_node hand_control_generate_messages_cpp)

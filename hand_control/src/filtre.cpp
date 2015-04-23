@@ -25,17 +25,6 @@ class Callback {
       // publication
       publisher.publish(pcl);
       ROS_INFO("PointCloud published");
-      ROS_INFO("filtered cloud :");
-      for(int i = 0; i < pcl->points.size(); ++i)
-      {
-        ROS_INFO("\nx : %f\ny : %f\nz : %f\nr : %d\ng : %d\nb : %d",
-                pcl->points[i].x,
-                pcl->points[i].y,
-                pcl->points[i].z,
-                pcl->points[i].r,
-                pcl->points[i].g,
-                pcl->points[i].b);
-      }
     }
 
     Callback(ros::Publisher& pub) : publisher(pub), z_filtre()
