@@ -85,7 +85,7 @@ main(int argc, char** argv)
     ROS_INFO("length : %d (default value)", length);
   }
   // initialisation
-  ros::Publisher  publisher = node.advertise<PointCloud>("random_output", 1);
+  ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
   Generator generator(length, min, max);
   ros::Rate loop_rate(freq);
   ROS_INFO("node started");

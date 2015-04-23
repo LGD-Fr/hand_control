@@ -52,7 +52,7 @@ int
 main(int argc, char** argv)
 {
   ros::init(argc, argv, "filtre");
-  ros::NodeHandle node;
+  ros::NodeHandle node("filtre");
 
   // récupération des paramètres
   double zmax(0);
@@ -66,9 +66,9 @@ main(int argc, char** argv)
   }
 
   // initialisation
-  ros::Publisher  publisher = node.advertise<PointCloud>("filtre_output", 1);
+  ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
   Callback callback(publisher);
-  ros::Subscriber subscriber = node.subscribe<PointCloud>("filtre_input", 1, callback);
+  ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
 
   // démarrage
   ROS_INFO("node started");
