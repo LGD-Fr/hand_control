@@ -35,7 +35,7 @@ class Callback {
 main(int argc, char** argv)
 {
   ros::init(argc, argv, "pcl_displayer");
-  ros::NodeHandle node("pcl_displayer");
+  ros::NodeHandle node("displayer");
 
   // initialisation
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, Callback());
