@@ -121,6 +121,10 @@ add_dependencies(random_pcl_publisher ${catkin_EXPORTED_TARGETS})
 add_executable(pcl_displayer src/pcl_displayer.cpp)
 target_link_libraries(pcl_displayer ${catkin_LIBRARIES})
 add_dependencies(pcl_displayer ${catkin_EXPORTED_TARGETS})
+
+add_executable(normal_estimator src/normal_estimator.cpp)
+target_link_libraries(normal_estimator ${catkin_LIBRARIES})
+add_dependencies(normal_estimator ${catkin_EXPORTED_TARGETS})
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(hand_control_node hand_control_generate_messages_cpp)
