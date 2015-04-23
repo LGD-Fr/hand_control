@@ -17,7 +17,7 @@ class Callback {
       *pcl = *msg;
       // filtrage
       double zmax(0.);
-      ros::param::getCached("zmax", zmax);
+      ros::param::getCached("/filtre/zmax", zmax);
       ROS_INFO("zmax : %f", zmax);
       z_filtre.setFilterLimits(0.0, zmax);
       z_filtre.setInputCloud(pcl);
