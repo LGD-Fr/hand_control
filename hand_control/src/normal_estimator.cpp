@@ -9,6 +9,17 @@ typedef pcl::PointCloud<Point> PointCloud;
 typedef Eigen::Vector4f PCLCoord; // vecteur, accès par v(0), v(1)...
 typedef geometry_msgs::Quaternion ROSCoord; // struct : x, y, z, w
 
+const ROSCoord::ConstPtr
+PCLCoord_to_ROSCoord(const PCLCoord& pcl_coord)
+{
+  ROSCoord::Ptr ros_coord(new ROSCoord());
+  ros_coord->x = pcl_coord(0); // a
+  ros_coord->y = pcl_coord(1); // b
+  ros_coord->z = pcl_coord(2); // c
+  ros_coord->w = pcl_coord(3); // d
+  return ros_coord;
+}
+
 int
 main(int argc, char** argv)
 {
