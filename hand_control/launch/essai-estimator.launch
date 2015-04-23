@@ -1,0 +1,8 @@
+<launch>
+  <include file="$(find hand_control)/launch/essai-filtre.launch"/>
+
+  <node name="estimator" pkg="hand_control" type="normal_estimator">
+    <remap from="/estimator/input" to="/filtre/output"/>
+  </node>
+
+</launch>
