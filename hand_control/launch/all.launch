@@ -9,4 +9,8 @@
 
   <param name="/filtre/zmax" value="50.0" type="double"/>
 
+  <node name="normal_estimator" pkg="hand_control" type="normal_estimator">
+    <remap from="/estimator/input" to="/filtre/output"/>
+  </node>
+
 </launch>
