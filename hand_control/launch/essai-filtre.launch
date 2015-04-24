@@ -3,12 +3,9 @@
   <node name="filtre_z" pkg="hand_control" type="filtre">
     <remap from="/filtre/input" to="/random_pcl"/>
   </node>
-  <param name="/filtre/zmax" value="100." type="double" />
 
   <node name="publisher" pkg="hand_control" type="random_pcl_publisher" >
     <remap from="/random/output" to="/random_pcl"/>
   </node>
-  <param name="/random/freq" value="1." type="double" />
-  <param name="/random/length" value="5" type="int" />
 
 </launch>

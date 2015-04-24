@@ -5,6 +5,6 @@
     <remap from="/estimator/input" to="/filtre/output"/>
   </node>
 
-  <param name="/random/freq" value="100." type="double" />
+<!--  <param name="/random/freq" value="100." type="double" /> -->
 
 </launch>
