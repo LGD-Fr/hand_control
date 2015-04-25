@@ -41,7 +41,7 @@ class Callback {
       ros_msg->normal.x = pcl_coord(0); // a
       ros_msg->normal.y = pcl_coord(1); // b
       ros_msg->normal.z = pcl_coord(2); // c
-      ros_msg->altitude = pcl_coord(3); // d
+      ros_msg->altitude = -pcl_coord(3); // -d
       ros_msg->curvature = curvature; // \lambda
       return ros_msg;
     }
