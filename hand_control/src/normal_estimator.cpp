@@ -13,37 +13,54 @@ class Callback {
     operator()(const PointCloud::ConstPtr& msg)
     {
       ROS_INFO("PointCloud received");
-      Eigen::Vector4f pcl_coord;
-      float curvature;
-      std::vector<int> indices;
+
+      float x, y, z, h, c;
+      x = y = z = h = c = 0.;
+
       // indices : tout le PointCloud
+      std::vector<int> indices;
       for (int i = 0; i < msg->points.size(); ++i)
         indices.push_back(i);
-      estimator.computePointNormal(*msg, indices,
-                                    pcl_coord, curvature);
+
+      // vérifier signature
+      estimator.computePointNormal(*msg, indices, x, y, z, c);
+      h = altitude(msg);
+
       // publication
       ROS_INFO("Plan published");
-      publisher.publish(to_Plan(pcl_coord, curvature));
+      publisher.publish(to_Plan(x, y, z, h, c));
     }
 
     Callback(ros::Publisher& pub) : publisher(pub), estimator() {}
 
   private:
     ros::Publisher publisher;
-
-    //pcl::NormalEstimationOMP<Point, Eigen::Vector4f> estimator;
     pcl::NormalEstimationOMP<Point, pcl::Normal> estimator;
 
+    inline
     const hand_control::Plan::ConstPtr
-    to_Plan(const Eigen::Vector4f& pcl_coord, const float& curvature)
+    to_Plan(const float& x, const float& y,
+            const float& z, const float& h,
+            const float& c)
     {
       hand_control::Plan::Ptr ros_msg(new hand_control::Plan());
-      ros_msg->normal.x = pcl_coord(0); // a
-      ros_msg->normal.y = pcl_coord(1); // b
-      ros_msg->normal.z = pcl_coord(2); // c
-      ros_msg->altitude = -pcl_coord(3); // -d
-      ros_msg->curvature = curvature; // \lambda
+      ros_msg->normal.x = x; 
+      ros_msg->normal.y = y; 
+      ros_msg->normal.z = z; 
+      ros_msg->altitude = h;
+      ros_msg->curvature = c; 
       return ros_msg;
+    }
+
+    inline
+    float
+    altitude(const PointCloud::ConstPtr& pcl)
+    {
+      int s = pcl->points.size();
+      float h(0);
+      for (int i = 0; i < s; ++i)
+        h += pcl->points[i].z;
+      return h/( (float) s );
     }
 };
 
