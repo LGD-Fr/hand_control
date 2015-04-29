@@ -35,8 +35,8 @@ vous devez cloner le dépôt de telle sorte que le dossier «hand_control» se s
 
 ```
 #!sh
-git clone git@bitbucket.org:_Luc_/handcontrol.git
-# ou bien : git clone https://username@bitbucket.org/_Luc_/handcontrol.git # (changer username)
+git clone git@bitbucket.org:_Luc_/hand_control.git
+# ou bien : git clone https://username@bitbucket.org/_Luc_/hand_control.git # (changer username)
 ```
 Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src». Il est ensuite possible de compiler :
 
@@ -44,6 +44,7 @@ Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src». Il est ens
 #!sh
 cd ~/hand_control_ws
 catkin_make
+catkin_make # régle le problème du message "Plan"
 ```
 
 Puis pour faciliter le développement : 
