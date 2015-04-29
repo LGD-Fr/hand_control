@@ -26,21 +26,17 @@ Après avoir créé un espace de travail catkin :
 
 ```
 #!sh
+source /opt/ros/indigo/setup.bash
 mkdir -p ~/hand_control_ws/src
 cd ~/hand_control_ws/src
-source /opt/ros/indigo/setup.bash
 catkin_init_workspace
-
 ```
 vous devez cloner le dépôt de telle sorte que le dossier «hand_control» se situe dans le dossier «~/hand_control_ws/src/», par exemple :
 
 ```
 #!sh
 git clone git@bitbucket.org:_Luc_/handcontrol.git
-# ou bien : git clone https://Username@bitbucket.org/_Luc_/handcontrol.git
-# (changer Username)
-mv -t ~/hand_control_ws/src handcontrol/* handcontrol/.git
-rmdir handcontrol
+# ou bien : git clone https://username@bitbucket.org/_Luc_/handcontrol.git # (changer username)
 ```
 Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src». Il est ensuite possible de compiler :
 
