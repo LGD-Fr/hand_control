@@ -1,3 +1,13 @@
+# IMPORTANT #
+Changement d’url du dépôt. Exécutez la commande ci-dessous à la racine de votre dépôt local :
+
+```
+#!sh
+
+git remote set-url orgin git@bitbucket.org:_Luc_/hand_control.git
+```
+
+
 # Contrôle par geste d'un drone #
 
 **Extrait de la présentation du projet**
