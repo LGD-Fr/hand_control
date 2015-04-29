@@ -35,6 +35,7 @@ vous devez cloner le dépôt de telle sorte que le dossier «hand_control» se s
 
 ```
 #!sh
+cd ~/hand_control_ws/src
 git clone git@bitbucket.org:_Luc_/hand_control.git
 # ou bien : git clone https://username@bitbucket.org/_Luc_/hand_control.git # (changer username)
 ```
