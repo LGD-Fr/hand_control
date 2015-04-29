@@ -4,9 +4,15 @@ Changement d’url du dépôt. Exécutez la commande ci-dessous à la racine de 
 ```
 #!sh
 
-git remote set-url orgin git@bitbucket.org:_Luc_/hand_control.git
+git remote set-url origin git@bitbucket.org:_Luc_/hand_control.git
 ```
+ou :
 
+```
+#!sh
+
+git remote set-url origin https://username@bitbucket.org/_Luc_/hand_control.git # changer "username"
+```
 
 # Contrôle par geste d'un drone #
 
