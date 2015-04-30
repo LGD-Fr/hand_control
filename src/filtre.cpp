@@ -3,7 +3,8 @@
 #include <pcl/point_types.h>
 #include <pcl/filters/passthrough.h>
 
-typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloud;
+typedef pcl::PointXYZRGB Point;
+typedef pcl::PointCloud<Point> PointCloud;
 
 class Callback {
   public:
@@ -11,10 +12,11 @@ class Callback {
     operator()(const PointCloud::ConstPtr& msg)
     {
       PointCloud::Ptr pcl(new PointCloud());
-      for (int i = 0; i < msg->points.size(); ++i)
+      copy_info(msg, pcl);
+      BOOST_FOREACH (const Point& pt, msg->points)
       {
-        if (msg->points[i].z < zmax)
-          pcl->points.push_back(msg->points[i]);
+        if (pt.z < zmax)
+          pcl->push_back(pt);
       }
       publisher.publish(pcl);
     }
@@ -25,6 +27,17 @@ class Callback {
   private:
     ros::Publisher publisher;
     float zmax;
+
+    inline
+    void
+    copy_info(const PointCloud::ConstPtr& a,
+              PointCloud::Ptr b)
+    {
+      b->header = a->header;
+      b->sensor_origin_ = a->sensor_origin_;
+      b->sensor_orientation_ = a->sensor_orientation_;
+      b->is_dense = a->is_dense;
+    }
 };
 
 int
