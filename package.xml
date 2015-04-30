@@ -17,34 +17,21 @@
   <author email="paul.janin@supelec.fr">Paul JANIN</author>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>ardrone_autonomy</build_depend>
-  <build_depend>freenect_camera</build_depend>
-  <build_depend>freenect_launch</build_depend>
+
   <build_depend>pcl_ros</build_depend>
-  <build_depend>pcl_conversion</build_depend>
   <build_depend>pcl_msgs</build_depend>
-  <build_depend>pcl_conversions</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
   <build_depend>message_generation</build_depend>
-  <build_depend>freenect_stack</build_depend>
-  <build_depend>perception_pcl</build_depend>
-  <run_depend>perception_pcl</run_depend>
-  <run_depend>freenect_stack</run_depend>
-  <run_depend>ardrone_autonomy</run_depend>
-  <run_depend>freenect_camera</run_depend>
-  <run_depend>freenect_launch</run_depend>
+
   <run_depend>pcl_ros</run_depend>
-  <run_depend>pcl_conversion</run_depend>
   <run_depend>pcl_msgs</run_depend>
-  <run_depend>pcl_conversions</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>std_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
   <run_depend>message_runtime</run_depend>
+  <run_depend>ardrone_autonomy</run_depend>
+  <run_depend>freenect_launch</run_depend>
 
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <!-- Other tools can request additional information be placed here -->
-
-  </export>
 </package>
