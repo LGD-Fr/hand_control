@@ -10,27 +10,21 @@ class Callback {
     void
     operator()(const PointCloud::ConstPtr& msg)
     {
-      ROS_INFO("PointCloud received");
-      // pour publier un shared_ptr (mieux)
       PointCloud::Ptr pcl(new PointCloud());
-      // filtrage
-      double zmax(0.);
-      ros::param::getCached("/filtre/zmax", zmax);
-      ROS_INFO("zmax : %f", zmax);
       for (int i = 0; i < msg->points.size(); ++i)
       {
-        if (msg->points[i].z > zmax)
+        if (msg->points[i].z < zmax)
           pcl->points.push_back(msg->points[i]);
       }
-      // publication
       publisher.publish(pcl);
-      ROS_INFO("PointCloud published");
     }
 
-    Callback(ros::Publisher& pub) : publisher(pub) {}
+    Callback(ros::Publisher& pub, float z)
+    : publisher(pub), zmax(z) {}
 
   private:
     ros::Publisher publisher;
+    float zmax;
 };
 
 int
@@ -50,9 +44,9 @@ main(int argc, char** argv)
     ROS_INFO("zmax : %f (default value)", zmax);
   }
 
-  // initialisation
+  // initialisatio
   ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
-  Callback callback(publisher);
+  Callback callback(publisher, (float) zmax);
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
 
   // démarrage
