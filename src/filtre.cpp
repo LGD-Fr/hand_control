@@ -18,6 +18,8 @@ class Callback {
         if (pt.z < zmax)
           pcl->push_back(pt);
       }
+      pcl->height = 1;
+      pcl->width = pcl->points.size();
       publisher.publish(pcl);
     }
 
