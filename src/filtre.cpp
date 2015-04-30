@@ -13,28 +13,24 @@ class Callback {
       ROS_INFO("PointCloud received");
       // pour publier un shared_ptr (mieux)
       PointCloud::Ptr pcl(new PointCloud());
-      // copie du nuage de point
-      *pcl = *msg;
       // filtrage
       double zmax(0.);
       ros::param::getCached("/filtre/zmax", zmax);
       ROS_INFO("zmax : %f", zmax);
-      z_filtre.setFilterLimits(0.0, zmax);
-      z_filtre.setInputCloud(pcl);
-      z_filtre.filter(*pcl);
+      for (int i = 0; i < msg->points.size(); ++i)
+      {
+        if (msg->points[i].z > zmax)
+          pcl->points.push_back(msg->points[i]);
+      }
       // publication
       publisher.publish(pcl);
       ROS_INFO("PointCloud published");
     }
 
-    Callback(ros::Publisher& pub) : publisher(pub), z_filtre()
-    {
-      z_filtre.setFilterFieldName("z");
-    }
+    Callback(ros::Publisher& pub) : publisher(pub) {}
 
   private:
     ros::Publisher publisher;
-    pcl::PassThrough<pcl::PointXYZRGB> z_filtre;
 };
 
 int
