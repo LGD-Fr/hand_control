@@ -1,4 +1,4 @@
-#include "curses.h"
+#include "display.h"
 #include "locale.h"
 int main()
 {

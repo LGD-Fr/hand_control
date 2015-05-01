@@ -5,8 +5,9 @@
 #include <string>
 #include <ros/ros.h>
 #include <ros/time.h>
-
-#include "curses.h"
+#include <locale.h>
+#include <ncurses.h>
+#include "display.h"
 
 #include <std_msgs/Empty.h>
 #include <geometry_msgs/Twist.h>
@@ -30,9 +31,6 @@ class Run
 
   public:
     Run() :
-      n(),
-      empty(),
-      term(),
       loop_rate(30),
       x_speed(0.2),
       y_speed(0.3),
@@ -46,23 +44,6 @@ class Run
 
     void operator()()
     {
-
-    /*
-      std::cout
-        <<"        ---------------------\n"
-        <<"takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|\n"
-        <<"        |---|---|---|---|---|----\n"
-        <<"  reset>|  g|⇐ h|← j|  k|→ l|⇒ m|\n"
-        <<"        |---|---|---|---|---|----\n"
-        <<"   land>|  b|⇓ n|↙ ,|↓ ;|↘ :|\n"
-        <<"        ---------------------\n"
-        <<"\n"
-        <<"a/w : increase/decrease linear `x` speeds by 10%\n"
-        <<"z/x : increase/decrease linear `y` speed by 10%\n"
-        <<"e/c : increase/decrease linear `z` speed by 10%\n"
-        <<"r/v : increase/decrease rotation speed by 10%\n";
-        */
-
       while (ros::ok())
       {
         geometry_msgs::Twist::Ptr msg(new geometry_msgs::Twist());
@@ -229,9 +210,11 @@ class Run
 
 int main(int argc, char** argv)
 {
+  setlocale(LC_ALL, "");
   ros::init(argc, argv, "keyboard_cmd");
-  Run run;
-  run();
+  Curses terminal;
+  terminal.print_kbd();
+  for(;;) ;
   return 0;
 }
 
