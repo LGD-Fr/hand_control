@@ -9,16 +9,25 @@ const int Curses::speed_columns = 50;
 Curses::Curses() {
   initscr();
   cbreak();
-  noecho();
+  //noecho();
   kbd = newwin(kbd_lines, kbd_columns, 0, 0);
-  speed = newwin(speed_lines, speed_columns,
-               kbd_lines+1, 0);
+  speed = newwin(speed_lines, speed_columns, kbd_lines+1, 0);
+  get = newwin(1,1,kbd_lines+speed_lines+1,2);
+  print_kbd();
+  wmove(get, 0, 0);
+  wrefresh(get);
 }
 
 Curses::~Curses() {
   delwin(kbd);
   delwin(speed);
+  delwin(get);
   endwin();
+}
+
+char Curses::getchar()
+{
+  return wgetch(get);
 }
 
 void Curses::print_kbd() {

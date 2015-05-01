@@ -26,11 +26,12 @@ class Run
     void reset()
       { pub_reset.publish(empty); };
     float x_speed, y_speed, z_speed, turn;
-    Curses term;
+    boost::shared_ptr<Curses> term;
     void print_speed() { ; };
 
   public:
-    Run() :
+    Run(boost::shared_ptr<Curses> terminal) :
+      term(terminal),
       loop_rate(30),
       x_speed(0.2),
       y_speed(0.3),
@@ -50,7 +51,7 @@ class Run
         msg->linear.x = msg->linear.y = msg->linear.z =
           msg->angular.x = msg->angular.y = msg->angular.z = 0.;
 
-        char c = getch();
+        char c = term->getchar();
 
         switch(c)
         {
@@ -212,9 +213,9 @@ int main(int argc, char** argv)
 {
   setlocale(LC_ALL, "");
   ros::init(argc, argv, "keyboard_cmd");
-  Curses terminal;
-  terminal.print_kbd();
-  for(;;) ;
+  boost::shared_ptr<Curses> term(new Curses());
+  Run fun(term);
+  fun();
   return 0;
 }
 

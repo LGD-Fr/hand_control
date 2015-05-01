@@ -13,11 +13,13 @@ class Curses
     static const int speed_lines;
     static const int speed_columns;
     WINDOW* speed;
+    void print_kbd();
+    WINDOW* get;
   
   public:
     Curses();
     ~Curses();
-    void print_kbd();
+    char getchar();
 };
 
 #endif
