@@ -9,6 +9,11 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
 )
+find_package(
+  PkgConfig REQUIRED
+)
+
+pkg_check_modules ( ncurses REQUIRED ncurses )
 
 add_message_files(
   FILES
@@ -25,6 +30,7 @@ catkin_package()
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${CURSES_INCLUDE_DIRS}
 )
 
 add_executable(filtre src/filtre.cpp)
@@ -35,6 +41,11 @@ target_link_libraries(random_pcl_publisher ${catkin_LIBRARIES})
 
 add_executable(pcl_displayer src/pcl_displayer.cpp)
 target_link_libraries(pcl_displayer ${catkin_LIBRARIES})
+
+add_library(curses src/curses.cpp src/curses.h)
+
+add_executable(keyboard_cmd src/keyboard_cmd.cpp)
+target_link_libraries(keyboard_cmd ${catkin_LIBRARIES} ${ncurses_LIBRARIES} curses)
 
 add_executable(normal_estimator src/normal_estimator.cpp)
 target_link_libraries(normal_estimator ${catkin_LIBRARIES})

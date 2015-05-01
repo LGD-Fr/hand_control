@@ -6,7 +6,7 @@
 #include <ros/ros.h>
 #include <ros/time.h>
 
-#include <ncurses.h>
+#include "curses.h"
 
 #include <std_msgs/Empty.h>
 #include <geometry_msgs/Twist.h>
@@ -25,17 +25,14 @@ class Run
     void reset()
       { pub_reset.publish(empty); };
     float x_speed, y_speed, z_speed, turn;
-    void print_speed()
-    {
-      std::cout << "x speed : " << x_speed << ", y speed : " <<
-        y_speed << ", z speed : " << z_speed <<
-        ", rotation speed : " << turn << "\n";
-    };
+    Curses term;
+    void print_speed() { ; };
 
   public:
     Run() :
       n(),
       empty(),
+      term(),
       loop_rate(30),
       x_speed(0.2),
       y_speed(0.3),
@@ -46,11 +43,6 @@ class Run
         pub_land = n.advertise<std_msgs::Empty>("/ardrone/land", 1);
         pub_reset = n.advertise<std_msgs::Empty>("/ardrone/reset", 1);
       }
-
-    ~Run()
-    {
-      endwin();
-    }
 
     void operator()()
     {
@@ -70,10 +62,6 @@ class Run
         <<"e/c : increase/decrease linear `z` speed by 10%\n"
         <<"r/v : increase/decrease rotation speed by 10%\n";
         */
-
-      initscr();
-      cbreak();
-      noecho();
 
       while (ros::ok())
       {
@@ -232,12 +220,11 @@ class Run
           default :
             break;
         } // switch
-
         ros::spinOnce();
         loop_rate.sleep();
-
       } // while
     } // run
+
 }; // class
 
 int main(int argc, char** argv)
