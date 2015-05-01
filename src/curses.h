@@ -1,5 +1,5 @@
-#ifndef CURSES
-#define CURSES
+#ifndef CURSES_TEST
+#define CURSES_TEST
 
 #include <ncurses.h>
 

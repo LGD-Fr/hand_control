@@ -1,5 +1,5 @@
-#include "curses.h"
 #include <ncurses.h>
+#include "curses.h"
 
 const int Curses::kbd_lines = 12;
 const int Curses::kbd_columns = 50;
@@ -11,7 +11,7 @@ Curses::Curses() {
   cbreak();
   noecho();
   kbd = newwin(kbd_lines, kbd_columns, 0, 0);
-  kbd = newwin(speed_lines, speed_columns,
+  speed = newwin(speed_lines, speed_columns,
                kbd_lines+1, 0);
 }
 
@@ -22,6 +22,8 @@ Curses::~Curses() {
 }
 
 void Curses::print_kbd() {
+  wprintw(kbd,"%s", L"tuiiaueakeoff>|  t|⇑ y|↖ u|↑ i|↗ o|");
+  wprintw(kbd,"%s", "tuiiaueakeoff>|  t|⇑ y|↖ u|↑ i|↗ o|");
   wmove(kbd, 0, 0); waddstr(kbd, "        ---------------------");
   wmove(kbd, 1, 0); waddstr(kbd, "takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|");
   wmove(kbd, 2, 0); waddstr(kbd, "        |---|---|---|---|---|----");
