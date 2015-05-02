@@ -6,6 +6,21 @@
 
 #include <std_msgs/Empty.h>
 #include <geometry_msgs/Twist.h>
+#include <ardrone_autonomy/Navdata.h>
+
+class Callback
+{
+  private:
+    boost::shared_ptr<Curses> term;
+
+  public:
+    Callback(const boost::shared_ptr<Curses>& terminal) :
+      term(terminal) {}
+
+    void operator()(const ardrone_autonomy::Navdata::ConstPtr msg) {
+      term->update_navdata(msg->batteryPercent, msg->state, msg->tm);
+    }
+}; // class Callback
 
 class Run
 {
@@ -14,17 +29,17 @@ class Run
     ros::NodeHandle n;
     ros::Rate loop_rate;
     ros::Publisher cmd, pub_takeoff, pub_land, pub_reset;
-    void land()
-      { pub_land.publish(empty); };
-    void takeoff()
-      { pub_takeoff.publish(empty); };
-    void reset()
-      { pub_reset.publish(empty); };
+    ros::Subscriber data_subscriber;
+    void land() { pub_land.publish(empty); };
+    void takeoff() { pub_takeoff.publish(empty); };
+    void reset() { pub_reset.publish(empty); };
     float x_speed, y_speed, z_speed, turn;
     boost::shared_ptr<Curses> term;
+    Callback data_callback;
 
   public:
-    Run(boost::shared_ptr<Curses> terminal) :
+    Run(const boost::shared_ptr<Curses>& terminal) :
+      data_callback(terminal),
       term(terminal),
       loop_rate(30),
       x_speed(0.2),
@@ -35,6 +50,7 @@ class Run
         pub_takeoff =  n.advertise<std_msgs::Empty>("/ardrone/takeoff", 1);
         pub_land = n.advertise<std_msgs::Empty>("/ardrone/land", 1);
         pub_reset = n.advertise<std_msgs::Empty>("/ardrone/reset", 1);
+        data_subscriber = n.subscribe<ardrone_autonomy::Navdata>("/ardrone/navdata", 1, data_callback);
       }
 
     void operator()()
@@ -166,49 +182,49 @@ class Run
           case 'a' :
             {// + x_speed
               x_speed *= 1.1;
-              term->update_speed('x', x_speed);
+              term->update_cmd_speed('x', x_speed);
               break;
             }
           case 'w' :
             {// - x_speed
               x_speed *= 0.9;
-              term->update_speed('x', x_speed);
+              term->update_cmd_speed('x', x_speed);
               break;
             }
           case 'z' :
             {// + y_speed
               y_speed *= 1.1;
-              term->update_speed('y', y_speed);
+              term->update_cmd_speed('y', y_speed);
               break;
             }
           case 'x' :
             {// - y_speed
               y_speed *= 0.9;
-              term->update_speed('y', y_speed);
+              term->update_cmd_speed('y', y_speed);
               break;
             }
           case 'e' :
             {// + z_speed
               z_speed *= 1.1;
-              term->update_speed('z', z_speed);
+              term->update_cmd_speed('z', z_speed);
               break;
             }
           case 'c' :
             {// - z_speed
               z_speed *= 0.9;
-              term->update_speed('z', z_speed);
+              term->update_cmd_speed('z', z_speed);
               break;
             }
           case 'r' :
             {// + turn speed
               turn *= 1.1;
-              term->update_speed('t', turn);
+              term->update_cmd_speed('t', turn);
               break;
             }
           case 'v' :
             {// - turn speed
               turn *= 0.9;
-              term->update_speed('t', turn);
+              term->update_cmd_speed('t', turn);
               break;
             }
           default :
@@ -219,12 +235,6 @@ class Run
     } //void run()
 
 }; // class Run
-
-class Callback
-{
-  //TODO
- // receives nav_data and display them in the term
-}; // class Callback
 
 int main(int argc, char** argv)
 {

@@ -2,17 +2,19 @@
 #define CURSES_DISPLAY
 
 #include <ncurses.h>
+#include <string>
 
 class Curses
 {
   private:
-    static const int kbd_lines;
-    static const int kbd_columns;
-    WINDOW* kbd;
-    static const int speed_lines;
-    static const int speed_columns;
-    WINDOW* speed;
-    void print_kbd();
+    static const int cmd_kbd_lines;
+    static const int cmd_kbd_columns;
+    WINDOW* cmd_kbd;
+    static const int cmd_speed_lines;
+    static const int cmd_speed_columns;
+    WINDOW* cmd_speed;
+    void print_cmd_kbd();
+    void print_cmd_speed();
     WINDOW* get;
 
     // TODO (avec scroll)
@@ -25,9 +27,11 @@ class Curses
     char getchar();
 
     // TODO
-    void update_speed(const char&, const float&);
-    // void update_navdata(...
-    void log_sent(char*);
+    void update_cmd_speed(const char& coord, const float& v);
+    void update_navdata(const float& batteryPercent,
+                        const int& state,
+                        const float& time);
+    void log_sent(const std::string& str);
 };
 
 #endif
