@@ -13,4 +13,6 @@
     <remap from="/estimator/input" to="/filtre/output"/>
   </node>
 
+  <include file="$(find hand_control)/launch/commande.launch"/>
+
 </launch>
