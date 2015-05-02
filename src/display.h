@@ -10,15 +10,24 @@ class Curses
     static const int cmd_kbd_lines;
     static const int cmd_kbd_columns;
     WINDOW* cmd_kbd;
+    void print_cmd_kbd();
+
     static const int cmd_speed_lines;
     static const int cmd_speed_columns;
     WINDOW* cmd_speed;
-    void print_cmd_kbd();
     void print_cmd_speed();
+
+    static const int get_lines;
+    static const int get_columns;
     WINDOW* get;
 
-    // TODO (avec scroll)
+    static const int log_sent_w_lines;
+    static const int log_sent_w_columns;
+    int log_line_number;
     WINDOW* log_sent_w;
+
+    static const int nav_data_lines;
+    static const int nav_data_columns;
     WINDOW* nav_data;
   
   public:
