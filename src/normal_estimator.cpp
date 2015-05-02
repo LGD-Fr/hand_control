@@ -29,22 +29,21 @@ class Callback {
 
       // publication
       ROS_INFO("Plan published");
-      publisher.publish(to_Plan(x, y, z, h, c, msg->header.stamp));
+      publisher.publish(to_Plan(x, y, z, h, c, msg->header.seq, msg->header.stamp));
     }
 
     Callback(ros::Publisher& pub) :
-      publisher(pub), estimator(), number(0) {}
+      publisher(pub), estimator() {}
 
   private:
     ros::Publisher publisher;
     pcl::NormalEstimationOMP<Point, pcl::Normal> estimator;
-    uint32_t number;
 
     inline
     const hand_control::Plan::ConstPtr
     to_Plan(const float& x, const float& y,
             const float& z, const float& h,
-            const float& c, uint64_t msec64)
+            const float& c, uint32_t seq, uint64_t msec64)
     {
       hand_control::Plan::Ptr ros_msg(new hand_control::Plan());
       ros_msg->normal.x = x; 
@@ -57,7 +56,7 @@ class Callback {
       uint64_t nsec64 = (msec64 % 1000000) * 1000;
       ros_msg->header.stamp.sec = (uint32_t) sec64;
       ros_msg->header.stamp.nsec = (uint32_t) nsec64;
-      ros_msg->header.seq = number++;
+      ros_msg->header.seq = seq;
       ros_msg->header.frame_id = "0";
       return ros_msg;
     }

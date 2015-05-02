@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include <time.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
 // for UniformGenerator
@@ -13,7 +14,7 @@ class Generator
 {
   public:
     Generator(int len, double m, double M)
-    : length(len), min(m), max(M), cgen()
+    : length(len), min(m), max(M), cgen(), number(0)
     {
       UGenerator::Parameters params(min, max, -1);
       cgen.setParameters(params);
@@ -30,6 +31,10 @@ class Generator
         pcl->points[i].g = (uint8_t) 255;
         pcl->points[i].b = (uint8_t) 0;
       }
+      ros::Time now = ros::Time::now();
+      pcl->header.stamp =  now.toNSec() / 1000;
+      pcl->header.seq = number++;
+      pcl->header.frame_id = "0";
       return pcl;
     }
 
@@ -37,6 +42,7 @@ class Generator
     pcl::common::CloudGenerator<pcl::PointXYZRGB, UGenerator> cgen;
     int length;
     double min, max;
+    uint32_t number;
 };
 
 int
