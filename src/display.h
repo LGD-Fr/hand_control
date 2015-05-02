@@ -25,6 +25,7 @@ class Curses
     static const int log_sent_w_columns;
     int log_line_number;
     WINDOW* log_sent_w;
+    WINDOW* log_sent_title;
 
     static const int nav_data_lines;
     static const int nav_data_columns;

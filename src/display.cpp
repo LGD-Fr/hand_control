@@ -33,6 +33,10 @@ Curses::Curses() {
   log_sent_w = newwin(log_sent_w_lines, log_sent_w_columns,
                       0, cmd_kbd_columns + 1);
   log_line_number = log_sent_w_lines - 1;
+  wattron(log_sent_w, A_BOLD);
+  start_color();
+  init_pair(1, COLOR_RED, COLOR_BLACK);
+  wattron(log_sent_w, COLOR_PAIR(1));
 
   scrollok(log_sent_w, TRUE);
 
