@@ -8,7 +8,13 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   message_generation
+  ardrone_autonomy
 )
+find_package(
+  PkgConfig REQUIRED
+)
+
+pkg_check_modules ( ncursesw REQUIRED ncursesw)
 
 add_message_files(
   FILES
@@ -27,6 +33,7 @@ CATKIN_DEPENDS message_runtime
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${ncursesw_INCLUDE_DIRS}
 )
 
 add_executable(filtre src/filtre.cpp)
@@ -37,6 +44,11 @@ target_link_libraries(random_pcl_publisher ${catkin_LIBRARIES})
 
 add_executable(pcl_displayer src/pcl_displayer.cpp)
 target_link_libraries(pcl_displayer ${catkin_LIBRARIES})
+
+add_library(display src/display.cpp)
+
+add_executable(keyboard_cmd src/keyboard_cmd.cpp)
+target_link_libraries(keyboard_cmd display ${catkin_LIBRARIES} ${ncursesw_LIBRARIES})
 
 add_executable(normal_estimator src/normal_estimator.cpp)
 target_link_libraries(normal_estimator ${catkin_LIBRARIES})
