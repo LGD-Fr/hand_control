@@ -228,6 +228,10 @@ class Run
               break;
             }
           default :
+            {
+              cmd.publish(msg);
+              term->log_sent("hover !");
+            }
             break;
         } // switch(c)
         loop_rate.sleep();
