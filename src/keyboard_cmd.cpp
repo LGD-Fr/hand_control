@@ -51,6 +51,11 @@ class Run
         pub_land = n.advertise<std_msgs::Empty>("/ardrone/land", 1);
         pub_reset = n.advertise<std_msgs::Empty>("/ardrone/reset", 1);
         data_subscriber = n.subscribe<ardrone_autonomy::Navdata>("/ardrone/navdata", 1, data_callback);
+
+        term->update_cmd_speed('x', x_speed);
+        term->update_cmd_speed('y', y_speed);
+        term->update_cmd_speed('z', z_speed);
+        term->update_cmd_speed('t', turn);
       }
 
     void operator()()
@@ -232,7 +237,6 @@ class Run
               cmd.publish(msg);
               term->log_sent("hover !");
             }
-            break;
         } // switch(c)
         loop_rate.sleep();
       } // while

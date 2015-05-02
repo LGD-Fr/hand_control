@@ -30,6 +30,7 @@ class Curses
     static const int nav_data_lines;
     static const int nav_data_columns;
     WINDOW* nav_data;
+    void print_nav_data();
   
   public:
     Curses();

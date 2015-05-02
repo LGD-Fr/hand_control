@@ -2,17 +2,17 @@
 #include <string>
 #include "display.h"
 
-const int Curses::cmd_kbd_lines = 12;
-const int Curses::cmd_kbd_columns = 50;
+const int Curses::cmd_kbd_lines = 7;
+const int Curses::cmd_kbd_columns = 55;
 
 const int Curses::cmd_speed_lines = 4;
-const int Curses::cmd_speed_columns = 50;
+const int Curses::cmd_speed_columns = 55;
 
 const int Curses::get_lines = 1;
 const int Curses::get_columns = 1;
 
-const int Curses::nav_data_lines = 5;
-const int Curses::nav_data_columns = 40;
+const int Curses::nav_data_lines = 3;
+const int Curses::nav_data_columns = 55;
 
 const int Curses::log_sent_w_lines = 12;
 const int Curses::log_sent_w_columns = 40;
@@ -44,8 +44,9 @@ Curses::Curses() {
   scrollok(log_sent_w, TRUE);
 
   nav_data = newwin(nav_data_lines, nav_data_columns,
-                    log_sent_w_lines + 1, cmd_kbd_columns + 1);
+                    cmd_kbd_lines + get_lines + cmd_speed_lines + 1, 0);
 
+  print_nav_data();
   print_cmd_kbd();
   print_cmd_speed();
 
@@ -68,26 +69,48 @@ char Curses::getchar() {
 }
 
 void Curses::print_cmd_kbd() {
-  wmove(cmd_kbd, 0, 0); waddstr(cmd_kbd, "        ---------------------");
-  wmove(cmd_kbd, 1, 0); waddstr(cmd_kbd, "takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|");
-  wmove(cmd_kbd, 2, 0); waddstr(cmd_kbd, "        |---|---|---|---|---|----");
-  wmove(cmd_kbd, 3, 0); waddstr(cmd_kbd, "  reset>|  g|⇐ h|← j|  k|→ l|⇒ m|");
-  wmove(cmd_kbd, 4, 0); waddstr(cmd_kbd, "        |---|---|---|---|---|----");
-  wmove(cmd_kbd, 5, 0); waddstr(cmd_kbd, "   land>|  b|⇓ n|↙ ,|↓ ;|↘ :|");
-  wmove(cmd_kbd, 6, 0); waddstr(cmd_kbd, "        ---------------------");
-  wmove(cmd_kbd, 8, 0); waddstr(cmd_kbd, "a/w : increase/decrease linear `x` speeds by 10%");
-  wmove(cmd_kbd, 9, 0); waddstr(cmd_kbd, "z/x : increase/decrease linear `y` speed by 10%");
-  wmove(cmd_kbd, 10, 0); waddstr(cmd_kbd, "e/c : increase/decrease linear `z` speed by 10%");
-  wmove(cmd_kbd, 11, 0); waddstr(cmd_kbd, "r/v : increase/decrease rotation speed by 10%");
+  wmove(cmd_kbd, 0, 0);
+   waddstr(cmd_kbd, "        ---------------------\n");
+   waddstr(cmd_kbd, "takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|\n");
+   waddstr(cmd_kbd, "        |---|---|---|---|---|----\n");
+   waddstr(cmd_kbd, "  reset>|  g|⇐ h|← j|  k|→ l|⇒ m|\n");
+   waddstr(cmd_kbd, "        |---|---|---|---|---|----\n");
+   waddstr(cmd_kbd, "   land>|  b|⇓ n|↙ ,|↓ ;|↘ :|\n");
+   waddstr(cmd_kbd, "        ---------------------\n");
   wrefresh(cmd_kbd);
 }
 
 void Curses::print_cmd_speed() {
-
+  wmove(cmd_speed, 0, 0);
+  waddstr(cmd_speed, " `x` cmd speed :         (a/w : increase/decrease)\n");
+  waddstr(cmd_speed, " `y` cmd speed :         (z/x : increase/decrease)\n");
+  waddstr(cmd_speed, " `z` cmd speed :         (e/c : increase/decrease)\n");
+  waddstr(cmd_speed, "rotation speed :         (r/v : increase/decrease)\n");
+  wrefresh(cmd_speed);
 }
 
 void Curses::update_cmd_speed(const char& coord, const float& v) {
-
+  switch(coord) {
+    case 'x':
+      wmove(cmd_speed, 0, 16);
+      wprintw(cmd_speed, "%f", v);
+      break;
+    case 'y':
+      wmove(cmd_speed, 1, 16);
+      wprintw(cmd_speed, "%f", v);
+      break;
+    case 'z':
+      wmove(cmd_speed, 2, 16);
+      wprintw(cmd_speed, "%f", v);
+      break;
+    case 't':
+      wmove(cmd_speed, 3, 16);
+      wprintw(cmd_speed, "%f", v);
+      break;
+    default:
+      ;
+  }
+  wrefresh(cmd_speed);
 }
 
 void Curses::log_sent(const std::string& str) {
@@ -96,8 +119,14 @@ void Curses::log_sent(const std::string& str) {
   wrefresh(log_sent_w);
 }
 
+
+void Curses::print_nav_data() {
+  wmove(nav_data, 0, 0);
+  waddstr(nav_data, "Battery :\n  State :\n   Time :");
+  wrefresh(nav_data);
+}
+
 void Curses::update_navdata(const float& batteryPercent,
                             const int& state,
                             const float& time) {
-
 }
