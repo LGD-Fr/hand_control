@@ -18,7 +18,7 @@ class Callback
       term(terminal) {}
 
     void operator()(const ardrone_autonomy::Navdata::ConstPtr& msg) {
-      term->update_navdata(msg->batteryPercent, msg->state, msg->tm);
+      term->update_nav_data(msg->batteryPercent, msg->state, msg->tm);
     }
 }; // class Callback
 
@@ -56,6 +56,11 @@ class Run
         term->update_cmd_speed('y', y_speed);
         term->update_cmd_speed('z', z_speed);
         term->update_cmd_speed('t', turn);
+
+        float a(0);
+        int s(0);
+        float time(0);
+        term->update_nav_data(a, s, time);
       }
 
     void operator()()

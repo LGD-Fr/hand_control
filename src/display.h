@@ -39,7 +39,7 @@ class Curses
 
     // TODO
     void update_cmd_speed(const char& coord, const float& v);
-    void update_navdata(const float& batteryPercent,
+    void update_nav_data(const float& batteryPercent,
                         const int& state,
                         const float& time);
     void log_sent(const std::string& str);

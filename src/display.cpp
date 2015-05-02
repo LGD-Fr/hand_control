@@ -2,7 +2,7 @@
 #include <string>
 #include "display.h"
 
-const int Curses::cmd_kbd_lines = 7;
+const int Curses::cmd_kbd_lines = 8;
 const int Curses::cmd_kbd_columns = 55;
 
 const int Curses::cmd_speed_lines = 4;
@@ -39,12 +39,15 @@ Curses::Curses() {
                       1, cmd_kbd_columns + 1);
   log_line_number = log_sent_w_lines - 2; 
   wattron(log_sent_w, A_BOLD);
-  init_pair(1, COLOR_RED, COLOR_BLACK);
+  init_pair(1, COLOR_GREEN, COLOR_BLACK);
   wattron(log_sent_w, COLOR_PAIR(1));
   scrollok(log_sent_w, TRUE);
 
   nav_data = newwin(nav_data_lines, nav_data_columns,
                     cmd_kbd_lines + get_lines + cmd_speed_lines + 1, 0);
+  init_pair(2, COLOR_RED, COLOR_BLACK);
+  wattron(nav_data, COLOR_PAIR(2));
+  wattron(nav_data, A_BOLD);
 
   print_nav_data();
   print_cmd_kbd();
@@ -70,13 +73,14 @@ char Curses::getchar() {
 
 void Curses::print_cmd_kbd() {
   wmove(cmd_kbd, 0, 0);
-   waddstr(cmd_kbd, "        ---------------------\n");
-   waddstr(cmd_kbd, "takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|\n");
-   waddstr(cmd_kbd, "        |---|---|---|---|---|----\n");
-   waddstr(cmd_kbd, "  reset>|  g|⇐ h|← j|  k|→ l|⇒ m|\n");
-   waddstr(cmd_kbd, "        |---|---|---|---|---|----\n");
-   waddstr(cmd_kbd, "   land>|  b|⇓ n|↙ ,|↓ ;|↘ :|\n");
-   waddstr(cmd_kbd, "        ---------------------\n");
+   waddstr(cmd_kbd, "         ---------------------\n");
+   waddstr(cmd_kbd, " takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|\n");
+   waddstr(cmd_kbd, "         |---|---|---|---|---|----\n");
+   waddstr(cmd_kbd, "   reset>|  g|⇐ h|← j|  k|→ l|⇒ m|\n");
+   waddstr(cmd_kbd, "         |---|---|---|---|---|----\n");
+   waddstr(cmd_kbd, "    land>|  b|⇓ n|↙ ,|↓ ;|↘ :|\n");
+   waddstr(cmd_kbd, "         ---------------------\n");
+   waddstr(cmd_kbd, "        Press ctrl + C to quit");
   wrefresh(cmd_kbd);
 }
 
@@ -126,7 +130,47 @@ void Curses::print_nav_data() {
   wrefresh(nav_data);
 }
 
-void Curses::update_navdata(const float& batteryPercent,
+void Curses::update_nav_data(const float& batteryPercent,
                             const int& state,
                             const float& time) {
+  wmove(nav_data, 0, 10);
+  wprintw(nav_data, "%f %", batteryPercent);
+  wmove(nav_data, 2, 10);
+  wprintw(nav_data, "%f %", time);
+  wmove(nav_data, 1, 10);
+  switch(state) {
+    case 0:
+      waddstr(nav_data, "unknown    ");
+      break;
+    case 1:
+      waddstr(nav_data, "inited     ");
+      break;
+    case 2:
+      waddstr(nav_data, "landed     ");
+      break;
+    case 3:
+      waddstr(nav_data, "flying     ");
+      break;
+    case 4:
+      waddstr(nav_data, "hovering   ");
+      break;
+    case 5:
+      waddstr(nav_data, "test       ");
+      break;
+    case 6:
+      waddstr(nav_data, "taking off ");
+      break;
+    case 7:
+      waddstr(nav_data, "flying     ");
+      break;
+    case 8:
+      waddstr(nav_data, "landing    ");
+      break;
+    case 9:
+      waddstr(nav_data, "looping    ");
+      break;
+    default:
+      ;
+  }
+  wrefresh(nav_data);
 }
