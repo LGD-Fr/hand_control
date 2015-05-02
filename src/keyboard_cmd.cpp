@@ -8,19 +8,33 @@
 #include <geometry_msgs/Twist.h>
 #include <ardrone_autonomy/Navdata.h>
 
-class Callback
+class NavdataCallback
 {
   private:
     boost::shared_ptr<Curses> term;
 
   public:
-    Callback(const boost::shared_ptr<Curses>& terminal) :
+    NavdataCallback(const boost::shared_ptr<Curses>& terminal) :
       term(terminal) {}
 
     void operator()(const ardrone_autonomy::Navdata::ConstPtr& msg) {
       term->update_nav_data(msg->batteryPercent, msg->state, msg->tm);
     }
-}; // class Callback
+}; // class NavdataCallback
+
+class CmdVelCallback
+{
+  private:
+    boost::shared_ptr<Curses> term;
+
+  public:
+    CmdVelCallback(const boost::shared_ptr<Curses>& terminal) :
+      term(terminal) {}
+
+    void operator()(const geometry_msgs::Twist::ConstPtr& msg) {
+      term->update_topic(msg);
+    }
+}; // class CmdVelCallback
 
 class Run
 {
@@ -29,17 +43,19 @@ class Run
     ros::NodeHandle n;
     ros::Rate loop_rate;
     ros::Publisher cmd, pub_takeoff, pub_land, pub_reset;
-    ros::Subscriber data_subscriber;
+    ros::Subscriber data_subscriber, cmdvel_subscriber;
     void land() { pub_land.publish(empty); };
     void takeoff() { pub_takeoff.publish(empty); };
     void reset() { pub_reset.publish(empty); };
     float x_speed, y_speed, z_speed, turn;
     boost::shared_ptr<Curses> term;
-    Callback data_callback;
+    NavdataCallback data_callback;
+    CmdVelCallback cmdvel_callback;
 
   public:
     Run(const boost::shared_ptr<Curses>& terminal) :
       data_callback(terminal),
+      cmdvel_callback(terminal),
       term(terminal),
       loop_rate(30),
       x_speed(0.2),
@@ -51,6 +67,7 @@ class Run
         pub_land = n.advertise<std_msgs::Empty>("/ardrone/land", 1);
         pub_reset = n.advertise<std_msgs::Empty>("/ardrone/reset", 1);
         data_subscriber = n.subscribe<ardrone_autonomy::Navdata>("/ardrone/navdata", 1, data_callback);
+        cmdvel_subscriber = n.subscribe<geometry_msgs::Twist>("/cmd_vel", 1, cmdvel_callback);
 
         term->update_cmd_speed('x', x_speed);
         term->update_cmd_speed('y', y_speed);

@@ -3,6 +3,7 @@
 
 #include <ncurses.h>
 #include <string>
+#include <geometry_msgs/Twist.h>
 
 class Curses
 {
@@ -32,6 +33,11 @@ class Curses
     WINDOW* nav_data;
     void print_nav_data();
   
+    static const int topic_lines;
+    static const int topic_columns;
+    WINDOW* topic;
+    void print_topic();
+
   public:
     Curses();
     ~Curses();
@@ -43,6 +49,7 @@ class Curses
                         const int& state,
                         const float& time);
     void log_sent(const std::string& str);
+    void update_topic(const geometry_msgs::Twist::ConstPtr& twist);
 };
 
 #endif

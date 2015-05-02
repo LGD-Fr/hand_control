@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <string>
+#include <geometry_msgs/Twist.h>
 #include "display.h"
 
 const int Curses::cmd_kbd_lines = 8;
@@ -12,10 +13,13 @@ const int Curses::get_lines = 1;
 const int Curses::get_columns = 1;
 
 const int Curses::nav_data_lines = 3;
-const int Curses::nav_data_columns = 55;
+const int Curses::nav_data_columns = 25;
 
 const int Curses::log_sent_w_lines = 12;
-const int Curses::log_sent_w_columns = 40;
+const int Curses::log_sent_w_columns = 22;
+
+const int Curses::topic_lines = 8;
+const int Curses::topic_columns = 22;
 
 Curses::Curses() {
   initscr();
@@ -49,9 +53,17 @@ Curses::Curses() {
   wattron(nav_data, COLOR_PAIR(2));
   wattron(nav_data, A_BOLD);
 
+  topic = newwin(topic_lines, topic_columns,
+      cmd_kbd_lines + get_lines + cmd_speed_lines + 1,
+      nav_data_columns + 1);
+  init_pair(3, COLOR_BLUE, COLOR_BLACK);
+  wattron(topic, COLOR_PAIR(3));
+  wattron(topic, A_BOLD);
+
   print_nav_data();
   print_cmd_kbd();
   print_cmd_speed();
+  print_topic();
 
   wmove(get, 0, 0);
   wrefresh(get);
@@ -64,6 +76,7 @@ Curses::~Curses() {
   delwin(log_sent_title);
   delwin(nav_data);
   delwin(get);
+  delwin(topic);
   endwin();
 }
 
@@ -134,7 +147,7 @@ void Curses::update_nav_data(const float& batteryPercent,
                             const int& state,
                             const float& time) {
   wmove(nav_data, 0, 10);
-  wprintw(nav_data, "%f %", batteryPercent);
+  wprintw(nav_data, "%f %%", batteryPercent);
   wmove(nav_data, 2, 10);
   wprintw(nav_data, "%f %", time);
   wmove(nav_data, 1, 10);
@@ -173,4 +186,21 @@ void Curses::update_nav_data(const float& batteryPercent,
       ;
   }
   wrefresh(nav_data);
+}
+
+void Curses::print_topic() {
+  wmove(topic, 0, 0);
+  waddstr(topic, "Linear :\n x : \n y : \n z : \n");
+  waddstr(topic, "Angular :\n x : \n y : \n z : ");
+  wrefresh(topic);
+}
+
+void Curses::update_topic(const geometry_msgs::Twist::ConstPtr& twist) {
+  wmove(topic, 1, 5); wprintw(topic, "%f  ", twist->linear.x);
+  wmove(topic, 2, 5); wprintw(topic, "%f  ", twist->linear.y);
+  wmove(topic, 3, 5); wprintw(topic, "%f  ", twist->linear.z);
+  wmove(topic, 5, 5); wprintw(topic, "%f  ", twist->angular.x);
+  wmove(topic, 6, 5); wprintw(topic, "%f  ", twist->angular.y);
+  wmove(topic, 7, 5); wprintw(topic, "%f  ", twist->angular.z);
+  wrefresh(topic);
 }
