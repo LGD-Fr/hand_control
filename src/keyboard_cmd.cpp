@@ -17,7 +17,7 @@ class Callback
     Callback(const boost::shared_ptr<Curses>& terminal) :
       term(terminal) {}
 
-    void operator()(const ardrone_autonomy::Navdata::ConstPtr msg) {
+    void operator()(const ardrone_autonomy::Navdata::ConstPtr& msg) {
       term->update_navdata(msg->batteryPercent, msg->state, msg->tm);
     }
 }; // class Callback
@@ -240,7 +240,6 @@ int main(int argc, char** argv)
 {
   setlocale(LC_ALL, "");
   ros::init(argc, argv, "keyboard_cmd");
-  //ros::Subscriber ... (navdata)
   boost::shared_ptr<Curses> term(new Curses());
   Run fun(term);
   fun();

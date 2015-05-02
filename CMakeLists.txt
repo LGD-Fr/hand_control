@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   message_generation
+  ardrone_autonomy
 )
 find_package(
   PkgConfig REQUIRED
@@ -30,7 +31,7 @@ catkin_package()
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${CURSESW_INCLUDE_DIRS}
+  ${ncursesw_INCLUDE_DIRS}
 )
 
 add_executable(filtre src/filtre.cpp)
