@@ -32,7 +32,8 @@ class Callback {
       publisher.publish(to_Plan(x, y, z, h, c, msg->header.stamp));
     }
 
-    Callback(ros::Publisher& pub) : publisher(pub), estimator() {}
+    Callback(ros::Publisher& pub) :
+      publisher(pub), estimator(), number(0) {}
 
   private:
     ros::Publisher publisher;
