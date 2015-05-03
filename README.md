@@ -38,7 +38,6 @@ Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src». Il est ens
 #!sh
 cd ~/hand_control_ws
 catkin_make
-catkin_make # régle le problème du message "Plan"
 ```
 
 Puis pour faciliter le développement : 
