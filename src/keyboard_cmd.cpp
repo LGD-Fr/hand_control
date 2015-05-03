@@ -1,7 +1,6 @@
 #include <ros/ros.h>
 #include <ros/time.h>
 #include <locale.h>
-#include <ncurses.h>
 #include "display.h"
 
 #include <std_msgs/Empty.h>
