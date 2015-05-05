@@ -15,7 +15,6 @@ sudo apt-get install ros-indigo-desktop-full ros-indigo-freenect-stack ros-indig
 ## Utilisation du dépôt ##
 
 Après avoir créé un espace de travail catkin :
-
 ```
 #!sh
 source /opt/ros/indigo/setup.bash
