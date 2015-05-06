@@ -69,8 +69,8 @@ class Callback {
 int
 main(int argc, char** argv)
 {
-  ros::init(argc, argv, "filtreRGB");
-  ros::NodeHandle node("filtreRGB");
+  ros::init(argc, argv, "filtreHue");
+  ros::NodeHandle node("filtreHue");
 
   // récupération des paramètres
   int hue(0);  
