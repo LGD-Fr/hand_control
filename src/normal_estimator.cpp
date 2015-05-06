@@ -3,6 +3,7 @@
 #include <pcl/point_types.h>
 #include <pcl/features/normal_3d_omp.h>
 #include <hand_control/Plan.h>
+#include <time.h>
 
 typedef pcl::PointXYZRGB Point;
 typedef pcl::PointCloud<Point> PointCloud;
@@ -28,10 +29,11 @@ class Callback {
 
       // publication
       ROS_INFO("Plan published");
-      publisher.publish(to_Plan(x, y, z, h, c));
+      publisher.publish(to_Plan(x, y, z, h, c, msg->header.seq, msg->header.stamp));
     }
 
-    Callback(ros::Publisher& pub) : publisher(pub), estimator() {}
+    Callback(ros::Publisher& pub) :
+      publisher(pub), estimator() {}
 
   private:
     ros::Publisher publisher;
@@ -41,7 +43,7 @@ class Callback {
     const hand_control::Plan::ConstPtr
     to_Plan(const float& x, const float& y,
             const float& z, const float& h,
-            const float& c)
+            const float& c, uint32_t seq, uint64_t msec64)
     {
       hand_control::Plan::Ptr ros_msg(new hand_control::Plan());
       ros_msg->normal.x = x; 
@@ -49,6 +51,13 @@ class Callback {
       ros_msg->normal.z = z; 
       ros_msg->altitude = h;
       ros_msg->curvature = c; 
+      // uint64_t msec64 is in ms (10-6)
+      uint64_t sec64 = msec64 / 1000000;
+      uint64_t nsec64 = (msec64 % 1000000) * 1000;
+      ros_msg->header.stamp.sec = (uint32_t) sec64;
+      ros_msg->header.stamp.nsec = (uint32_t) nsec64;
+      ros_msg->header.seq = seq;
+      ros_msg->header.frame_id = "0";
       return ros_msg;
     }
 

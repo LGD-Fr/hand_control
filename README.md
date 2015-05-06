@@ -1,29 +1,20 @@
-# IMPORTANT #
-Changement d’url du dépôt. Exécutez la commande ci-dessous à la racine de votre dépôt local :
-
-```
-#!sh
-
-git remote set-url origin git@bitbucket.org:_Luc_/hand_control.git
-```
-ou :
-
-```
-#!sh
-
-git remote set-url origin https://username@bitbucket.org/_Luc_/hand_control.git # changer "username"
-```
-
 # Contrôle par geste d'un drone #
 
 **Extrait de la présentation du projet**
 
 « On s'intéresse dans ce projet à contrôler un drone à l'aide la main. On utilisera pour ce faire une kinect, placée à l'horizontal, au dessus de laquelle on placera la main du contrôleur. La kinect fournit des informations sur la profondeur des objets placés en face d'elle. On peut alors régresser un plan sur les échantillons et utiliser deux inclinaisons et la distance pour contrôler le roulis, le tangage et l'altitude d'un drone. »
 
+## Installation des dépendances ##
+```
+#!sh
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
+wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install ros-indigo-desktop-full ros-indigo-freenect-stack ros-indigo-ardrone-autonomy libncursesw5-dev
+```
 ## Utilisation du dépôt ##
 
 Après avoir créé un espace de travail catkin :
-
 ```
 #!sh
 source /opt/ros/indigo/setup.bash
@@ -45,7 +36,6 @@ Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src». Il est ens
 #!sh
 cd ~/hand_control_ws
 catkin_make
-catkin_make # régle le problème du message "Plan"
 ```
 
 Puis pour faciliter le développement : 
