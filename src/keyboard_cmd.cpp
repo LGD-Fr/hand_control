@@ -57,10 +57,10 @@ class Run
       cmdvel_callback(terminal),
       term(terminal),
       loop_rate(30),
-      x_speed(0.2),
-      y_speed(0.3),
-      z_speed(0.5),
-      turn(0.5) {
+      x_speed(0.05),
+      y_speed(0.05),
+      z_speed(0.05),
+      turn(0.1) {
         cmd =  n.advertise<geometry_msgs::Twist>("/cmd_vel",1);
         pub_takeoff =  n.advertise<std_msgs::Empty>("/ardrone/takeoff", 1);
         pub_land = n.advertise<std_msgs::Empty>("/ardrone/land", 1);
