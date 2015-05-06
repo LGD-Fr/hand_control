@@ -56,3 +56,6 @@ target_link_libraries(filtreRGB ${catkin_LIBRARIES})
 add_executable(normal_estimator src/normal_estimator.cpp)
 target_link_libraries(normal_estimator ${catkin_LIBRARIES})
 add_dependencies(normal_estimator hand_control_generate_messages_cpp)
+
+add_executable(commande src/commande.cpp)
+target_link_libraries(commande ${catkin_LIBRARIES})
