@@ -59,46 +59,53 @@ main(int argc, char** argv)
   
   uint8_t delta(0);
 
-  if (node.getParam("red", red))
+  int redInt;
+  int greenInt;
+  int blueInt;
+
+  int deltaInt;
+
+  if (node.getParam("red",  redInt))
   {
-    ROS_INFO("red : %f" , red);
+    ROS_INFO("red : %d" , redInt);
   } else {
     node.setParam("red", 0);
-    node.getParam("red", red);
-    ROS_INFO("red : %f (default value)", red);
+    node.getParam("red", redInt);
+    ROS_INFO("red : %d (default value)", redInt);
   }
 
-  if (node.getParam("blue", blue))
+  if (node.getParam("blue", blueInt))
   {
   
-    ROS_INFO("blue : %f" , blue);
+    ROS_INFO("blue : %d" , blueInt);
   } else {
     node.setParam("blue", 0);
-    node.getParam("blue", blue);
-    ROS_INFO("blue : %f (default value)", blue);
+    node.getParam("blue", blueInt);
+    ROS_INFO("blue : %d (default value)", blueInt);
   }
 
-  if (node.getParam("green", green))
+  if (node.getParam("green", greenInt))
   {
-    ROS_INFO("green : %f" , green);
+    ROS_INFO("green : %d" , greenInt);
   } else {
     node.setParam("green", 0);
-    node.getParam("green", green);
-    ROS_INFO("green : %f (default value)", green);
+    node.getParam("green", greenInt);
+    ROS_INFO("green : %d (default value)", greenInt);
   }
 
-  if (node.getParam("delta", delta))
+  if (node.getParam("delta", deltaInt))
   {
-    ROS_INFO("delta : %f" , delta);
+    ROS_INFO("delta : %d" , deltaInt);
   } else {
     node.setParam("delta", 0);
-    node.getParam("delta", delta);
-    ROS_INFO("delta : %f (default value)", delta);
+    node.getParam("delta", deltaInt);
+    ROS_INFO("delta : %d (default value)", deltaInt);
   }
+ 
 
   // initialisatio
   ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
-  Callback callback(publisher, (uint8_t) red, (uint8_t) green, (uint8_t) blue, (uint8_t) delta);
+  Callback callback(publisher, (uint8_t) redInt, (uint8_t) greenInt, (uint8_t) blueInt, (uint8_t) deltaInt);
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
 
   // démarrage
