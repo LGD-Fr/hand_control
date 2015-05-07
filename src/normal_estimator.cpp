@@ -29,7 +29,7 @@ class Callback {
 
       // publication
       ROS_INFO("Plan published");
-      publisher.publish(to_Plan(x, y, z, h, c, msg->header.seq, msg->header.stamp));
+      publisher.publish(to_Plan(x, y, z, h, c, msg->header.seq, msg->header.stamp, msg->width));
     }
 
     Callback(ros::Publisher& pub) :
@@ -43,7 +43,8 @@ class Callback {
     const hand_control::Plan::ConstPtr
     to_Plan(const float& x, const float& y,
             const float& z, const float& h,
-            const float& c, uint32_t seq, uint64_t msec64)
+            const float& c, uint32_t seq,
+            uint64_t msec64, uint64_t number)
     {
       hand_control::Plan::Ptr ros_msg(new hand_control::Plan());
       ros_msg->normal.x = x; 
@@ -51,6 +52,7 @@ class Callback {
       ros_msg->normal.z = z; 
       ros_msg->altitude = h;
       ros_msg->curvature = c; 
+      ros_msg->number = number;
       // uint64_t msec64 is in ms (10-6)
       uint64_t sec64 = msec64 / 1000000;
       uint64_t nsec64 = (msec64 % 1000000) * 1000;
