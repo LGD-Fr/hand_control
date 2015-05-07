@@ -3,16 +3,22 @@
 
   <include file="$(find hand_control)/launch/freenect-registered-xyzrgb.launch"/>
 
+  <param name="/filtre/zmax" value="1.1" type="double"/>
+  <param name="/filtre/hue" value="0.0" type="double"/>
+  <param name="/filtre/delta_hue" value="10.0" type="double"/>
+
   <node name="filtre" pkg="hand_control" type="filtre">
     <remap from="/filtre/input" to="/camera/xyzrgb/points"/>
   </node>
 
-  <param name="/filtre/zmax" value="1.1" type="double"/>
-  <param name="/filtre/hue" value="0.0" type="double"/>
-  <param name="/filtre/delta_hue" value="15.0" type="double"/>
-
-  <node name="normal_estimator" pkg="hand_control" type="normal_estimator">
+  <node name="estimator" pkg="hand_control" type="normal_estimator">
     <remap from="/estimator/input" to="/filtre/output"/>
   </node>
+
+  <!--
+  <node name="commander" pkg="hand_control" type="commande">
+    <remap from="/commander/input" to="/estimator/output"/>
+  </node>
+  -->
 
 </launch>

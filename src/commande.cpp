@@ -53,43 +53,65 @@ class Run
 
     void operator()(const hand_control::Plan::ConstPtr& msg)
     {
+      ROS_INFO("plan received");
       if (msg->curvature < max_curv)
       {
         t_current = msg->header.stamp;
         z_current = msg->normal.z;
         
         if (!first_msg)
+        {
           dz = (z_current - z_previous)/((t_current - t_previous).toSec());
+          ROS_INFO("dz = %f", dz);
+        }
+
 
         xx = msg->normal.x;
+        ROS_INFO("xx = %f", xx);
         yy = msg->normal.y;
+        ROS_INFO("yy = %f", yy);
 
         t_previous = t_current;
         z_previous = z_current;
         z_current = std::numeric_limits<double>::signaling_NaN();
         t_current.nsec = t_current.sec = std::numeric_limits<uint32_t>::signaling_NaN();
-        if (first_msg) first_msg = false;
+        if (first_msg)
+        {
+          first_msg = false;
+          ROS_INFO("first msg received");
+        }
+        ROS_INFO("coords updated");
       }
     };
 
     void run()
     {
-      geometry_msgs::Twist zero;
-      zero.linear.x = zero.linear.y = zero.linear.z = 
-        zero.angular.x = zero.angular.y = zero.angular.z = 0.;
+      ROS_INFO("node running");
 
       while(ros::ok())
       {
+        ROS_INFO("loop entered");
 
         geometry_msgs::Twist::Ptr mvt(new geometry_msgs::Twist());
-        *mvt = zero;
-
+        
+        ROS_INFO("dz : %f > %f : dz_min ?", dz, dz_min);
         if (dz > dz_min)
+        {
           mvt->linear.z = dz * z_vel;
+          ROS_INFO("z changed");
+        }
+        ROS_INFO("xx : %f > %f : x_dev_min ?", xx, x_dev_min);
         if (xx > x_dev_min)
+        {
           mvt->linear.x = xx * plan_vel;
+          ROS_INFO("x changed");
+        }
+        ROS_INFO("yy : %f > %f : y_dev_min ?", yy, y_dev_min);
         if (yy > y_dev_min)
+        {
           mvt->linear.y = yy * plan_vel;
+          ROS_INFO("y changed");
+        }
 
         pub.publish(mvt);
         ros::spinOnce();
@@ -135,7 +157,7 @@ int main(int argc, char** argv)
   }
 
   ros::Publisher cmd_pub = node.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-  Run run(cmd_pub, max_curv, plan_vel, z_vel, 0.05, 0.05, 0.05);
+  Run run(cmd_pub, max_curv, plan_vel, z_vel, 0.0, 0.0, 0.0);
   ros::Subscriber plan_sub = node.subscribe<hand_control::Plan>("input", 1, run);
   run.run();
   return 0;
