@@ -9,7 +9,7 @@
 
   <param name="/filtre/zmax" value="1.1" type="double"/>
   <param name="/filtre/hue" value="0.0" type="double"/>
-  <param name="/filtre/delta_hue" value="10.0" type="double"/>
+  <param name="/filtre/delta_hue" value="15.0" type="double"/>
 
   <node name="normal_estimator" pkg="hand_control" type="normal_estimator">
     <remap from="/estimator/input" to="/filtre/output"/>
