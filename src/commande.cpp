@@ -40,7 +40,7 @@ class Run
       if (fabs(dz) > dz_min)
       {
         mvt->linear.z = dz * z_vel;
-        ROS_INFO("z changed");
+        ROS_INFO("z changed : %f, z_vel %f", mvt->linear.z, z_vel);
       }
       if (fabs(xx) > x_dev_min)
       {
@@ -168,23 +168,23 @@ int main(int argc, char** argv)
   }
 
   double x_dev_min(0);
-  if (node.getParam("x_dev_min", z_vel))
+  if (node.getParam("x_dev_min", x_dev_min))
   {
-    ROS_INFO("x_dev_min : %f" , z_vel);
+    ROS_INFO("x_dev_min : %f" , x_dev_min);
   } else {
     node.setParam("x_dev_min", 0.05);
-    node.getParam("x_dev_min", z_vel);
-    ROS_INFO("x_dev_min : %f (default value)", z_vel);
+    node.getParam("x_dev_min", x_dev_min);
+    ROS_INFO("x_dev_min : %f (default value)", x_dev_min);
   }
 
   double y_dev_min(0);
-  if (node.getParam("y_dev_min", z_vel))
+  if (node.getParam("y_dev_min", y_dev_min))
   {
-    ROS_INFO("y_dev_min : %f" , z_vel);
+    ROS_INFO("y_dev_min : %f" , y_dev_min);
   } else {
     node.setParam("y_dev_min", 0.05);
-    node.getParam("y_dev_min", z_vel);
-    ROS_INFO("y_dev_min : %f (default value)", z_vel);
+    node.getParam("y_dev_min", y_dev_min);
+    ROS_INFO("y_dev_min : %f (default value)", y_dev_min);
   }
 
   double dz_dev_min(0);
