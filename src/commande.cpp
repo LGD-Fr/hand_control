@@ -42,12 +42,12 @@ class Run
         mvt->linear.z = dz * z_vel;
         ROS_INFO("z changed");
       }
-      if (xx > x_dev_min)
+      if (fabs(xx) > x_dev_min)
       {
         mvt->linear.y = xx * plan_vel;
         // because of the kinect orientation
       }
-      if (yy > y_dev_min)
+      if (fabs(yy) > y_dev_min)
       {
         mvt->linear.x = yy * plan_vel;
         // because of the kinect orientation

@@ -1,5 +1,0 @@
-<launch>
-        <node name="commande" pkg="hand_control" type="commande">
-                <remap from="/filtre/output" to="/cmd_vel"/>
-        </node>
-</launch>
