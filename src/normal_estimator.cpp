@@ -43,8 +43,8 @@ class Callback {
     const hand_control::Plan::ConstPtr
     to_Plan(const float& x, const float& y,
             const float& z, const float& h,
-            const float& c, uint32_t seq,
-            uint64_t msec64, uint64_t number)
+            const float& c, const uint32_t& seq,
+            const uint64_t& msec64, const uint64_t& number)
     {
       hand_control::Plan::Ptr ros_msg(new hand_control::Plan());
       ros_msg->normal.x = x; 
