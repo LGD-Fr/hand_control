@@ -17,6 +17,8 @@ class Callback {
         BOOST_FOREACH (const Point& pt, msg->points)
         {
           uint8_t min, max, c;
+          
+          //Recherche du min et du max des coefficients R,G,B
           if (pt.r >= pt.g) {
             if (pt.g >= pt.b) {
               max = pt.r
@@ -40,7 +42,7 @@ class Callback {
           }
           
           c = max - min;
-
+          
           assert(c > 0);
           assert(max > pt.r);
           assert(max > pt.g);
@@ -50,7 +52,7 @@ class Callback {
           assert(min < pt.b);
          
           
-
+          
           pcl->height = 1;
           pcl->width = pcl->points.size();
           publisher.publish(pcl);
