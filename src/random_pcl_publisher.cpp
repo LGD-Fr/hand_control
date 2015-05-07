@@ -27,9 +27,9 @@ class Generator
       cgen.fill(length, length, *pcl);
       for (int i = 0; i < pcl->points.size(); ++i)
       {
-        pcl->points[i].r = (uint8_t) 255;
-        pcl->points[i].g = (uint8_t) 255;
-        pcl->points[i].b = (uint8_t) 0;
+        pcl->points[i].r = (uint8_t) 175;
+        pcl->points[i].g = (uint8_t) 120;
+        pcl->points[i].b = (uint8_t) 118;
       }
       ros::Time now = ros::Time::now();
       pcl->header.stamp =  now.toNSec() / 1000;

@@ -61,7 +61,7 @@ class Callback {
         diff2 = std::fabs(360.0f + h - hue);
       else
         diff2 = std::fabs(360.0f + hue - h);
-      return std::max(diff1, diff2);
+      return std::min(diff1, diff2);
     }
 };
 
