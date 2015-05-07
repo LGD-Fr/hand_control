@@ -188,13 +188,13 @@ int main(int argc, char** argv)
   }
 
   double dz_dev_min(0);
-  if (node.getParam("dz_dev_min", z_vel))
+  if (node.getParam("dz_dev_min", dz_dev_min))
   {
-    ROS_INFO("dz_dev_min : %f" , z_vel);
+    ROS_INFO("dz_dev_min : %f" , dz_dev_min);
   } else {
     node.setParam("dz_dev_min", 0.05);
-    node.getParam("dz_dev_min", z_vel);
-    ROS_INFO("dz_dev_min : %f (default value)", z_vel);
+    node.getParam("dz_dev_min", dz_dev_min);
+    ROS_INFO("dz_dev_min : %f (default value)", dz_dev_min);
   }
 
   ros::Publisher cmd_pub = node.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
