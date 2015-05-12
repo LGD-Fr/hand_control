@@ -100,11 +100,15 @@ class Run
         }
         
         if(msg->normal.z > 0)
+        {
           yy = msg->normal.x;
           xx = msg->normal.y;
+        }
         else
+        {
           yy = - msg->normal.x;
           xx = - msg->normal.y;
+        }
 
         t_previous = t_current;
         z_previous = z_current;
