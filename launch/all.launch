@@ -15,10 +15,17 @@
     <remap from="/estimator/input" to="/filtre/output"/>
   </node>
 
-  <!--
+  <param name="/commande/max_curv" value="0.02" type="double" />
+  <param name="/commande/plan_vel" value="0.8" type="double" />
+  <param name="/commande/z_vel" value="0.8" type="double" />
+  <param name="/commande/min_number" value="5000" type="int" />
+  <param name="/commande/x_dev_min" value="0.1" type="double" />
+  <param name="/commande/y_dev_min" value="0.1" type="double" />
+  <param name="/commande/y_dev_min" value="0.1" type="double" />
+  <param name="/commande/dz_dev_min" value="0.1" type="double" />
+
   <node name="commander" pkg="hand_control" type="commande">
-    <remap from="/commander/input" to="/estimator/output"/>
+    <remap from="/commande/input" to="/estimator/output"/>
   </node>
-  -->
 
 </launch>
