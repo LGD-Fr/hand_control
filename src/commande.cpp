@@ -17,8 +17,17 @@ class Run
 
     ros::Rate loop_rate;
 
-    // xx*plan_vel, yy*plan_vel and dz*dz_vel will be published
     float xx, yy, dz;
+
+    // xx > 0 : forward
+    // xx < 0 : backward
+
+    // yy > 0 : right
+    // yy < 0 : left
+
+    // dz > 0 : up
+    // dz < 0 : down
+
     float plan_vel, z_vel;
 
     // to calculate dz
@@ -44,13 +53,11 @@ class Run
       }
       if (fabs(xx) > x_dev_min)
       {
-        mvt->linear.y = xx * plan_vel;
-        // because of the kinect orientation
+        mvt->linear.x = xx * plan_vel;
       }
       if (fabs(yy) > y_dev_min)
       {
-        mvt->linear.x = yy * plan_vel;
-        // because of the kinect orientation
+        mvt->linear.y = yy * plan_vel;
       }
       pub.publish(mvt);
       ROS_INFO("cmd published");
@@ -92,10 +99,12 @@ class Run
           ROS_INFO("dz = %f", dz);
         }
         
-        xx = msg->normal.x;
-        ROS_INFO("xx = %f", xx);
-        yy = msg->normal.y;
-        ROS_INFO("yy = %f", yy);
+        if(msg->normal.z > 0)
+          yy = msg->normal.x;
+          xx = msg->normal.y;
+        else
+          yy = - msg->normal.x;
+          xx = - msg->normal.y;
 
         t_previous = t_current;
         z_previous = z_current;
