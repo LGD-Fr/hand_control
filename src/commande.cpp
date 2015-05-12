@@ -91,7 +91,7 @@ class Run
           dz = (z_current - z_previous)/((t_current - t_previous).toSec());
           ROS_INFO("dz = %f", dz);
         }
-
+        
         xx = msg->normal.x;
         ROS_INFO("xx = %f", xx);
         yy = msg->normal.y;
@@ -107,6 +107,8 @@ class Run
           ROS_INFO("first msg received");
         }
         ROS_INFO("coords updated");
+      } else {
+        xx = yy = dz = 0.;
       }
     };
 
