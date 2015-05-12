@@ -1,0 +1,34 @@
+
+<launch>
+
+  <include file="$(find hand_control)/launch/freenect-registered-xyzrgb.launch"/>
+
+  <param name="/filtre/zmax" value="1.9" type="double"/>
+  <!-- hand color
+  <param name="/filtre/hue" value="0.0" type="double"/>
+  -->
+  <param name="/filtre/hue" value="210.0" type="double"/>
+  <param name="/filtre/delta_hue" value="20.0" type="double"/>
+
+  <node name="filtre" pkg="hand_control" type="filtre">
+    <remap from="/filtre/input" to="/camera/xyzrgb/points"/>
+  </node>
+
+  <node name="estimator" pkg="hand_control" type="normal_estimator">
+    <remap from="/estimator/input" to="/filtre/output"/>
+  </node>
+
+  <param name="/commande/max_curv" value="0.02" type="double" />
+  <param name="/commande/plan_vel" value="0.2" type="double" />
+  <param name="/commande/z_vel" value="1.0" type="double" />
+  <param name="/commande/min_number" value="2000" type="int" />
+  <param name="/commande/x_dev_min" value="0.1" type="double" />
+  <param name="/commande/y_dev_min" value="0.1" type="double" />
+  <param name="/commande/y_dev_min" value="0.1" type="double" />
+  <param name="/commande/dz_dev_min" value="0.05" type="double" />
+
+  <node name="commander" pkg="hand_control" type="commande-new">
+    <remap from="/commande/input" to="/estimator/output"/>
+  </node>
+
+</launch>

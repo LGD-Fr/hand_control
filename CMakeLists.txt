@@ -62,3 +62,9 @@ add_dependencies(normal_estimator hand_control_generate_messages_cpp)
 
 add_executable(commande src/commande.cpp)
 target_link_libraries(commande ${catkin_LIBRARIES})
+
+add_executable(commande-new src/commande-new.cpp)
+target_link_libraries(commande-new ${catkin_LIBRARIES})
+
+add_executable(commande-new-1d src/commande-new-1d.cpp)
+target_link_libraries(commande-new-1d ${catkin_LIBRARIES})
