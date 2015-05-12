@@ -84,7 +84,7 @@ class Run
       if (msg->curvature < max_curv && msg->number > min_number)
       {
         t_current = msg->header.stamp;
-        z_current = msg->normal.z;
+        z_current = msg->altitude;
 
         if (!first_msg)
         {
