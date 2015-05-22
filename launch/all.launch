@@ -12,7 +12,7 @@
     <remap from="/estimator/input" to="/filtre/output"/>
   </node>
 
-  <node name="commander" pkg="hand_control" type="commande">
+  <node name="commander" pkg="hand_control" type="commande-new-1d">
     <remap from="/commande/input" to="/estimator/output"/>
   </node>
 
