@@ -3,6 +3,7 @@
 #include <locale.h>
 #include <limits>
 #include <math.h>
+#include <assert.h>
 
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
@@ -60,7 +61,8 @@ class Run
       {
         mvt->linear.x = xx * plan_vel;
       }
-
+      
+      assert( !(mvt->linear.x > 0. && mvt->linear.y > 0.) );
       pub.publish(mvt);
       ROS_INFO("cmd published");
     }//end publish
