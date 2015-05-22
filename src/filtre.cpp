@@ -68,14 +68,22 @@ class Callback {
       return std::min(diff1, diff2);
     }
 
+<<<<<<< HEAD
     float sat(const Point& pt)
+=======
+    float sat_dist(const Point& pt)
+>>>>>>> 016c5b01c8e2d4513b333d32b0e0689e985e6776
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
       return s;
     }
 
+<<<<<<< HEAD
     float val(const Point& pt)
+=======
+    float val_dist(const Point& pt)
+>>>>>>> 016c5b01c8e2d4513b333d32b0e0689e985e6776
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
