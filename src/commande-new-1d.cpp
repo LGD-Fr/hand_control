@@ -56,10 +56,12 @@ class Run
       if (fabs(yy) > fabs(xx) && fabs(yy) > y_dev_min)
       {
         mvt->linear.y = yy * plan_vel;
+        mvt->linear.x = 0.;
       }
       else if (fabs(xx) > x_dev_min)
       {
         mvt->linear.x = xx * plan_vel;
+        mvt->linear.y = 0.;
       }
       
       assert( !(mvt->linear.x > 0. && mvt->linear.y > 0.) );
