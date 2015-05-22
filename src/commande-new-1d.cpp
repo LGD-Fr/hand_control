@@ -64,7 +64,7 @@ class Run
         mvt->linear.y = 0.;
       }
       
-      assert( !(mvt->linear.x > 0. && mvt->linear.y > 0.) );
+      assert(mvt->linear.x == 0. || mvt->linear.y == 0.);
       pub.publish(mvt);
       ROS_INFO("cmd published");
     }//end publish
