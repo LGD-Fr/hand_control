@@ -17,8 +17,8 @@ class Run
   private:
     float xx, yy, dz;
 
-    // xx > 0 : forward
-    // xx < 0 : backward
+    // xx < 0 : forward
+    // xx > 0 : backward
 
     // yy > 0 : right
     // yy < 0 : left
@@ -56,12 +56,10 @@ class Run
       if (fabs(yy) > fabs(xx) && fabs(yy) > y_dev_min)
       {
         mvt->linear.y = yy * plan_vel;
-        mvt->linear.x = 0.;
       }
       else if (fabs(xx) > x_dev_min)
       {
-        mvt->linear.x = xx * plan_vel;
-        mvt->linear.y = 0.;
+        mvt->linear.x = - xx * plan_vel;
       }
       
       assert(mvt->linear.x == 0. || mvt->linear.y == 0.);
