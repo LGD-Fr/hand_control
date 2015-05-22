@@ -25,7 +25,7 @@ class Run
     // dz > 0 : up
     // dz < 0 : down
 
-    float plan_vel, z_vel;
+    float plan_vel, z_vel, up_factor;
 
     // to calculate dz
     float z_current, z_previous;
@@ -43,10 +43,15 @@ class Run
     void publish()
     {
       geometry_msgs::Twist::Ptr mvt(new geometry_msgs::Twist());
+
       if (fabs(dz) > dz_min)
       {
-        mvt->linear.z = dz * z_vel;
+        if (dz > 0)
+          mvt->linear.z = dz * z_vel * up_factor ;
+        else
+          mvt->linear.z = dz * z_vel;
       }
+
       if (fabs(yy) > fabs(xx) && fabs(yy) > y_dev_min)
       {
         mvt->linear.y = yy * plan_vel;
@@ -55,6 +60,7 @@ class Run
       {
         mvt->linear.x = xx * plan_vel;
       }
+
       pub.publish(mvt);
       ROS_INFO("cmd published");
     }//end publish
@@ -62,7 +68,7 @@ class Run
   public:
     Run(const ros::Publisher& cmd_publisher, const float& max_curvature, const float& plan_velocity,
         const float& z_velocity, const float& x_minimal_deviation, const float& y_minimal_deviation,
-        const float& dz_minimal_difference, const int& min_points_number) :
+        const float& dz_minimal_difference, const int& min_points_number, const float& up_fact) :
       pub(cmd_publisher),
       plan_vel(plan_velocity),
       max_curv(max_curvature),
@@ -74,7 +80,8 @@ class Run
       y_dev_min(y_minimal_deviation),
       dz_min(dz_minimal_difference),
       first_msg(true),
-      min_number(min_points_number){
+      min_number(min_points_number),
+      up_factor(up_fact) {
         z_current = z_previous =  std::numeric_limits<float>::signaling_NaN();
         t_previous.nsec = t_previous.sec =
           t_previous.nsec = t_previous.sec = std::numeric_limits<uint32_t>::signaling_NaN();
@@ -203,8 +210,18 @@ int main(int argc, char** argv)
     ROS_INFO("dz_dev_min : %f (default value)", dz_dev_min);
   }
 
+  double up_fact(0);
+  if (node.getParam("up_fact", up_fact))
+  {
+    ROS_INFO("up_fact : %f" , up_fact);
+  } else {
+    node.setParam("up_fact", 1.5);
+    node.getParam("up_fact", up_fact);
+    ROS_INFO("up_fact : %f (default value)", up_fact);
+  }
+
   ros::Publisher cmd_pub = node.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-  Run run(cmd_pub, max_curv, plan_vel, z_vel, x_dev_min, y_dev_min, dz_dev_min, min_number);
+  Run run(cmd_pub, max_curv, plan_vel, z_vel, x_dev_min, y_dev_min, dz_dev_min, min_number, up_fact);
   ros::Subscriber plan_sub = node.subscribe<hand_control::Plan>("input", 1, &Run::callback, &run);
   run.run();
   return 0;

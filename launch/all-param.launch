@@ -2,10 +2,10 @@
 <launch>
 
   <param name="/filtre/zmax" value="1.9" type="double"/>
-  <!-- hand color
   <param name="/filtre/hue" value="0.0" type="double"/>
-  -->
+  <!--
   <param name="/filtre/hue" value="210.0" type="double"/>
+  -->
   <param name="/filtre/delta_hue" value="20.0" type="double"/>
 
   <param name="/commande/max_curv" value="0.02" type="double" />
