@@ -17,7 +17,7 @@ class Callback {
       copy_info(msg, pcl);
       BOOST_FOREACH (const Point& pt, msg->points)
       {
-        if (pt.z < zmax and hue_dist(pt) < delta_hue and sat_dist(pt) < delta_sat and val_dist(pt) < delta_val)
+        if (pt.z < zmax and hue_dist(pt) < delta_hue and sat(pt) < sat_max and sat(pt) > sat_min and val(pt) < val_max and val(pt) > val_min)
           pcl->push_back(pt);
       }
       pcl->height = 1;
@@ -25,8 +25,8 @@ class Callback {
       publisher.publish(pcl);
     }
 
-    Callback(ros::Publisher& pub, float z, float h, float delta_h, float s, float delta_s, float v, float delta_v)
-    : publisher(pub), zmax(z), hue(h), delta_hue(delta_h),  sat(s), delta_sat(delta_s), val(v), delta_val(delta_val)
+    Callback(ros::Publisher& pub, float z, float h, float delta_h, float smin, float smax, float vmin, float vmax)
+    : publisher(pub), zmax(z), hue(h), delta_hue(delta_h),  sat_min(smin), sat_max(smax), val_min(vmin), val_max(vmax)
     {
       assert(delta_hue > 0);
       assert(zmax > 0);
@@ -40,7 +40,7 @@ class Callback {
 
   private:
     ros::Publisher publisher;
-    float zmax, hue, delta_hue, val, delta_val, sat, delta_sat;
+    float zmax, hue, delta_hue, val_min, val_max, sat_min, sat_max;
 
     inline
     void
@@ -68,18 +68,18 @@ class Callback {
       return std::min(diff1, diff2);
     }
 
-    sat_dist(const Point& pt)
+    float sat(const Point& pt)
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
-      return std::fabs(s - sat);
+      return s;
     }
 
-    val_dist(const Point& pt)
+    float val(const Point& pt)
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
-      return std::fabs(v - val);
+      return v;
     }
 };
 
@@ -120,49 +120,49 @@ main(int argc, char** argv)
     ROS_INFO("delta_hue : %f (default value)", delta_hue);
   }
 
-  double sat(0);
-  if (node.getParam("sat", sat))
+  double sat_min(0);
+  if (node.getParam("sat_min", sat_min))
   {
-    ROS_INFO("sat : %f" , sat);
+    ROS_INFO("sat_min : %f" , sat_min);
   } else {
-    node.setParam("sat", 0.0);
-    node.getParam("sat", sat);
-    ROS_INFO("sat : %f (default value)", sat);
+    node.setParam("sat_min", 0.1);
+    node.getParam("sat_min", sat_min);
+    ROS_INFO("sat_min : %f (default value)", sat_min);
   }
 
-  double delta_sat(0);
-  if (node.getParam("delta_sat", delta_sat))
+  double sat_max(0);
+  if (node.getParam("sat_max", sat_max))
   {
-    ROS_INFO("delta_sat : %f" , delta_sat);
+    ROS_INFO("sat_max : %f" , sat_max);
   } else {
-    node.setParam("delta_sat", 10.0);
-    node.getParam("delta_sat", delta_sat);
-    ROS_INFO("delta_sat : %f (default satue)", delta_sat);
+    node.setParam("sat_max", 1.);
+    node.getParam("sat_max", sat_max);
+    ROS_INFO("sat_max : %f (default value)", sat_max);
   }
 
-  double val(0);
-  if (node.getParam("val", hue))
+  double val_min(0);
+  if (node.getParam("val_min", val_min))
   {
-    ROS_INFO("val : %f" , hue);
+    ROS_INFO("val_min : %f" , val_min);
   } else {
-    node.setParam("val", 0.0);
-    node.getParam("val", hue);
-    ROS_INFO("val : %f (default value)", hue);
+    node.setParam("val_min", 0.4);
+    node.getParam("val_min", val_min);
+    ROS_INFO("val_min : %f (default value)", val_min);
   }
 
-  double delta_val(0);
-  if (node.getParam("delta_val", delta_hue))
+  double val_max(0);
+  if (node.getParam("val_max", val_max))
   {
-    ROS_INFO("delta_val : %f" , delta_hue);
+    ROS_INFO("val_max : %f" , val_max);
   } else {
-    node.setParam("delta_val", 10.0);
-    node.getParam("delta_val", delta_hue);
-    ROS_INFO("delta_val : %f (default value)", delta_hue);
+    node.setParam("val_max", 1.);
+    node.getParam("val_max", val_max);
+    ROS_INFO("val_max : %f (default value)", val_max);
   }
 
   // initialisatio
   ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
-  Callback callback(publisher, (float) zmax, (float) hue, (float) delta_hue, (float) sat, (float) delta_sat, (float) val, (float) delta_val);
+  Callback callback(publisher, (float) zmax, (float) hue, (float) delta_hue, (float) sat_min, (float) sat_max, (float) val_min, (float) val_max);
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
 
   // démarrage
