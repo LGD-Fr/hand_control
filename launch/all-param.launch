@@ -7,7 +7,11 @@
   <param name="/filtre/hue" value="210.0" type="double"/>
   -->
   <param name="/filtre/hue" value="140.0" type="double"/>
-  <param name="/filtre/delta_hue" value="20.0" type="double"/>
+  <param name="/filtre/delta_hue" value="60.0" type="double"/>
+  <param name="/filtre/val_min" value="0.01" type="double"/>
+  <param name="/filtre/val_max" value="1." type="double"/>
+  <param name="/filtre/sat_min" value="0.02" type="double"/>
+  <param name="/filtre/sat_max" value="1." type="double"/>
 
   <param name="/commande/max_curv" value="0.02" type="double" />
   <param name="/commande/plan_vel" value="0.2" type="double" />
