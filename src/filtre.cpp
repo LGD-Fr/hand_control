@@ -68,14 +68,14 @@ class Callback {
       return std::min(diff1, diff2);
     }
 
-    sat_dist(const Point& pt)
+    float sat_dist(const Point& pt)
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
       return std::fabs(s - sat);
     }
 
-    val_dist(const Point& pt)
+    float val_dist(const Point& pt)
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
