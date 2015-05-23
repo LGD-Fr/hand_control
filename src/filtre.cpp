@@ -17,7 +17,7 @@ class Callback {
       copy_info(msg, pcl);
       BOOST_FOREACH (const Point& pt, msg->points)
       {
-        if (pt.z < zmax and hue_dist(pt) < delta_hue and sat(pt) < sat_max and sat(pt) > sat_min and val(pt) < val_max and val(pt) > val_min)
+        if (pt.z < z_max and hue_dist(pt) < delta_hue and sat(pt) < sat_max and sat(pt) > sat_min and val(pt) < val_max and val(pt) > val_min)
           pcl->push_back(pt);
       }
       pcl->height = 1;
@@ -26,10 +26,10 @@ class Callback {
     }
 
     Callback(ros::Publisher& pub, float z, float h, float delta_h, float smin, float smax, float vmin, float vmax)
-    : publisher(pub), zmax(z), hue(h), delta_hue(delta_h),  sat_min(smin), sat_max(smax), val_min(vmin), val_max(vmax)
+    : publisher(pub), z_max(z), hue(h), delta_hue(delta_h),  sat_min(smin), sat_max(smax), val_min(vmin), val_max(vmax)
     {
       assert(delta_hue > 0);
-      assert(zmax > 0);
+      assert(z_max > 0);
       assert(hue >= 0);
       assert(hue <= 360.);
       assert(sat_min >= 0);
@@ -40,7 +40,7 @@ class Callback {
 
   private:
     ros::Publisher publisher;
-    float zmax, hue, delta_hue, val_min, val_max, sat_min, sat_max;
+    float z_max, hue, delta_hue, val_min, val_max, sat_min, sat_max;
 
     inline
     void
@@ -90,14 +90,14 @@ main(int argc, char** argv)
   ros::NodeHandle node("filtre");
 
   // récupération des paramètres
-  double zmax(0);
-  if (node.getParam("zmax", zmax))
+  double z_max(0);
+  if (node.getParam("z_max", z_max))
   {
-    ROS_INFO("zmax : %f" , zmax);
+    ROS_INFO("z_max : %f" , z_max);
   } else {
-    node.setParam("zmax", 50.0);
-    node.getParam("zmax", zmax);
-    ROS_INFO("zmax : %f (default value)", zmax);
+    node.setParam("z_max", 50.0);
+    node.getParam("z_max", z_max);
+    ROS_INFO("z_max : %f (default value)", z_max);
   }
 
   double hue(0);
@@ -162,7 +162,7 @@ main(int argc, char** argv)
 
   // initialisatio
   ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
-  Callback callback(publisher, (float) zmax, (float) hue, (float) delta_hue, (float) sat_min, (float) sat_max, (float) val_min, (float) val_max);
+  Callback callback(publisher, (float) z_max, (float) hue, (float) delta_hue, (float) sat_min, (float) sat_max, (float) val_min, (float) val_max);
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
 
   // démarrage
