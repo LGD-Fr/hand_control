@@ -3,6 +3,8 @@
 #include <pcl/point_types.h>
 #include <pcl/tracking/impl/hsv_color_coherence.hpp>
 #include <assert.h>
+#include <dynamic_reconfigure/server.h>
+#include <hand_control/FiltreConfig.h>
 
 
 typedef pcl::PointXYZRGB Point;
@@ -11,7 +13,7 @@ typedef pcl::PointCloud<Point> PointCloud;
 class Callback {
   public:
     void
-    operator()(const PointCloud::ConstPtr& msg)
+    callback(const PointCloud::ConstPtr& msg)
     {
       PointCloud::Ptr pcl(new PointCloud());
       copy_info(msg, pcl);
@@ -25,8 +27,8 @@ class Callback {
       publisher.publish(pcl);
     }
 
-    Callback(ros::Publisher& pub, float z, float h, float delta_h, float smin, float smax, float vmin, float vmax)
-    : publisher(pub), z_max(z), hue(h), delta_hue(delta_h),  sat_min(smin), sat_max(smax), val_min(vmin), val_max(vmax)
+    Callback(ros::Publisher& pub)
+    : publisher(pub), z_max(90.), hue(0.), delta_hue(20.),  sat_min(0.3), sat_max(1.), val_min(0.3), val_max(1.)
     {
       assert(delta_hue > 0);
       assert(z_max > 0);
@@ -37,6 +39,17 @@ class Callback {
       assert(val_min >= 0);
       assert(val_max <= 1.);
     }
+
+  void
+  reconfigure(hand_control::FiltreConfig& c, uint32_t level) { 
+    z_max = c.z_max;
+    hue = c.hue;
+    delta_hue = c.delta_hue;
+    val_min = c.val_min;
+    val_max = c.val_max;
+    sat_min = c.sat_min;
+    sat_max = c.sat_max;
+  }
 
   private:
     ros::Publisher publisher;
@@ -89,81 +102,15 @@ main(int argc, char** argv)
   ros::init(argc, argv, "filtre");
   ros::NodeHandle node("filtre");
 
-  // récupération des paramètres
-  double z_max(0);
-  if (node.getParam("z_max", z_max))
-  {
-    ROS_INFO("z_max : %f" , z_max);
-  } else {
-    node.setParam("z_max", 50.0);
-    node.getParam("z_max", z_max);
-    ROS_INFO("z_max : %f (default value)", z_max);
-  }
-
-  double hue(0);
-  if (node.getParam("hue", hue))
-  {
-    ROS_INFO("hue : %f" , hue);
-  } else {
-    node.setParam("hue", 0.0);
-    node.getParam("hue", hue);
-    ROS_INFO("hue : %f (default value)", hue);
-  }
-
-  double delta_hue(0);
-  if (node.getParam("delta_hue", delta_hue))
-  {
-    ROS_INFO("delta_hue : %f" , delta_hue);
-  } else {
-    node.setParam("delta_hue", 10.0);
-    node.getParam("delta_hue", delta_hue);
-    ROS_INFO("delta_hue : %f (default value)", delta_hue);
-  }
-
-  double sat_min(0);
-  if (node.getParam("sat_min", sat_min))
-  {
-    ROS_INFO("sat_min : %f" , sat_min);
-  } else {
-    node.setParam("sat_min", 0.1);
-    node.getParam("sat_min", sat_min);
-    ROS_INFO("sat_min : %f (default value)", sat_min);
-  }
-
-  double sat_max(0);
-  if (node.getParam("sat_max", sat_max))
-  {
-    ROS_INFO("sat_max : %f" , sat_max);
-  } else {
-    node.setParam("sat_max", 1.);
-    node.getParam("sat_max", sat_max);
-    ROS_INFO("sat_max : %f (default value)", sat_max);
-  }
-
-  double val_min(0);
-  if (node.getParam("val_min", val_min))
-  {
-    ROS_INFO("val_min : %f" , val_min);
-  } else {
-    node.setParam("val_min", 0.4);
-    node.getParam("val_min", val_min);
-    ROS_INFO("val_min : %f (default value)", val_min);
-  }
-
-  double val_max(0);
-  if (node.getParam("val_max", val_max))
-  {
-    ROS_INFO("val_max : %f" , val_max);
-  } else {
-    node.setParam("val_max", 1.);
-    node.getParam("val_max", val_max);
-    ROS_INFO("val_max : %f (default value)", val_max);
-  }
-
-  // initialisatio
+  // initialisation
   ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
-  Callback callback(publisher, (float) z_max, (float) hue, (float) delta_hue, (float) sat_min, (float) sat_max, (float) val_min, (float) val_max);
-  ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
+  Callback my_callback(publisher);
+  ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, &Callback::callback, &my_callback);
+
+  dynamic_reconfigure::Server<hand_control::FiltreConfig> server;
+  dynamic_reconfigure::Server<hand_control::FiltreConfig>::CallbackType f;
+  f = boost::bind(&Callback::reconfigure, &my_callback, _1, _2);
+  server.setCallback(f);
 
   // démarrage
   ROS_INFO("node started");
