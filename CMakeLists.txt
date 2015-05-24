@@ -48,12 +48,6 @@ add_library(display src/display.cpp)
   add_executable(keyboard_cmd src/keyboard_cmd.cpp)
 target_link_libraries(keyboard_cmd display ${catkin_LIBRARIES} ${ncursesw_LIBRARIES})
 
-  add_executable(filtreRGB src/filtreRGB.cpp)
-target_link_libraries(filtreRGB ${catkin_LIBRARIES})
-
-#add_executable(filtreHue src/filtreHue.cpp)
-#target_link_libraries(filtreHue ${catkin_LIBRARIES})
-
   add_executable(normal_estimator src/normal_estimator.cpp)
 target_link_libraries(normal_estimator ${catkin_LIBRARIES})
 add_dependencies(normal_estimator hand_control_generate_messages_cpp)
