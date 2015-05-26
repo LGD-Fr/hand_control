@@ -19,7 +19,9 @@ class Callback {
       copy_info(msg, pcl);
       BOOST_FOREACH (const Point& pt, msg->points)
       {
-        if (pt.z < z_max and hue_dist(pt) < delta_hue and sat(pt) < sat_max and sat(pt) > sat_min and val(pt) < val_max and val(pt) > val_min)
+        float hue_dist, sat, val;
+        hdist_s_v(pt, hue_dist, sat, val);
+        if (pt.z < z_max and hue_dist < delta_hue and sat < sat_max and sat > sat_min and val < val_max and val > val_min)
           pcl->push_back(pt);
       }
       pcl->height = 1;
@@ -41,7 +43,7 @@ class Callback {
     }
 
   void
-  reconfigure(const hand_control::FiltreConfig& c, const uint32_t level) { 
+  reconfigure(const hand_control::FiltreConfig& c, const uint32_t& level) { 
     z_max = c.z_max;
     hue = c.hue;
     delta_hue = c.delta_hue;
@@ -49,6 +51,14 @@ class Callback {
     val_max = c.val_max;
     sat_min = c.sat_min;
     sat_max = c.sat_max;
+    assert(delta_hue > 0);
+    assert(z_max > 0);
+    assert(hue >= 0);
+    assert(hue <= 360.);
+    assert(sat_min >= 0);
+    assert(sat_max <= 1.);
+    assert(val_min >= 0);
+    assert(val_max <= 1.);
   }
 
   private:
@@ -58,7 +68,7 @@ class Callback {
     inline
     void
     copy_info(const PointCloud::ConstPtr& a,
-              PointCloud::Ptr b)
+              PointCloud::Ptr& b)
     {
       b->header = a->header;
       b->sensor_origin_ = a->sensor_origin_;
@@ -67,10 +77,10 @@ class Callback {
     }
 
     inline
-    float
-    hue_dist(const Point& pt)
+    void
+    hdist_s_v(const Point& pt, float& h_dist, float& s, float& v)
     {
-      float h, s, v, diff1, diff2;
+      float h, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
       h *= 360.0f ;
       diff1 = std::fabs(h - hue);
@@ -78,25 +88,7 @@ class Callback {
         diff2 = std::fabs(360.0f + h - hue);
       else
         diff2 = std::fabs(360.0f + hue - h);
-      return std::min(diff1, diff2);
-    }
-    
-    inline
-    float
-    sat(const Point& pt)
-    {
-      float h, s, v, diff1, diff2;
-      pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
-      return s;
-    }
-
-    inline
-    float
-    val(const Point& pt)
-    {
-      float h, s, v, diff1, diff2;
-      pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
-      return v;
+      h_dist = std::min(diff1, diff2);
     }
 };
 
