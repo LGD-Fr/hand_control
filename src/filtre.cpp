@@ -27,7 +27,7 @@ class Callback {
       publisher.publish(pcl);
     }
 
-    Callback(ros::Publisher& pub)
+    Callback(const ros::Publisher& pub)
     : publisher(pub), z_max(90.), hue(0.), delta_hue(20.),  sat_min(0.3), sat_max(1.), val_min(0.3), val_max(1.)
     {
       assert(delta_hue > 0);
@@ -41,7 +41,7 @@ class Callback {
     }
 
   void
-  reconfigure(hand_control::FiltreConfig& c, uint32_t level) { 
+  reconfigure(const hand_control::FiltreConfig& c, const uint32_t level) { 
     z_max = c.z_max;
     hue = c.hue;
     delta_hue = c.delta_hue;
@@ -80,15 +80,19 @@ class Callback {
         diff2 = std::fabs(360.0f + hue - h);
       return std::min(diff1, diff2);
     }
-
-    float sat(const Point& pt)
+    
+    inline
+    float
+    sat(const Point& pt)
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
       return s;
     }
 
-    float val(const Point& pt)
+    inline
+    float
+    val(const Point& pt)
     {
       float h, s, v, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
