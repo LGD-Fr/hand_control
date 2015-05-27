@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
-//#include <pcl/features/normal_3d_omp.h>
+#include <pcl/features/normal_3d_omp.h>
 #include <hand_control/Plan.h>
 #include <time.h>
 #include <math.h>
@@ -10,12 +10,15 @@
 
 typedef pcl::PointXYZRGB Point;
 typedef pcl::PointCloud<Point> PointCloud;
+typedef Eigen::Matrix3f& Matrix;
 
 class Callback {
   public:
     void
     operator()(const PointCloud::ConstPtr& msg)
     {
+      analyser.setInputCloud(msg);
+      Matrix eg = analyser.getEigenVectors();
       ROS_INFO("PointCloud received");
 
       float x, y, z, th, h, c;
@@ -26,25 +29,33 @@ class Callback {
       for (int i = 0; i < msg->points.size(); ++i)
         indices.push_back(i);
 
+
+
       // vérifier signature
       //estimator.computePointNormal(*msg, indices, x, y, z, c);
            //Produit vectoriel des deux première colonnes de Matrix3f
-           x = Matrix3f.getElement(2,1)*Matrix3f.getElement(3,2)
-                 - Matrix3f.getElement(3,1)*Matrix3f.getElement(2,2);
-           y = Matrix3f.getElement(3,1)*Matrix3f.getElement(1,2)
-                 - Matrix3f.getElement(1,1)*Matrix3f.getElement(3,2);
-           z = Matrix3f.getElement(1,1)*Matrix3f.getElement(2,2)
-                 - Matrix3f.getElement(2,1)*Matrix3f.getElement(1,2);
+          /* x = eg(2,1)*eg(3,2)
+                 - eg(3,1)*eg(2,2);
+           y = eg(3,1)*eg(1,2)
+                 - eg(1,1)*eg(3,2);
+           z = eg(1,1)*eg(2,2)
+                 - eg(2,1)*eg(1,2);*/
+           Eigen::Vector3f v = eg.col(0).cross(eg.col(1));
+           v.normalize();
+           /*
            x = x/sqrt(x*x+y*y+z*z);
            y = x/sqrt(x*x+y*y+z*z);
            z = x/sqrt(x*x+y*y+z*z);
+           */
+           x = v(0); y=v(1); z=v(2);
+       
       
-      h = pcl::PCA::getMean(msg).z;
+      h = (analyser.getMean())(3);
       
       //h = altitude(msg);
       th = -90
-           + 2 * atan (Matrix3f.getElement(2,1)
-                       /(1 + Matrix3f.getElement(1,1)));
+           + 2 * atan (eg(2,1)
+                       /(1 + eg(1,1)));
 
       // publication
       ROS_INFO("Plan published");
@@ -56,8 +67,8 @@ class Callback {
 
   private:
     ros::Publisher publisher;
+    pcl::PCA<Point> analyser;
     //pcl::NormalEstimationOMP<Point, pcl::Normal> estimator;
-    Eigen::Matrix3f& pcl::PCA<Point, pcl::Normal>::getEigenVectors eigenVectors;
     
     inline
     const hand_control::Plan::ConstPtr
