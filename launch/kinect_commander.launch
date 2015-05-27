@@ -1,0 +1,17 @@
+
+<launch>
+  <include file="$(find hand_control)/launch/freenect-registered-xyzrgb.launch"/>
+
+  <node name="filter" pkg="hand_control" type="filter">
+    <remap from="/filter/input" to="/camera/xyzrgb/points"/>
+  </node>
+
+  <node name="estimator" pkg="hand_control" type="estimator">
+    <remap from="/estimator/input" to="/filter/output"/>
+  </node>
+
+  <node name="commander" pkg="hand_control" type="commander">
+    <remap from="/commander/input" to="/estimator/output"/>
+  </node>
+
+</launch>

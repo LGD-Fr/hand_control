@@ -13,7 +13,7 @@
 #include <math.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <hand_control/CommandeConfig.h>
+#include <hand_control/CommanderConfig.h>
 
 
 class Run
@@ -111,7 +111,7 @@ class Run
       publish();
     };
 
-    void reconfigure(const hand_control::CommandeConfig& c, const uint32_t& level) {
+    void reconfigure(const hand_control::CommanderConfig& c, const uint32_t& level) {
       max_curv = c.max_curvature;
       x_dev_min = c.x_minimal_deviation;
       y_dev_min = c.y_minimal_deviation;
@@ -134,15 +134,15 @@ class Run
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "commande");
-  ros::NodeHandle node("commande");
+  ros::init(argc, argv, "commander");
+  ros::NodeHandle node("commander");
 
   ros::Publisher cmd_pub = node.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
   Run run(cmd_pub);
   ros::Subscriber plan_sub = node.subscribe<hand_control::Plan>("input", 1, &Run::callback, &run);
   
-  dynamic_reconfigure::Server<hand_control::CommandeConfig> server;
-  dynamic_reconfigure::Server<hand_control::CommandeConfig>::CallbackType f;
+  dynamic_reconfigure::Server<hand_control::CommanderConfig> server;
+  dynamic_reconfigure::Server<hand_control::CommanderConfig>::CallbackType f;
   f = boost::bind(&Run::reconfigure, &run, _1, _2);
   server.setCallback(f);
 

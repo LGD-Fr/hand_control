@@ -35,8 +35,8 @@ pkg_check_modules ( ncursesw REQUIRED ncursesw)
                       ${ncursesw_INCLUDE_DIRS}
                      )
 
-  add_executable(filtre src/filtre.cpp)
-target_link_libraries(filtre ${catkin_LIBRARIES})
+  add_executable(filter src/filter.cpp)
+target_link_libraries(filter ${catkin_LIBRARIES})
 
   add_executable(random_pcl_publisher src/random_pcl_publisher.cpp)
 target_link_libraries(random_pcl_publisher ${catkin_LIBRARIES})
@@ -49,22 +49,22 @@ add_library(display src/display.cpp)
   add_executable(keyboard_cmd src/keyboard_cmd.cpp)
 target_link_libraries(keyboard_cmd display ${catkin_LIBRARIES} ${ncursesw_LIBRARIES})
 
-  add_executable(normal_estimator_pca src/normal_estimator-pca.cpp)
-target_link_libraries(normal_estimator_pca ${catkin_LIBRARIES})
-add_dependencies(normal_estimator_pca hand_control_generate_messages_cpp)
+  add_executable(estimator src/estimator.cpp)
+target_link_libraries(estimator ${catkin_LIBRARIES})
+add_dependencies(estimator hand_control_generate_messages_cpp)
 
-  add_executable(commande-abs src/commande-abs.cpp)
-target_link_libraries(commande-abs ${catkin_LIBRARIES})
-add_dependencies(commande-abs hand_control_generate_messages_cpp)
+  add_executable(commander src/commander.cpp)
+target_link_libraries(commander ${catkin_LIBRARIES})
+add_dependencies(commander hand_control_generate_messages_cpp)
 
 #add dynamic reconfigure api
 generate_dynamic_reconfigure_options(
-  cfg/Filtre.cfg
-  cfg/Commande.cfg
+  cfg/Filter.cfg
+  cfg/Commander.cfg
   )
 
-add_dependencies(filtre ${PROJECT_NAME}_gencfg)
-add_dependencies(commande-abs ${PROJECT_NAME}_gencfg)
+add_dependencies(filter ${PROJECT_NAME}_gencfg)
+add_dependencies(commander ${PROJECT_NAME}_gencfg)
 
   catkin_package(
                  CATKIN_DEPENDS message_runtime

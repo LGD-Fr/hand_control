@@ -4,7 +4,7 @@
 #include <pcl/tracking/impl/hsv_color_coherence.hpp>
 #include <assert.h>
 #include <dynamic_reconfigure/server.h>
-#include <hand_control/FiltreConfig.h>
+#include <hand_control/FilterConfig.h>
 
 
 typedef pcl::PointXYZRGB Point;
@@ -43,7 +43,7 @@ class Callback {
     }
 
   void
-  reconfigure(const hand_control::FiltreConfig& c, const uint32_t& level) { 
+  reconfigure(const hand_control::FilterConfig& c, const uint32_t& level) { 
     z_max = c.z_max;
     hue = c.hue;
     delta_hue = c.delta_hue;
@@ -95,16 +95,16 @@ class Callback {
 int
 main(int argc, char** argv)
 {
-  ros::init(argc, argv, "filtre");
-  ros::NodeHandle node("filtre");
+  ros::init(argc, argv, "filter");
+  ros::NodeHandle node("filter");
 
   // initialisation
   ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
   Callback my_callback(publisher);
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, &Callback::callback, &my_callback);
 
-  dynamic_reconfigure::Server<hand_control::FiltreConfig> server;
-  dynamic_reconfigure::Server<hand_control::FiltreConfig>::CallbackType f;
+  dynamic_reconfigure::Server<hand_control::FilterConfig> server;
+  dynamic_reconfigure::Server<hand_control::FilterConfig>::CallbackType f;
   f = boost::bind(&Callback::reconfigure, &my_callback, _1, _2);
   server.setCallback(f);
 
