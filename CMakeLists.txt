@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(hand_control)
 
-  find_package(catkin REQUIRED COMPONENTS
+find_package(catkin REQUIRED COMPONENTS
                pcl_ros
                pcl_msgs
                roscpp
@@ -11,6 +11,7 @@ project(hand_control)
                ardrone_autonomy
                dynamic_reconfigure
               )
+
 find_package(
              PkgConfig REQUIRED
             )
@@ -59,11 +60,14 @@ target_link_libraries(commande-new-1d ${catkin_LIBRARIES})
 target_link_libraries(commande-abs ${catkin_LIBRARIES})
 
 #add dynamic reconfigure api
-  generate_dynamic_reconfigure_options(
-                                       cfg/Filtre.cfg
-				       cfg/Commande.cfg
-                                      )
+generate_dynamic_reconfigure_options(
+  cfg/Filtre.cfg
+  cfg/Commande.cfg
+  )
+
 add_dependencies(filtre ${PROJECT_NAME}_gencfg)
-catkin_package(
-               CATKIN_DEPENDS message_runtime
-              )
+add_dependencies(commande-abs ${PROJECT_NAME}_gencfg)
+
+  catkin_package(
+                 CATKIN_DEPENDS message_runtime
+                )
