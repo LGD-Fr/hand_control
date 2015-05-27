@@ -54,8 +54,8 @@ target_link_libraries(normal_estimator ${catkin_LIBRARIES})
 add_dependencies(normal_estimator hand_control_generate_messages_cpp)
 
   add_executable(normal_estimator src/normal_estimator_pca.cpp)
-target_link_libraries(normal_estimator ${catkin_LIBRARIES})
-add_dependencies(normal_estimator hand_control_generate_messages_cpp)
+target_link_libraries(normal_estimator_pca ${catkin_LIBRARIES})
+add_dependencies(normal_estimator_pca hand_control_generate_messages_cpp)
 
   add_executable(commande-new-1d src/commande-new-1d.cpp)
 target_link_libraries(commande-new-1d ${catkin_LIBRARIES})
