@@ -17,6 +17,7 @@ class Callback {
     void
     operator()(const PointCloud::ConstPtr& msg)
     {
+      if (msg->width >3){
       analyser.setInputCloud(msg);
       Matrix eg = analyser.getEigenVectors();
       ROS_INFO("PointCloud received");
@@ -50,16 +51,17 @@ class Callback {
            x = v(0); y=v(1); z=v(2);
        
       
-      h = (analyser.getMean())(3);
+      h = (analyser.getMean())(2);
       
       //h = altitude(msg);
-      th = -90
-           + 2 * atan (eg(2,1)
+      th = 
+            2 * atan (eg(2,1)
                        /(1 + eg(1,1)));
 
       // publication
       ROS_INFO("Plan published");
       publisher.publish(to_Plan(x, y, z, h, th, c, msg->header.seq, msg->header.stamp, msg->width));
+      }
     }
 
     Callback(ros::Publisher& pub) :

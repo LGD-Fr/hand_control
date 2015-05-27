@@ -65,7 +65,7 @@ class Run
        mvt->angular.z * angle_vel;
      }
 
-      assert(mvt->linear.x == 0. || mvt->linear.y == 0.);
+      assert(mvt->linear.x != 0. || mvt->linear.y != 0.);
       pub.publish(mvt);
       ROS_INFO("cmd published");
     }//end publish
@@ -117,6 +117,9 @@ class Run
       neutral_z = c.neutral_alt;
       min_number = c.min_points_number;
       up_factor = c.up_fact;
+      plan_vel = c.plan_vel;
+      z_vel = c.z_vel;
+      angle_vel = c.angle_vel;
     }  
 
     void run()
