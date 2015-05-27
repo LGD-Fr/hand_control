@@ -20,6 +20,7 @@ class Run
 {
   private:
     float xx, yy, zz, theta;
+    float DEMI_PI;
 
     // xx < 0 : forward
     // xx > 0 : backward
@@ -62,7 +63,7 @@ class Run
       }
       
      if (fabs(theta) > th_dev_min) {
-       mvt->angular.z * angle_vel;
+       mvt->angular.z = theta * angle_vel;
      }
 
       assert(mvt->linear.x == 0. || mvt->linear.y == 0.);
@@ -73,7 +74,9 @@ class Run
   public:
     Run(const ros::Publisher& cmd_publisher) :
       pub(cmd_publisher)
-      {}
+      {
+        DEMI_PI = 2*atan(1.);
+      }
 
     void callback(const hand_control::Plan::ConstPtr& msg)
     {
@@ -94,7 +97,7 @@ class Run
 
         zz = msg->altitude - neutral_z;
 
-	theta = msg->angle;
+	theta = msg->angle - DEMI_PI;
 
         if (first_msg)
         {
