@@ -20,8 +20,6 @@ class Run
 {
   private:
     float xx, yy, zz, theta;
-    float DEMI_PI;
-
     // xx < 0 : forward
     // xx > 0 : backward
 
@@ -61,10 +59,10 @@ class Run
       {
         mvt->linear.x = - xx * plan_vel;
       }
-      
-     if (fabs(theta) > th_dev_min) {
-       mvt->angular.z = theta * angle_vel;
-     }
+
+      if (fabs(theta) > th_dev_min) {
+        mvt->angular.z = theta * angle_vel;
+      }
 
       assert(mvt->linear.x == 0. || mvt->linear.y == 0.);
       pub.publish(mvt);
@@ -74,16 +72,15 @@ class Run
   public:
     Run(const ros::Publisher& cmd_publisher) :
       pub(cmd_publisher)
-      {
-        DEMI_PI = 2*atan(1.);
-      }
+  {
+  }
 
     void callback(const hand_control::Plan::ConstPtr& msg)
     {
       ROS_INFO("plan received");
       if (msg->curvature < max_curv && msg->number > min_number)
       {
-        
+
         if(msg->normal.z > 0)
         {
           yy = msg->normal.x;
@@ -97,7 +94,8 @@ class Run
 
         zz = msg->altitude - neutral_z;
 
-	theta = msg->angle - DEMI_PI;
+        theta = msg->angle;
+        // theta between -90 and 90
 
         if (first_msg)
         {
@@ -127,7 +125,7 @@ class Run
 
     void run()
     {
-        ros::spin();
+      ros::spin();
     }
 
 };
@@ -140,7 +138,7 @@ int main(int argc, char** argv)
   ros::Publisher cmd_pub = node.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
   Run run(cmd_pub);
   ros::Subscriber plan_sub = node.subscribe<hand_control::Plan>("input", 1, &Run::callback, &run);
-  
+
   dynamic_reconfigure::Server<hand_control::CommanderConfig> server;
   dynamic_reconfigure::Server<hand_control::CommanderConfig>::CallbackType f;
   f = boost::bind(&Run::reconfigure, &run, _1, _2);
