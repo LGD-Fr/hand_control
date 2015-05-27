@@ -49,18 +49,13 @@ add_library(display src/display.cpp)
   add_executable(keyboard_cmd src/keyboard_cmd.cpp)
 target_link_libraries(keyboard_cmd display ${catkin_LIBRARIES} ${ncursesw_LIBRARIES})
 
-  add_executable(normal_estimator src/normal_estimator.cpp)
-target_link_libraries(normal_estimator ${catkin_LIBRARIES})
-add_dependencies(normal_estimator hand_control_generate_messages_cpp)
-
   add_executable(normal_estimator_pca src/normal_estimator-pca.cpp)
 target_link_libraries(normal_estimator_pca ${catkin_LIBRARIES})
-
-  add_executable(commande-new-1d src/commande-new-1d.cpp)
-target_link_libraries(commande-new-1d ${catkin_LIBRARIES})
+add_dependencies(normal_estimator_pca hand_control_generate_messages_cpp)
 
   add_executable(commande-abs src/commande-abs.cpp)
 target_link_libraries(commande-abs ${catkin_LIBRARIES})
+add_dependencies(commande-abs hand_control_generate_messages_cpp)
 
 #add dynamic reconfigure api
 generate_dynamic_reconfigure_options(
