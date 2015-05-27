@@ -3,6 +3,7 @@
 #include <locale.h>
 #include <limits>
 #include <math.h>
+#include <assert.h>
 
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
@@ -11,29 +12,28 @@
 #include <geometry_msgs/Twist.h>
 #include <math.h>
 
+#include <dynamic_reconfigure/server.h>
+#include <hand_control/CommandeConfig.h>
+
+
 class Run
 {
   private:
-    float xx, yy, dz;
+    float xx, yy, zz, theta;
 
-    // xx > 0 : forward
-    // xx < 0 : backward
+    // xx < 0 : forward
+    // xx > 0 : backward
 
     // yy > 0 : right
     // yy < 0 : left
 
-    // dz > 0 : up
-    // dz < 0 : down
+    // zz > 0 : up
+    // zz < 0 : down
 
-    float plan_vel, z_vel;
+    float plan_vel, z_vel, angle_vel, up_factor, neutral_z;
 
-    // to calculate dz
-    float z_current, z_previous;
-    ros::Time t_current, t_previous;
-
-    // conditions to publish a message
     float max_curv;
-    float dz_min, x_dev_min, y_dev_min;
+    float z_dev_min, x_dev_min, y_dev_min, th_dev_min;
     uint64_t min_number;
 
     bool first_msg;
@@ -43,56 +43,60 @@ class Run
     void publish()
     {
       geometry_msgs::Twist::Ptr mvt(new geometry_msgs::Twist());
-      if (fabs(dz) > dz_min)
+
+      if (fabs(zz) > z_dev_min)
       {
-        mvt->linear.z = dz * z_vel;
+        if (zz > 0)
+          mvt->linear.z = zz * z_vel * up_factor ;
+        else
+          mvt->linear.z = zz * z_vel;
       }
-      if (fabs(xx) > x_dev_min)
-      {
-        mvt->linear.x = xx * plan_vel;
-      }
-      if (fabs(yy) > y_dev_min)
+
+      if (fabs(yy) > fabs(xx) && fabs(yy) > y_dev_min)
       {
         mvt->linear.y = yy * plan_vel;
       }
+      else if (fabs(xx) > x_dev_min)
+      {
+        mvt->linear.x = - xx * plan_vel;
+      }
+      
+     if (fabs(theta) > th_dev_min) {
+       mvt->angular.z * angle_vel;
+     }
+
+      assert(mvt->linear.x == 0. || mvt->linear.y == 0.);
       pub.publish(mvt);
       ROS_INFO("cmd published");
     }//end publish
 
   public:
-    Run(const ros::Publisher& cmd_publisher, const float& max_curvature, const float& plan_velocity,
+    Run(const ros::Publisher& cmd_publisher, const float& max_curvature, const float& plan_velocity, const float& angle_velocity,
         const float& z_velocity, const float& x_minimal_deviation, const float& y_minimal_deviation,
-        const float& dz_minimal_difference, const int& min_points_number) :
+        const float& z_minimal_deviation, const float& neutral_alt, const float& theta_minimal_deviation, 
+	const int& min_points_number, const float& up_fact) :
       pub(cmd_publisher),
       plan_vel(plan_velocity),
+      angle_vel(angle_velocity);
       max_curv(max_curvature),
       z_vel(z_velocity),
       xx(0),
       yy(0),
-      dz(0),
+      zz(0),
+      theta(0),
       x_dev_min(x_minimal_deviation),
       y_dev_min(y_minimal_deviation),
-      dz_min(dz_minimal_difference),
+      z_dev_min(z_minimal_deviation),
+      neutral_z(neutral_alt),
       first_msg(true),
-      min_number(min_points_number){
-        z_current = z_previous =  std::numeric_limits<float>::signaling_NaN();
-        t_previous.nsec = t_previous.sec =
-          t_previous.nsec = t_previous.sec = std::numeric_limits<uint32_t>::signaling_NaN();
-      }
+      min_number(min_points_number),
+      up_factor(up_fact)
 
     void callback(const hand_control::Plan::ConstPtr& msg)
     {
       ROS_INFO("plan received");
       if (msg->curvature < max_curv && msg->number > min_number)
       {
-        t_current = msg->header.stamp;
-        z_current = msg->altitude;
-
-        if (!first_msg)
-        {
-          dz = (z_current - z_previous)/((t_current - t_previous).toSec());
-          ROS_INFO("dz = %f", dz);
-        }
         
         if(msg->normal.z > 0)
         {
@@ -105,10 +109,10 @@ class Run
           xx = - msg->normal.y;
         }
 
-        t_previous = t_current;
-        z_previous = z_current;
-        z_current = std::numeric_limits<float>::signaling_NaN();
-        t_current.nsec = t_current.sec = std::numeric_limits<uint32_t>::signaling_NaN();
+        zz = msg->altitude - neutral_z;
+
+	theta = msg->angle;
+
         if (first_msg)
         {
           first_msg = false;
@@ -116,10 +120,21 @@ class Run
         }
         ROS_INFO("coords updated");
       } else {
-        xx = yy = dz = 0.;
+        xx = yy = zz = 0.;
       }
       publish();
     };
+
+    void reconfigure(const hand_control::CommandeConfig& c, const uint32_t& level) {
+      max_curv = c.max_curvature;
+      x_dev_min = c.x_minimal_deviation;
+      y_dev_min = c.y_minimal_deviation;
+      z_dev_min = c.z_minimal_deviation;
+      th_dev_min = c.theta_minimal_deviation;
+      neutral_z = c.neutral_alt;
+      min_number = c.min_points_number;
+      up_factor = c.up_fact;
+    }  
 
     void run()
     {
@@ -163,6 +178,16 @@ int main(int argc, char** argv)
     ROS_INFO("z_vel : %f (default value)", z_vel);
   }
 
+  double angle_vel(0);
+  if (node.getParam("angle_vel", angle_vel))
+  {
+    ROS_INFO("angle_vel : %f" , angle_vel);
+  } else {
+    node.setParam("angle_vel", 10);
+    node.getParam("angle_vel", angle_vel);
+    ROS_INFO("angle_vel : %f (default value)", angle_vel);
+  }
+
   int min_number(0);
   if (node.getParam("min_number", min_number))
   {
@@ -193,19 +218,55 @@ int main(int argc, char** argv)
     ROS_INFO("y_dev_min : %f (default value)", y_dev_min);
   }
 
-  double dz_dev_min(0);
-  if (node.getParam("dz_dev_min", dz_dev_min))
+  double z_dev_min(0);
+  if (node.getParam("z_dev_min", z_dev_min))
   {
-    ROS_INFO("dz_dev_min : %f" , dz_dev_min);
+    ROS_INFO("z_dev_min : %f" , z_dev_min);
   } else {
-    node.setParam("dz_dev_min", 0.05);
-    node.getParam("dz_dev_min", dz_dev_min);
-    ROS_INFO("dz_dev_min : %f (default value)", dz_dev_min);
+    node.setParam("z_dev_min", 0.1);
+    node.getParam("z_dev_min", z_dev_min);
+    ROS_INFO("z_dev_min : %f (default value)", z_dev_min);
+  }
+
+  double th_dev_min(0);
+  if (node.getParam("th_dev_min", th_dev_min))
+  {
+    ROS_INFO("th_dev_min : %f" , th_dev_min);
+  } else {
+    node.setParam("th_dev_min", 15);
+    node.getParam("th_dev_min", th_dev_min);
+    ROS_INFO("th_dev_min : %f (default value)", th_dev_min);
+  }
+
+  double neutral_z(0);
+  if (node.getParam("neutral_z", neutral_z))
+  {
+    ROS_INFO("neutral_z : %f" , neutral_z);
+  } else {
+    node.setParam("neutral_z", 1.5);
+    node.getParam("neutral_z", neutral_z);
+    ROS_INFO("neutral_z : %f (default value)", neutral_z);
+  }
+
+  double up_fact(0);
+  if (node.getParam("up_fact", up_fact))
+  {
+    ROS_INFO("up_fact : %f" , up_fact);
+  } else {
+    node.setParam("up_fact", 1.5);
+    node.getParam("up_fact", up_fact);
+    ROS_INFO("up_fact : %f (default value)", up_fact);
   }
 
   ros::Publisher cmd_pub = node.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-  Run run(cmd_pub, max_curv, plan_vel, z_vel, x_dev_min, y_dev_min, dz_dev_min, min_number);
+  Run run(cmd_pub, max_curv, plan_vel, z_vel, angle_vel, x_dev_min, y_dev_min, z_dev_min, th_dev_min, neutral_z, min_number, up_fact);
   ros::Subscriber plan_sub = node.subscribe<hand_control::Plan>("input", 1, &Run::callback, &run);
+  
+  dynamic_reconfigure::Server<hand_control::CommandeConfig> server;
+  dynamic_reconfigure::Server<hand_control::CommandeConfig>::CallbackType f;
+  f = boost::bind(&Run::reconfigure, &run, _1, _2);
+  server.setCallback(f);
+
   run.run();
   return 0;
 }
