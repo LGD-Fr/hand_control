@@ -64,6 +64,7 @@ target_link_libraries(commande-new-1d ${catkin_LIBRARIES})
 #add dynamic reconfigure api
   generate_dynamic_reconfigure_options(
                                        cfg/Filtre.cfg
+				       cfg/Commande.cfg
                                       )
 add_dependencies(filtre ${PROJECT_NAME}_gencfg)
 catkin_package(
