@@ -55,8 +55,8 @@ class Callback {
       
       //h = altitude(msg);
       th = 
-            2 * atan (eg(2,1)
-                       /(1 + eg(1,1)));
+            2 * atan (eg(1,0)
+                       /(1 + eg(0,0)));
 
       // publication
       ROS_INFO("Plan published");
