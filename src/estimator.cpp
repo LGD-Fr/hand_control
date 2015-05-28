@@ -16,7 +16,7 @@ typedef Eigen::Matrix3f& Matrix;
 
 class Callback {
   public:
-    void operator()(const PointCloud::ConstPtr& msg)
+    void callback(const PointCloud::ConstPtr& msg)
     {
       ROS_INFO("PointCloud received");
 
@@ -37,7 +37,13 @@ class Callback {
         Eigen::Vector3f v = eg.col(0).cross(eg.col(1));
         // norm(v) == 1
         v.normalize();
-        x = v(0); y=v(1); z=v(2);
+        if (!reverse)
+        {
+          x = v(0); y=v(1);
+        } else {
+          x = v(1); y = v(0);
+        }
+        z=v(2);
 
         // h is the altitude
         h = (analyser.getMean())(2);
@@ -46,23 +52,20 @@ class Callback {
         //  -pi/2 <= th <= pi/2
         // ie cos(th) == m_x >= 0
         float m_x, m_y;
-        if (!reverse)
+        if (!reverse_angle)
         {
-           m_x = eg(0,0);
-           m_y = eg(1,0);
+          m_x = eg(0,0);
+          m_y = eg(1,0);
         } else {
-           m_x = eg(1,0);
-           m_y = eg(0,0);
+          m_x = eg(1,0);
+          m_y = eg(0,0);
         }
 
-        if(m_x < 0) 
-        {
-            m_x *= -1.;
-            m_y *= -1.;
-        }
-        th = 2 * atan(m_y / (1 + m_x));
-        // -pi/2 <= th <= pi/2
-        
+        if (m_x < 0.)
+          m_y *= -1;
+
+        th = - asin(m_y / sqrt(pow(m_y,2)+ pow(m_x,2)));
+        // 0 <= th <= pi
         th *= _RAD2DEG;
         // -90 <= th <= 90
 
@@ -72,18 +75,19 @@ class Callback {
       }
     }
 
-    Callback(ros::Publisher& pub):publisher(pub), _RAD2DEG(45.f/atan(1.)), reverse(false) {};
+    Callback(ros::Publisher& pub):publisher(pub), _RAD2DEG(45.f/atan(1.)), reverse(false), reverse_angle(false) {};
 
 
-  void reconfigure(const hand_control::EstimatorConfig& c, const uint32_t& level) { 
-    reverse = c.reverse ;
-  }
+    void reconfigure(const hand_control::EstimatorConfig& c, const uint32_t& level) { 
+      reverse = c.reverse ;
+      reverse_angle = c.reverse_angle;
+    }
 
   private:
     ros::Publisher publisher;
     pcl::PCA<Point> analyser;
     const float _RAD2DEG;
-    bool reverse;
+    bool reverse, reverse_angle;
 
     inline const hand_control::Plan::ConstPtr
       to_Plan(const float& x, const float& y,
@@ -118,7 +122,7 @@ int main(int argc, char** argv)
 
   ros::Publisher  publisher = node.advertise<hand_control::Plan>("output", 1);
   Callback callback(publisher);
-  ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
+  ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, &Callback::callback, &callback);
 
   dynamic_reconfigure::Server<hand_control::EstimatorConfig> server;
   dynamic_reconfigure::Server<hand_control::EstimatorConfig>::CallbackType f;
