@@ -53,6 +53,10 @@ target_link_libraries(keyboard_cmd display ${catkin_LIBRARIES} ${ncursesw_LIBRAR
 target_link_libraries(estimator ${catkin_LIBRARIES})
 add_dependencies(estimator hand_control_generate_messages_cpp)
 
+  add_executable(commander_atan src/commander_atan.cpp)
+target_link_libraries(commander_atan ${catkin_LIBRARIES})
+add_dependencies(commander_atan hand_control_generate_messages_cpp)
+
   add_executable(commander src/commander.cpp)
 target_link_libraries(commander ${catkin_LIBRARIES})
 add_dependencies(commander hand_control_generate_messages_cpp)
@@ -62,11 +66,13 @@ generate_dynamic_reconfigure_options(
   cfg/Filter.cfg
   cfg/Commander.cfg
   cfg/Estimator.cfg
+  cfg/Commander_atan.cfg
   )
 
 add_dependencies(filter ${PROJECT_NAME}_gencfg)
 add_dependencies(commander ${PROJECT_NAME}_gencfg)
 add_dependencies(estimator ${PROJECT_NAME}_gencfg)
+add_dependencies(commander_atan ${PROJECT_NAME}_gencfg)
 
   catkin_package(
                  CATKIN_DEPENDS message_runtime
