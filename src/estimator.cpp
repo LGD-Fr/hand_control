@@ -5,6 +5,8 @@
 #include <hand_control/Plan.h>
 #include <time.h>
 #include <math.h>
+#include <dynamic_reconfigure/server.h>
+#include <hand_control/EstimatorConfig.h>
 
 #include <pcl/common/pca.h>
 
@@ -43,9 +45,17 @@ class Callback {
         // this formula is good only if :
         //  -pi/2 <= th <= pi/2
         // ie cos(th) == m_x >= 0
-        float m_x(eg(0,0));
-        float m_y(eg(1,0));
-        if(x < 0) 
+        float m_x, m_y;
+        if (!reverse)
+        {
+           m_x = eg(0,0);
+           m_y = eg(1,0);
+        } else {
+           m_x = eg(1,0);
+           m_y = eg(0,0);
+        }
+
+        if(m_x < 0) 
         {
             m_x *= -1.;
             m_y *= -1.;
@@ -62,12 +72,18 @@ class Callback {
       }
     }
 
-    Callback(ros::Publisher& pub):publisher(pub), _RAD2DEG(45.f/atan(1.)){};
+    Callback(ros::Publisher& pub):publisher(pub), _RAD2DEG(45.f/atan(1.)), reverse(false) {};
+
+
+  void reconfigure(const hand_control::EstimatorConfig& c, const uint32_t& level) { 
+    reverse = c.reverse ;
+  }
 
   private:
     ros::Publisher publisher;
     pcl::PCA<Point> analyser;
     const float _RAD2DEG;
+    bool reverse;
 
     inline const hand_control::Plan::ConstPtr
       to_Plan(const float& x, const float& y,
@@ -103,6 +119,11 @@ int main(int argc, char** argv)
   ros::Publisher  publisher = node.advertise<hand_control::Plan>("output", 1);
   Callback callback(publisher);
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, callback);
+
+  dynamic_reconfigure::Server<hand_control::EstimatorConfig> server;
+  dynamic_reconfigure::Server<hand_control::EstimatorConfig>::CallbackType f;
+  f = boost::bind(&Callback::reconfigure, &callback, _1, _2);
+  server.setCallback(f);
 
   ROS_INFO("node started");
   ros::spin();

@@ -61,10 +61,12 @@ add_dependencies(commander hand_control_generate_messages_cpp)
 generate_dynamic_reconfigure_options(
   cfg/Filter.cfg
   cfg/Commander.cfg
+  cfg/Estimator.cfg
   )
 
 add_dependencies(filter ${PROJECT_NAME}_gencfg)
 add_dependencies(commander ${PROJECT_NAME}_gencfg)
+add_dependencies(estimator ${PROJECT_NAME}_gencfg)
 
   catkin_package(
                  CATKIN_DEPENDS message_runtime
