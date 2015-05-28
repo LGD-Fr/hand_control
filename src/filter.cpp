@@ -31,16 +31,7 @@ class Callback {
 
     Callback(const ros::Publisher& pub)
     : publisher(pub), z_max(90.), hue(0.), delta_hue(20.),  sat_min(0.3), sat_max(1.), val_min(0.3), val_max(1.)
-    {
-      assert(delta_hue > 0);
-      assert(z_max > 0);
-      assert(hue >= 0);
-      assert(hue <= 360.);
-      assert(sat_min >= 0);
-      assert(sat_max <= 1.);
-      assert(val_min >= 0);
-      assert(val_max <= 1.);
-    }
+    {}
 
   void
   reconfigure(const hand_control::FilterConfig& c, const uint32_t& level) { 
@@ -51,14 +42,6 @@ class Callback {
     val_max = c.val_max;
     sat_min = c.sat_min;
     sat_max = c.sat_max;
-    assert(delta_hue > 0);
-    assert(z_max > 0);
-    assert(hue >= 0);
-    assert(hue <= 360.);
-    assert(sat_min >= 0);
-    assert(sat_max <= 1.);
-    assert(val_min >= 0);
-    assert(val_max <= 1.);
   }
 
   private:
