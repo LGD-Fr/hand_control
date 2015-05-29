@@ -77,28 +77,27 @@ class Run
 
       geometry_msgs::Twist::Ptr mvt(new geometry_msgs::Twist());
 
-      if (fabs(in.y) > fabs(in.x))
-      {
-        out.y = f.y(in.y);
-        if (out.y > min.y)
-          mvt->linear.y = out.y;
-      } else {      {
-        out.x = f.x(in.x);
-        if (out.x > min.x)
-          mvt->linear.x = out.x;
-      }
+      //      if (fabs(in.y) > fabs(in.x))
+      //     {
+      out.y = f.y(in.y);
+      if (fabs(out.y) > min.y)
+        mvt->linear.y = out.y;
+      //    } else {
+      out.x = f.x(in.x);
+      if (fabs(out.x) > min.x)
+        mvt->linear.x = out.x;
+      //   }
 
       out.z = f.z(in.z);
-      if (out.z > min.z)
+      if (fabs(out.z) > min.z)
         mvt->linear.z = out.z;
 
       out.th = f.th(in.th);
-      if (out.th > min.th)
+      if (fabs(out.th) > min.th)
         mvt->angular.z = out.th;
 
       pub.publish(mvt);
       ROS_INFO("cmd published");
-      }
     }
 
     void reconfigure(const hand_control::Commander_atanConfig& c, const uint32_t& level)
