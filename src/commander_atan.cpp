@@ -24,23 +24,9 @@ class Run
     {
       protected:
         float max;
-        float gradient;
       public:
         virtual float f(const float& arg) = 0;
-        Function() : max(0.8) {}
-        Function(const float& maximum, const float& grad)
-        {
-          set_gradient(grad);
-          set_max(maximum);
-        }
-        virtual void set_gradient(const float& grad)
-        {
-          gradient = grad;
-        }
-        void set_max(const float& m)
-        {
-          max = m;
-        }
+        virtual void set(const float& maximum, const float& grad) = 0;
     };
 
     class Atan : public Function
@@ -56,26 +42,38 @@ class Run
         Atan(const float& max, const float& grad)
           :t(demi_pi)
         {
-          set_gradient(grad);
+          set(max, grad);
         }
-        virtual void set_gradient(const float& grad)
+        virtual void set(const float& maximum, const float& grad)
         {
-          t = grad*2*atan(1);
-          gradient = grad;
+          max = maximum;
+          t = grad*demi_pi/max;
         }
     };
 
     class Lin : public Function
     {
+      private:
+        float t;
       public:
-        Lin(const float& max, const float& grad){}
+        Lin(const float& max, const float& grad)
+        {
+          set(max, grad);
+        }
+        virtual void set(const float& maximum, const float& grad)
+        {
+          max = maximum;
+          t = grad;
+        }
         virtual float f(const float& arg)
         {
-          return std::max(gradient * arg, max);
+          return std::max(t * arg, max);
         }
     };
 
+    enum FType { f_lin, f_atan };
     Data<boost::shared_ptr<Function> > f;
+    Data<FType> f_type;
     Data<float> min;
     float neutral_z;
     float max_curv;
@@ -89,6 +87,7 @@ class Run
         f.y = boost::make_shared<Lin>(0.8f, 0.5f);
         f.z = boost::make_shared<Lin>(0.8f, 2.0f);
         f.th = boost::make_shared<Lin>(0.8f, 0.005f);
+        f_type.x = f_type.y = f_type.z = f_type.th = f_lin;
         min.x = min.y = min.z = min.th = 0.1;
       }
 
@@ -142,14 +141,27 @@ class Run
       max_curv = c.max_curvature;
       neutral_z = c.neutral_alt;
       min_number = c.min_points_number;
-      f.x->set_gradient(c.p_x);
-      f.y->set_gradient(c.p_y);
-      f.z->set_gradient(c.p_z);
-      f.th->set_gradient(c.p_th);
-      f.x->set_max(c.max_x);
-      f.y->set_max(c.max_y);
-      f.z->set_max(c.max_z);
-      f.th->set_max(c.max_th);
+
+      if (c.atan and f_type.x != f_atan)
+      {
+        f.x = boost::make_shared<Atan>(0.8f, 0.5f);
+        f.y = boost::make_shared<Atan>(0.8f, 0.5f);
+        f.z = boost::make_shared<Atan>(0.8f, 2.f);
+        f.th = boost::make_shared<Atan>(0.8f, 0.005f);
+        f_type.x = f_type.y = f_type.z = f_type.th = f_atan;
+        
+      } else if (!c.atan and f_type.x == f_atan) {
+
+        f.x = boost::make_shared<Lin>(0.8f, 0.5f);
+        f.y = boost::make_shared<Lin>(0.8f, 0.5f);
+        f.z = boost::make_shared<Lin>(0.8f, 2.0f);
+        f.th = boost::make_shared<Lin>(0.8f, 0.005f);
+        f_type.x = f_type.y = f_type.z = f_type.th = f_lin;
+      }
+      f.x->set(c.max_x, c.p_x);
+      f.y->set(c.max_y, c.p_y);
+      f.z->set(c.max_z, c.p_z);
+      f.th->set(c.max_th, c.p_th);
       min.x = c.x_min;
       min.y = c.y_min;
       min.z = c.z_min;
