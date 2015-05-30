@@ -52,7 +52,7 @@ class Callback {
         //  -pi/2 <= th <= pi/2
         // ie cos(th) == m_x >= 0
         float m_x, m_y;
-        if (!reverse_angle)
+        if (reverse_angle)
         {
           m_x = eg(0,0);
           m_y = eg(1,0);
