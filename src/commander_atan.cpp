@@ -19,29 +19,63 @@
 class Run
 {
   private:
+
     class Function
     {
-      private:
-        float t;
-        static const float demi_pi;
+      protected:
+        float max;
+        float gradient;
       public:
-        float operator()(float arg)
+        virtual float f(const float& arg) = 0;
+        Function() : max(0.8) {}
+        Function(const float& maximum, const float& grad)
         {
-          return atan(t * arg) / demi_pi;
+          set_gradient(grad);
+          set_max(maximum);
         }
-        Function() : t(demi_pi){}
-        void set_t(float tt)
+        virtual void set_gradient(const float& grad)
         {
-          t = tt;
+          gradient = grad;
         }
-        void set_p(float pp)
-          // pp : gradient in 0
+        void set_max(const float& m)
         {
-          t = pp*demi_pi;
+          max = m;
         }
     };
 
-    Data<Function> f;
+    class Atan : public Function
+    {
+      private:
+        static const float demi_pi;
+        float t;
+      public:
+        virtual float f(const float& arg)
+        {
+          return max * atan(t * arg) / demi_pi;
+        }
+        Atan(const float& max, const float& grad)
+          :t(demi_pi)
+        {
+          set_gradient(grad);
+        }
+        virtual void set_gradient(const float& grad)
+        {
+          t = grad*2*atan(1);
+          gradient = grad;
+        }
+    };
+
+    class Lin : public Function
+    {
+      public:
+        Lin(const float& max, const float& grad){}
+        virtual float f(const float& arg)
+        {
+          return std::max(gradient * arg, max);
+        }
+    };
+
+    Data<boost::shared_ptr<Function> > f;
     Data<float> min;
     float neutral_z;
     float max_curv;
@@ -51,7 +85,10 @@ class Run
   public:
     Run(const ros::Publisher& cmd_publisher) :
       pub(cmd_publisher) {
-        f.x = f.y = f.z = f.th = Function();
+        f.x = boost::make_shared<Lin>(0.8f, 0.5f);
+        f.y = boost::make_shared<Lin>(0.8f, 0.5f);
+        f.z = boost::make_shared<Lin>(0.8f, 2.0f);
+        f.th = boost::make_shared<Lin>(0.8f, 0.005f);
         min.x = min.y = min.z = min.th = 0.1;
       }
 
@@ -77,22 +114,22 @@ class Run
 
       geometry_msgs::Twist::Ptr mvt(new geometry_msgs::Twist());
 
-      //      if (fabs(in.y) > fabs(in.x))
-      //     {
-      out.y = f.y(in.y);
-      if (fabs(out.y) > min.y)
-        mvt->linear.y = out.y;
-      //    } else {
-      out.x = f.x(in.x);
-      if (fabs(out.x) > min.x)
-        mvt->linear.x = out.x;
-      //   }
+      if (fabs(in.y) > fabs(in.x))
+      {
+        out.y = f.y->f(in.y);
+        if (fabs(out.y) > min.y)
+          mvt->linear.y = out.y;
+      } else {
+        out.x = f.x->f(in.x);
+        if (fabs(out.x) > min.x)
+          mvt->linear.x = out.x;
+      }
 
-      out.z = f.z(in.z);
+      out.z = f.z->f(in.z);
       if (fabs(out.z) > min.z)
         mvt->linear.z = out.z;
 
-      out.th = f.th(in.th);
+      out.th = f.th->f(in.th);
       if (fabs(out.th) > min.th)
         mvt->angular.z = out.th;
 
@@ -105,10 +142,14 @@ class Run
       max_curv = c.max_curvature;
       neutral_z = c.neutral_alt;
       min_number = c.min_points_number;
-      f.x.set_p(c.p_x);
-      f.y.set_p(c.p_y);
-      f.z.set_p(c.p_z);
-      f.th.set_p(c.p_th);
+      f.x->set_gradient(c.p_x);
+      f.y->set_gradient(c.p_y);
+      f.z->set_gradient(c.p_z);
+      f.th->set_gradient(c.p_th);
+      f.x->set_max(c.max_x);
+      f.y->set_max(c.max_y);
+      f.z->set_max(c.max_z);
+      f.th->set_max(c.max_th);
       min.x = c.x_min;
       min.y = c.y_min;
       min.z = c.z_min;
@@ -136,4 +177,4 @@ int main(int argc, char** argv)
   return 0;
 }
 
-const float Run::Function::demi_pi = 2*atan(1.);
+const float Run::Atan::demi_pi = 2*atan(1);
