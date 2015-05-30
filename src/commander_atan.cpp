@@ -20,13 +20,25 @@ class Run
 {
   private:
 
+    enum FType { f_lin, f_atan, f_undef };
+
     class Function
     {
+      private:
+        virtual void set_grad(const float& grad) = 0;
       protected:
-        float max;
+        float min, max;
+        FType type;
       public:
+        Function() : min(0.1f), max(0.8f) {}
         virtual float f(const float& arg) = 0;
-        virtual void set(const float& maximum, const float& grad) = 0;
+        void set(const float& minimum, const float& maximum, const float& grad)
+        {
+          min = minimum;
+          max = maximum;
+          set_grad(grad);
+        }
+        FType get_type() { return type; }
     };
 
     class Atan : public Function
@@ -34,20 +46,19 @@ class Run
       private:
         static const float demi_pi;
         float t;
+        virtual void set_grad(const float& grad)
+        {
+          t = grad*demi_pi/max;
+        }
       public:
+        Atan() :t(demi_pi) { type = f_atan; }
         virtual float f(const float& arg)
         {
-          return max * atan(t * arg) / demi_pi;
-        }
-        Atan(const float& max, const float& grad)
-          :t(demi_pi)
-        {
-          set(max, grad);
-        }
-        virtual void set(const float& maximum, const float& grad)
-        {
-          max = maximum;
-          t = grad*demi_pi/max;
+          float out = max * atan(t * arg) / demi_pi;
+          if (fabs(out) > min)
+            return out;
+          else
+            return 0.;
         }
     };
 
@@ -55,26 +66,23 @@ class Run
     {
       private:
         float t;
-      public:
-        Lin(const float& max, const float& grad)
+        virtual void set_grad(const float& grad)
         {
-          set(max, grad);
-        }
-        virtual void set(const float& maximum, const float& grad)
-        {
-          max = maximum;
           t = grad;
         }
+      public:
+        Lin() { type = f_lin; }
         virtual float f(const float& arg)
         {
-          return std::max(t * arg, max);
+          float out = std::min(t * arg, max);
+          if (fabs(out) > min)
+            return out;
+          else
+            return 0.;
         }
     };
 
-    enum FType { f_lin, f_atan };
     Data<boost::shared_ptr<Function> > f;
-    Data<FType> f_type;
-    Data<float> min;
     float neutral_z;
     float max_curv;
     uint64_t min_number;
@@ -83,12 +91,10 @@ class Run
   public:
     Run(const ros::Publisher& cmd_publisher) :
       pub(cmd_publisher) {
-        f.x = boost::make_shared<Lin>(0.8f, 0.5f);
-        f.y = boost::make_shared<Lin>(0.8f, 0.5f);
-        f.z = boost::make_shared<Lin>(0.8f, 2.0f);
-        f.th = boost::make_shared<Lin>(0.8f, 0.005f);
-        f_type.x = f_type.y = f_type.z = f_type.th = f_lin;
-        min.x = min.y = min.z = min.th = 0.1;
+        f.x = boost::make_shared<Lin>();
+        f.y = boost::make_shared<Lin>();
+        f.z = boost::make_shared<Lin>();
+        f.th = boost::make_shared<Lin>();
       }
 
     void callback(const hand_control::Plan::ConstPtr& msg)
@@ -96,14 +102,14 @@ class Run
       ROS_INFO("plan received");
       Data<float> in, out;
       in.x = in.y = in.z = in.th = 0.;
-      out.x = out.y = out.z = out.th = 0;
       if (msg->curvature < max_curv && msg->number > min_number)
       {
         if(msg->normal.z > 0)
         {
           in.y = msg->normal.x;
           in.x = msg->normal.y;
-        } else {
+        } else
+        {
           in.y = - msg->normal.x;
           in.x = - msg->normal.y;
         }
@@ -115,22 +121,15 @@ class Run
 
       if (fabs(in.y) > fabs(in.x))
       {
-        out.y = f.y->f(in.y);
-        if (fabs(out.y) > min.y)
-          mvt->linear.y = out.y;
-      } else {
-        out.x = f.x->f(in.x);
-        if (fabs(out.x) > min.x)
-          mvt->linear.x = out.x;
+        mvt->linear.y =  f.y->f(in.y);
+      } else
+      {
+        mvt->linear.x = f.x->f(in.x);
       }
 
-      out.z = f.z->f(in.z);
-      if (fabs(out.z) > min.z)
-        mvt->linear.z = out.z;
+      mvt->linear.z = f.z->f(in.z);
 
-      out.th = f.th->f(in.th);
-      if (fabs(out.th) > min.th)
-        mvt->angular.z = out.th;
+      mvt->angular.z = f.th->f(in.th);
 
       pub.publish(mvt);
       ROS_INFO("cmd published");
@@ -142,30 +141,24 @@ class Run
       neutral_z = c.neutral_alt;
       min_number = c.min_points_number;
 
-      if (c.atan and f_type.x != f_atan)
+      if (c.atan and f.x->get_type() != f_atan)
       {
-        f.x = boost::make_shared<Atan>(0.8f, 0.5f);
-        f.y = boost::make_shared<Atan>(0.8f, 0.5f);
-        f.z = boost::make_shared<Atan>(0.8f, 2.f);
-        f.th = boost::make_shared<Atan>(0.8f, 0.005f);
-        f_type.x = f_type.y = f_type.z = f_type.th = f_atan;
-        
-      } else if (!c.atan and f_type.x == f_atan) {
-
-        f.x = boost::make_shared<Lin>(0.8f, 0.5f);
-        f.y = boost::make_shared<Lin>(0.8f, 0.5f);
-        f.z = boost::make_shared<Lin>(0.8f, 2.0f);
-        f.th = boost::make_shared<Lin>(0.8f, 0.005f);
-        f_type.x = f_type.y = f_type.z = f_type.th = f_lin;
+        f.x = boost::make_shared<Atan>();
+        f.y = boost::make_shared<Atan>();
+        f.z = boost::make_shared<Atan>();
+        f.th = boost::make_shared<Atan>();
+      } else if (!c.atan and f.x->get_type() == f_atan)
+      {
+        f.x = boost::make_shared<Lin>();
+        f.y = boost::make_shared<Lin>();
+        f.z = boost::make_shared<Lin>();
+        f.th = boost::make_shared<Lin>();
       }
-      f.x->set(c.max_x, c.p_x);
-      f.y->set(c.max_y, c.p_y);
-      f.z->set(c.max_z, c.p_z);
-      f.th->set(c.max_th, c.p_th);
-      min.x = c.x_min;
-      min.y = c.y_min;
-      min.z = c.z_min;
-      min.th = c.th_min;
+      f.x->set(c.x_min, c.x_max, c.x_p);
+      f.y->set(c.y_min, c.y_max, c.y_p);
+      f.z->set(c.z_min, c.z_max, c.z_p);
+      f.th->set(c.th_min, c.th_max, c.th_p);
+      ROS_INFO("parameters reconfigured");
     }  
 
 };
