@@ -16,7 +16,7 @@
     <param name="flight_without_shell" value="0" />
     
     <!-- in mm -->
-    <param name="altitude_max" value="2000" /><!-- 2 m -->
+    <param name="altitude_max" value="8000" /><!-- 2 m -->
     <param name="altitude_min" value="50" />
 
     <!-- in radians,  between 0. and 0.52 (30°) -->
