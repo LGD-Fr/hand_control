@@ -106,12 +106,12 @@ class Run
       {
         if(msg->normal.z > 0)
         {
-          in.y = msg->normal.x;
+          in.y = - msg->normal.x;
           in.x = msg->normal.y;
         } else
         {
           in.y = - msg->normal.x;
-          in.x = - msg->normal.y;
+          in.x = msg->normal.y;
         }
         in.z = msg->altitude - neutral_z;
         in.th = msg->angle;
