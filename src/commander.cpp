@@ -29,7 +29,7 @@ class Run
     // zz > 0 : up
     // zz < 0 : down
 
-    float plan_vel, z_vel, angle_vel, up_factor, neutral_z;
+    float x_vel, y_vel, z_vel, angle_vel, up_factor, neutral_z;
 
     float max_curv;
     float z_dev_min, x_dev_min, y_dev_min, th_dev_min;
@@ -53,11 +53,11 @@ class Run
 
       if (fabs(yy) > fabs(xx) && fabs(yy) > y_dev_min)
       {
-        mvt->linear.y = yy * plan_vel;
+        mvt->linear.y = yy * y_vel;
       }
       else if (fabs(xx) > x_dev_min)
       {
-        mvt->linear.x = - xx * plan_vel;
+        mvt->linear.x = - xx * x_vel;
       }
 
       if (fabs(theta) > th_dev_min) {
@@ -118,7 +118,8 @@ class Run
       neutral_z = c.neutral_alt;
       min_number = c.min_points_number;
       up_factor = c.up_fact;
-      plan_vel = c.plan_vel;
+      x_vel = c.x_vel;
+      y_vel = c.y_vel;
       z_vel = c.z_vel;
       angle_vel = c.angle_vel;
     }  
