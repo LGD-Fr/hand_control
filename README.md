@@ -83,6 +83,12 @@ Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particul
   - `val_min` : 0.0 ;
   - `val_max` : 0.3 (à modifier à votre convenance);
 
+### Autres paramètres ###
+
+Toujours avec `rqt_reconfigure`, cette fois pour le nœud `estimator` :
+- `reverse` : échange x et y (axes de la Kinect) (valeur par défaut pour une utilisation normale : faux [décoché])
+- `reverse_angle` : modifie l’axe choisi pour calculer l’angle de la main (valeur par défaut pour un utilisation normale : faux [décoché])
+
 ## Connexion au drone et pilotage ##
 
 * Connecter l’ordinateur au réseau wifi du drone ;
@@ -105,6 +111,16 @@ Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particul
 
 ### Options et paramètres de la commande ###
 
-Lancer si ce n’est déjà fait `rosrun rqt_reconfigure rqt_reconfigure` :
+Pour éditer les options de la commande, lancer si ce n’est déjà fait `rosrun rqt_reconfigure rqt_reconfigure` :
+
+- `max_curvature` : non utilisé pour l’instant ;
+- `x/y/z/theta_minimal_deviation` : seuils à partir desquels le mouvement de la main est pris en compte :
+    * x, y : entre 0. et 1. (il s’agit des composantes x et y de la normale au plan);
+    * z : en mètre ;
+    * theta : en degrés.
+   Tout mettre à 0.0 rend le comportement complétement linéaire.
+- `neutral_alt` : hauteur de la main qui correspond à l’immobilité de l’altitude du drone ;
+- `min_points_number` : nombre minimal de points (du nuage de points qui a servi à régresser le plan reçu) nécessaire pour qu’une commande soit envoyé au drone.
+- `angle/x/y/z_vel` : coefficients de proportionnalité à appliquer aux données en entrée pour établir la commande envoyée au drone. Les augmenter augmentera la vitesse du drone.
 
 
