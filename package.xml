@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>hand_control</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>Contrôle d’un drone "Parrot AR Drone" par les mouvements de la main mesurés par une Kinect</description>
 
   <maintainer email="luc.absil@supelec.fr">Luc ABSIL</maintainer>
@@ -9,8 +9,6 @@
   <maintainer email="paul.janin@supelec.fr">Paul JANIN</maintainer>
 
   <license>BSD</license>
-
-  <url type="website">https://bitbucket.org/_Luc_/handcontrol</url>
 
   <author email="luc.absil@supelec.fr">Luc ABSIL</author>
   <author email="contact@lgdubois.fr">Louis-Guillaume DUBOIS</author>
