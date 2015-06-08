@@ -54,9 +54,13 @@ echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 ## Branchement de la Kinect et paramétrage ##
 
 1. Brancher la Kinect (sous tension) à l’ordinateur par USB ;
+2. Poser la Kinect sur le sol, pointant le plafond ;
 2. Lancer le "launchfile" `kinect_commander.launch`: `roslaunch hand_control kinect_commander.launch` ;
 3. Vérifier les paramètres du filtre :
-    - lancer rviz : `rosrun rqt_rviz rqt_rviz`;
+    - lancer rviz : 
+    ```
+    rosrun rqt_rviz rqt_rviz
+    ```
     - visualiser la sortie du filtrage (topic : `/filter/output` ; frame : `/camera_depth_optical_frame`) et repérer la main ;
     - lancer `rqt_reconfigure` : `rosrun rqt_reconfigure rqt_reconfigure` pour :
       - modifier les paramètres du filtre jusqu’à ne voir que les points de la main/gant/pancarte sur rviz (voir ci-dessous).
@@ -64,7 +68,7 @@ echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
     
 ### Paramètres du filtre ###
 
-Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particulier `rqt_reconfigure` sont :
+Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particulier `rqt_reconfigure`) sont :
 
 * `z_max` : en mètres, altitude maximale de la main, doit être inférieure à la hauteur du plafond.
 
@@ -83,3 +87,6 @@ Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particul
   - `val_max` : 0.3 (à modifier à votre convenance);
 
 ## Connexion au drone et pilotage ##
+
+* Connecter l’ordinateur au réseau wifi du drone ;
+* Lancer
