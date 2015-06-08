@@ -65,20 +65,18 @@ echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particulier `rqt_reconfigure`) sont :
 
 * `z_max` : en mètres, altitude maximale de la main, doit être inférieure à la hauteur du plafond.
-
 * pour un gant ou un carton *coloré* (vert, bleu etc.), on a généralement :
-  - `hue` : par exemple 220 (bleu ciel) ou 150 (vert) ou 0 (rose/rouge) ;
-  - `delta_hue` : entre 10 et 20 ;
-  - `sat/val_min` : 0.0 ;
-  - `sat/val_max` : 1.0 ;
-
+    - `hue` : par exemple 220 (bleu ciel) ou 150 (vert) ou 0 (rose/rouge) ;
+    - `delta_hue` : entre 10 et 20 ;
+    - `sat/val_min` : 0.0 ;
+    - `sat/val_max` : 1.0 ;
 * pour un gant *noir* :
-  - `hue` : 0 ;
-  - `delta_hue` : 180 ;
-  - `sat_min` : 0.0 ;
-  - `sat_max` : 1.0 ;
-  - `val_min` : 0.0 ;
-  - `val_max` : 0.3 (à modifier à votre convenance);
+    - `hue` : 0 ;
+    - `delta_hue` : 180 ;
+    - `sat_min` : 0.0 ;
+    - `sat_max` : 1.0 ;
+    - `val_min` : 0.0 ;
+    - `val_max` : 0.3 (à modifier à votre convenance);
 
 ### Autres paramètres ###
 
@@ -91,14 +89,14 @@ Toujours avec `rqt_reconfigure`, cette fois pour le nœud `estimator` :
 * Connecter l’ordinateur au réseau wifi du drone ;
 * Lancer le "launchfile" ardrone.launch : `roslaunch hand_control ardrone.launch` ;
 * Pour décoller : 
-  - soit `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
-  - soit lancer le nœud keyboard_cmd : `rosrun hand_control keyboard_cmd` et utiliser la touche *t* du clavier.
+    - soit `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
+    - soit lancer le nœud keyboard_cmd : `rosrun hand_control keyboard_cmd` et utiliser la touche *t* du clavier.
 * Pour atterir :
-  - soit `rostopic pub /ardrone/land std_msgs/Empty` ;
-  - soit, avec keyboard_cmd, utiliser la touche *b* du clavier.
+    - soit `rostopic pub /ardrone/land std_msgs/Empty` ;
+    - soit, avec keyboard_cmd, utiliser la touche *b* du clavier.
 * Arrêt d’urgence :
-  - soit `rostopic pub /ardrone/reset std_msgs/Empty` ;
-  - soit, avec keyboard_cmd, utiliser la touche *g* du clavier.
+    - soit `rostopic pub /ardrone/reset std_msgs/Empty` ;
+    - soit, avec keyboard_cmd, utiliser la touche *g* du clavier.
 
 ### Commande à la main ###
 
