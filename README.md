@@ -8,9 +8,12 @@ wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo 
 sudo apt-get update
 sudo apt-get install ros-indigo-desktop-full ros-indigo-freenect-stack ros-indigo-ardrone-autonomy libncursesw5-dev
 ```
-## Utilisation du dépôt ##
+## Installation du paquet ##
 
 ### Création d’un espace de travail catkin ###
+
+Par exemple :
+
 ```
 #!sh
 source /opt/ros/indigo/setup.bash
@@ -18,17 +21,10 @@ mkdir -p ~/hand_control_ws/src
 cd ~/hand_control_ws/src
 catkin_init_workspace
 ```
-### Clonage du dépôt ###
 
-Clonage de telle sorte que le dossier `hand_control` se situe dans le dossier `~/hand_control_ws/src/`, par exemple :
+### Déplacement du code ###
 
-```
-#!sh
-cd ~/hand_control_ws/src
-git clone git@bitbucket.org:_Luc_/hand_control.git
-# ou bien : git clone https://username@bitbucket.org/_Luc_/hand_control.git # (changer username)
-```
-Le contenu du dépôt se trouve alors dans `~/hand_control_ws/src`.
+Renommer si besoin est le dossier qui contient ce ficher en `hand_control`, et le déplacer dans `~/hand_control_ws/src/`, ou dans le sous-dossier `src` de votre espace de travail catkin.
 
 ## Compilation ##
 
@@ -36,11 +32,12 @@ Il est ensuite possible de compiler :
 
 ```
 #!sh
-cd ~/hand_control_ws
+cd ~/hand_control_ws # ou votre espace de travail catkin
 catkin_make
 ```
 
-Puis pour pouvoir utiliser les commoandes ROS : 
+Puis pour pouvoir utiliser les commoandes ROS, en remplaçant si besoin "hand_control_ws" par votre espace de travail catkin :
+
 ```
 #!sh
 source /opt/ros/indigo/setup.bash
@@ -54,7 +51,7 @@ echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 ## Branchement de la Kinect et paramétrage ##
 
 1. Brancher la Kinect (sous tension) à l’ordinateur par USB ;
-2. Poser la Kinect sur le sol, pointant le plafond ;
+2. Poser la Kinect sur le sol, pointant le plafond, votre bras devra être perpendiculaire à la Kinect pour pouvoir bien piloter le drone ;
 2. Lancer le "launchfile" kinect_commander.launch : `roslaunch hand_control kinect_commander.launch` ;
 3. Vérifier les paramètres du filtre :
     - lancer rviz :  `rosrun rqt_rviz rqt_rviz`
@@ -71,7 +68,7 @@ Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particul
 
 * pour un gant ou un carton *coloré* (vert, bleu etc.), on a généralement :
   - `hue` : par exemple 220 (bleu ciel) ou 150 (vert) ou 0 (rose/rouge) ;
-  - `delta_hue` : 10-20 ;
+  - `delta_hue` : entre 10 et 20 ;
   - `sat/val_min` : 0.0 ;
   - `sat/val_max` : 1.0 ;
 
@@ -113,7 +110,7 @@ Toujours avec `rqt_reconfigure`, cette fois pour le nœud `estimator` :
 
 Pour éditer les options de la commande, lancer si ce n’est déjà fait `rosrun rqt_reconfigure rqt_reconfigure` :
 
-- `max_curvature` : non utilisé pour l’instant ;
+- `max_curvature` : non utilisé pour l’instantt ;
 - `x/y/z/theta_minimal_deviation` : seuils à partir desquels le mouvement de la main est pris en compte. Tout mettre à 0.0 rend le comportement complétement linéaire.
     * x, y : entre 0. et 1. (il s’agit des composantes x et y de la normale au plan);
     * z : en mètre ;
@@ -121,3 +118,24 @@ Pour éditer les options de la commande, lancer si ce n’est déjà fait `rosru
 - `neutral_alt` : hauteur de la main qui correspond à l’immobilité de l’altitude du drone ;
 - `min_points_number` : nombre minimal de points (du nuage de points qui a servi à régresser le plan reçu) nécessaire pour qu’une commande soit envoyé au drone.
 - `angle/x/y/z_vel` : coefficients de proportionnalité à appliquer aux données en entrée pour établir la commande envoyée au drone. Les augmenter augmentera la vitesse du drone.
+
+### Notes sur `keyboard_cmd` ###
+
+Il permet de publier des commandes sur le topic `cmd_vel` et ainsi de piloter le drone. Il est prévu pour les claviers azerty. Pour le lancer :
+
+```
+#!sh
+rosrun hand_control keyboard_cmd
+```
+
+Pour augmenter/diminuer les vitesses (expliqué sur l’affichage du programme) : touches a,z,e,r et w,x,c,v
+
+L’affichage des informations reçues du drone n’est mise à jour qu’à l’occasion de l’appui sur une touche. 
+
+Pour quitter : Ctr+C, et appui sur "Entrée" pour retrouver l’affichage de la console.
+
+# Problème(s) rencontré(s) — Améliorations souhaitables #
+
+- Si des commandes sont publiées sur `cmd_vel` (depuis la Kinect par exemple) après le lancement du fichier `ardrone.launch` et avant le décollage du drone, alors, après le décollage, de drone semble obéir aux commandes publiées avant le décollage.
+
+- Comme écrit plus haut, l’affichage des informations reçues du drone sur `keyboard_cmd` n’est mise à jour qu’à l’occasion de l’appui sur une touche, et peut donc resté fixe quand on n’utilise pas la commande au clavier.
