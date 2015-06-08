@@ -36,7 +36,7 @@ cd ~/hand_control_ws # ou votre espace de travail catkin
 catkin_make
 ```
 
-Puis pour pouvoir utiliser les commoandes ROS, en remplaçant si besoin "hand_control_ws" par votre espace de travail catkin :
+Puis pour pouvoir utiliser les commandes ROS, en remplaçant si besoin "hand_control_ws" par votre espace de travail catkin :
 
 ```
 #!sh
