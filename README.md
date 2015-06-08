@@ -118,7 +118,7 @@ Pour éditer les options de la commande, lancer si ce n’est déjà fait `rosru
     * x, y : entre 0. et 1. (il s’agit des composantes x et y de la normale au plan);
     * z : en mètre ;
     * theta : en degrés.
-   Tout mettre à 0.0 rend le comportement complétement linéaire.
+   Tout mettre à 0.0 rend le comportement complètement linéaire.
 - `neutral_alt` : hauteur de la main qui correspond à l’immobilité de l’altitude du drone ;
 - `min_points_number` : nombre minimal de points (du nuage de points qui a servi à régresser le plan reçu) nécessaire pour qu’une commande soit envoyé au drone.
 - `angle/x/y/z_vel` : coefficients de proportionnalité à appliquer aux données en entrée pour établir la commande envoyée au drone. Les augmenter augmentera la vitesse du drone.
