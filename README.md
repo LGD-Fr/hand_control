@@ -136,4 +136,4 @@ Pour quitter : Ctr+C, et appui sur "Entrée" pour retrouver l’affichage de la 
 
 - Si des commandes sont publiées sur `cmd_vel` (depuis la Kinect par exemple) après le lancement du fichier `ardrone.launch` et avant le décollage du drone, alors, après le décollage, de drone semble obéir aux commandes publiées avant le décollage.
 
-- Comme écrit plus haut, l’affichage des informations reçues du drone sur `keyboard_cmd` n’est mise à jour qu’à l’occasion de l’appui sur une touche, et peut donc resté fixe quand on n’utilise pas la commande au clavier.
+- Comme écrit plus haut, l’affichage des informations reçues du drone sur `keyboard_cmd` n’est mise à jour qu’à l’occasion de l’appui sur une touche, et peut donc rester fixe quand on n’utilise pas la commande au clavier.
