@@ -114,13 +114,10 @@ Toujours avec `rqt_reconfigure`, cette fois pour le nœud `estimator` :
 Pour éditer les options de la commande, lancer si ce n’est déjà fait `rosrun rqt_reconfigure rqt_reconfigure` :
 
 - `max_curvature` : non utilisé pour l’instant ;
-- `x/y/z/theta_minimal_deviation` : seuils à partir desquels le mouvement de la main est pris en compte :
+- `x/y/z/theta_minimal_deviation` : seuils à partir desquels le mouvement de la main est pris en compte. Tout mettre à 0.0 rend le comportement complétement linéaire.
     * x, y : entre 0. et 1. (il s’agit des composantes x et y de la normale au plan);
     * z : en mètre ;
     * theta : en degrés.
-   Tout mettre à 0.0 rend le comportement complètement linéaire.
 - `neutral_alt` : hauteur de la main qui correspond à l’immobilité de l’altitude du drone ;
 - `min_points_number` : nombre minimal de points (du nuage de points qui a servi à régresser le plan reçu) nécessaire pour qu’une commande soit envoyé au drone.
 - `angle/x/y/z_vel` : coefficients de proportionnalité à appliquer aux données en entrée pour établir la commande envoyée au drone. Les augmenter augmentera la vitesse du drone.
-
-
