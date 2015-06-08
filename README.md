@@ -30,7 +30,7 @@ git clone git@bitbucket.org:_Luc_/hand_control.git
 ```
 Le contenu du dépôt se trouve alors dans `~/hand_control_ws/src`.
 
-## Compilation ##
+## Compilation ##
 
 Il est ensuite possible de compiler :
 
@@ -55,14 +55,11 @@ echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 
 1. Brancher la Kinect (sous tension) à l’ordinateur par USB ;
 2. Poser la Kinect sur le sol, pointant le plafond ;
-2. Lancer le "launchfile" `kinect_commander.launch`: `roslaunch hand_control kinect_commander.launch` ;
+2. Lancer le "launchfile" kinect_commander.launch : `roslaunch hand_control kinect_commander.launch` ;
 3. Vérifier les paramètres du filtre :
-    - lancer rviz : 
-    ```
-    rosrun rqt_rviz rqt_rviz
-    ```
+    - lancer rviz :  `rosrun rqt_rviz rqt_rviz`
     - visualiser la sortie du filtrage (topic : `/filter/output` ; frame : `/camera_depth_optical_frame`) et repérer la main ;
-    - lancer `rqt_reconfigure` : `rosrun rqt_reconfigure rqt_reconfigure` pour :
+    - lancer rqt_reconfigure : `rosrun rqt_reconfigure rqt_reconfigure` pour :
       - modifier les paramètres du filtre jusqu’à ne voir que les points de la main/gant/pancarte sur rviz (voir ci-dessous).
       - modifier le paramètre `neutral_alt` du nœud `commander` à la hauteur souhaitée (en mètres). C’est la hauteur de la main qui correspondra à l’immobilité de l’altitude.
     
@@ -89,4 +86,25 @@ Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particul
 ## Connexion au drone et pilotage ##
 
 * Connecter l’ordinateur au réseau wifi du drone ;
-* Lancer
+* Lancer le "launchfile" ardrone.launch : `roslaunch hand_control ardrone.launch` ;
+* Pour décoller : 
+  - soit `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
+  - soit lancer le nœud keyboard_cmd : `rosrun hand_control keyboard_cmd` et utiliser la touche *t* du clavier.
+* Pour atterir :
+  - soit `rostopic pub /ardrone/land std_msgs/Empty` ;
+  - soit, avec keyboard_cmd, utiliser la touche *b* du clavier.
+* Arrêt d’urgence :
+  - soit `rostopic pub /ardrone/reset std_msgs/Empty` ;
+  - soit, avec keyboard_cmd, utiliser la touche *g* du clavier.
+
+### Commande à la main ###
+
+* Avancer/reculer & translations latérales : inclinaison de la main ;
+* Tourner (rotation autours de l’axe z) : angle de l’axe de la main avec l’axe parallèle au sol et perpendiculaire à la Kinect ;
+* Monter/descendre : altitude de la main.
+
+### Options et paramètres de la commande ###
+
+Lancer si ce n’est déjà fait `rosrun rqt_reconfigure rqt_reconfigure` :
+
+
