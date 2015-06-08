@@ -24,7 +24,7 @@ catkin_init_workspace
 
 ### Déplacement du code ###
 
-Renommer si besoin est le dossier qui contient ce ficher en `hand_control`, et le déplacer dans `~/hand_control_ws/src/`, ou dans le sous-dossier `src` de votre espace de travail catkin.
+Renommer si besoin est le dossier qui contient ce fichier en `hand_control`, et le déplacer dans `~/hand_control_ws/src/`, ou dans le sous-dossier `src` de votre espace de travail catkin.
 
 ## Compilation ##
 
