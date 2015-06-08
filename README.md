@@ -1,8 +1,4 @@
-# Contrôle par geste d'un drone #
-
-**Extrait de la présentation du projet**
-
-« On s'intéresse dans ce projet à contrôler un drone à l'aide la main. On utilisera pour ce faire une kinect, placée à l'horizontal, au dessus de laquelle on placera la main du contrôleur. La kinect fournit des informations sur la profondeur des objets placés en face d'elle. On peut alors régresser un plan sur les échantillons et utiliser deux inclinaisons et la distance pour contrôler le roulis, le tangage et l'altitude d'un drone. »
+# Installation #
 
 ## Installation des dépendances ##
 ```
@@ -14,7 +10,7 @@ sudo apt-get install ros-indigo-desktop-full ros-indigo-freenect-stack ros-indig
 ```
 ## Utilisation du dépôt ##
 
-Après avoir créé un espace de travail catkin :
+### Création d’un espace de travail catkin ###
 ```
 #!sh
 source /opt/ros/indigo/setup.bash
@@ -22,7 +18,9 @@ mkdir -p ~/hand_control_ws/src
 cd ~/hand_control_ws/src
 catkin_init_workspace
 ```
-vous devez cloner le dépôt de telle sorte que le dossier «hand_control» se situe dans le dossier «~/hand_control_ws/src/», par exemple :
+### Clonage du dépôt ###
+
+Clonage de telle sorte que le dossier `hand_control` se situe dans le dossier `~/hand_control_ws/src/`, par exemple :
 
 ```
 #!sh
@@ -30,7 +28,11 @@ cd ~/hand_control_ws/src
 git clone git@bitbucket.org:_Luc_/hand_control.git
 # ou bien : git clone https://username@bitbucket.org/_Luc_/hand_control.git # (changer username)
 ```
-Le contenu du dépôt se trouve alors dans «~/hand_control_ws/src». Il est ensuite possible de compiler :
+Le contenu du dépôt se trouve alors dans `~/hand_control_ws/src`.
+
+## Compilation ##
+
+Il est ensuite possible de compiler :
 
 ```
 #!sh
@@ -38,21 +40,46 @@ cd ~/hand_control_ws
 catkin_make
 ```
 
-Puis pour faciliter le développement : 
+Puis pour pouvoir utiliser les commoandes ROS : 
 ```
 #!sh
 source /opt/ros/indigo/setup.bash
 source ~/hand_control_ws/devel/setup.bash
 echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
-
 ```
 
-### Important ###
+# Utilisation #
 
-Avant de coder, regarder :
+## Branchement de la Kinect et paramétrage ##
 
-- [les conventions d’écriture du code du projet ROS](http://wiki.ros.org/CppStyleGuide)
-- [le guide du développeur](http://wiki.ros.org/DevelopersGuide)
+1. Brancher la Kinect (sous tension) à l’ordinateur par USB ;
+2. Lancer le "launchfile" `kinect_commander.launch`: `roslaunch hand_control kinect_commander.launch` ;
+3. Vérifier les paramètres du filtre :
+    - lancer rviz : `rosrun rqt_rviz rqt_rviz`;
+    - visualiser la sortie du filtrage (topic : `/filter/output` ; frame : `/camera_depth_optical_frame`) et repérer la main ;
+    - lancer `rqt_reconfigure` : `rosrun rqt_reconfigure rqt_reconfigure` pour :
+      - modifier les paramètres du filtre jusqu’à ne voir que les points de la main/gant/pancarte sur rviz (voir ci-dessous).
+      - modifier le paramètre `neutral_alt` du nœud `commander` à la hauteur souhaitée (en mètres). C’est la hauteur de la main qui correspondra à l’immobilité de l’altitude.
+    
+### Paramètres du filtre ###
 
-Cf. le [Wiki](https://bitbucket.org/_Luc_/handcontrol/wiki/Home) pour le reste de la documentation et le résultat des recherches.
+Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particulier `rqt_reconfigure` sont :
+
+* `z_max` : en mètres, altitude maximale de la main, doit être inférieure à la hauteur du plafond.
+
+* pour un gant ou un carton *coloré* (vert, bleu etc.), on a généralement :
+  - `hue` : par exemple 220 (bleu ciel) ou 150 (vert) ou 0 (rose/rouge) ;
+  - `delta_hue` : 10-20 ;
+  - `sat/val_min` : 0.0 ;
+  - `sat/val_max` : 1.0 ;
+
+* pour un gant *noir* :
+  - `hue` : 0 ;
+  - `delta_hue` : 180 ;
+  - `sat_min` : 0.0 ;
+  - `sat_max` : 1.0 ;
+  - `val_min` : 0.0 ;
+  - `val_max` : 0.3 (à modifier à votre convenance);
+
+## Connexion au drone et pilotage ##
