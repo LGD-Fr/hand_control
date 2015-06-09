@@ -91,7 +91,7 @@ Toujours avec `rqt_reconfigure`, cette fois pour le nœud `estimator` :
 * Pour décoller : 
     - soit `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
     - soit lancer le nœud keyboard_cmd : `rosrun hand_control keyboard_cmd` et utiliser la touche *t* du clavier.
-* Pour atterir :
+* Pour atterrir :
     - soit `rostopic pub /ardrone/land std_msgs/Empty` ;
     - soit, avec keyboard_cmd, utiliser la touche *b* du clavier.
 * Arrêt d’urgence :
@@ -116,6 +116,7 @@ Pour éditer les options de la commande, lancer si ce n’est déjà fait `rosru
 - `neutral_alt` : hauteur de la main qui correspond à l’immobilité de l’altitude du drone ;
 - `min_points_number` : nombre minimal de points (du nuage de points qui a servi à régresser le plan reçu) nécessaire pour qu’une commande soit envoyé au drone.
 - `angle/x/y/z_vel` : coefficients de proportionnalité à appliquer aux données en entrée pour établir la commande envoyée au drone. Les augmenter augmentera la vitesse du drone.
+- `up_fact` : coefficient de proportionnalité à appliquer à la commande augmentant l’altitude du drone, par rapport à la commande équivalente la diminuant (pour corriger l’effet de la gravité).
 
 ### Notes sur `keyboard_cmd` ###
 
