@@ -34,9 +34,6 @@ class Callback {
           indices.push_back(i);
 
         // v = eg_1 ^ eg_2 is the plan normal
-        //TODO !!! eg_3 is also the plan normal :-)
-        // the code hereunder should work :
-        // Eigen::Vector3f v = eg.col(2);
         Eigen::Vector3f v = eg.col(0).cross(eg.col(1));
         // norm(v) == 1
         v.normalize();
