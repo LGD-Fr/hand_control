@@ -137,3 +137,5 @@ Pour quitter : Ctr+C, et appui sur "Entrée" pour retrouver l’affichage de la 
 - Si des commandes sont publiées sur `cmd_vel` (depuis la Kinect par exemple) après le lancement du fichier `ardrone.launch` et avant le décollage du drone, alors, après le décollage, de drone semble obéir aux commandes publiées avant le décollage.
 
 - Comme écrit plus haut, l’affichage des informations reçues du drone sur `keyboard_cmd` n’est mise à jour qu’à l’occasion de l’appui sur une touche, et peut donc rester fixe quand on n’utilise pas la commande au clavier.
+
+- Le décollage/atterrissage n’est pas possible à commander avec la main. Il faut utiliser le clavier (`keyboard_cmd` ou `rostopic pub`) à la place. Il est possible de de remédier à cela en créant deux nouveaux seuils, minimaux et maximaux, pour la hauteur de la main : une main très basse ferait atterrir le drone, une main très haute le ferait décoller.
