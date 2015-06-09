@@ -35,7 +35,7 @@ class Run
     float z_dev_min, x_dev_min, y_dev_min, th_dev_min;
     uint64_t min_number;
 
-    bool first_msg;
+    bool no_diag;
 
     ros::Publisher pub;
 
@@ -50,14 +50,23 @@ class Run
         else
           mvt->linear.z = zz * z_vel;
       }
-
-      if (fabs(yy) > fabs(xx) && fabs(yy) > y_dev_min)
+      
+      if (no_diag)
       {
-        mvt->linear.y = yy * y_vel;
-      }
-      else if (fabs(xx) > x_dev_min)
+        if (fabs(yy) > fabs(xx) && fabs(yy) > y_dev_min)
+        {
+          mvt->linear.y = yy * y_vel;
+        }
+        else if (fabs(xx) > x_dev_min)
+        {
+          mvt->linear.x = - xx * x_vel;
+        }
+      } else
       {
-        mvt->linear.x = - xx * x_vel;
+        if (fabs(yy) > y_dev_min)
+          mvt->linear.y = yy * y_vel;
+        if (fabs(xx) > x_dev_min)
+          mvt->linear.x = - xx * x_vel;
       }
 
       if (fabs(theta) > th_dev_min) {
@@ -97,11 +106,6 @@ class Run
         theta = msg->angle;
         // theta between -90 and 90
 
-        if (first_msg)
-        {
-          first_msg = false;
-          ROS_INFO("first msg received");
-        }
         ROS_INFO("coords updated");
       } else {
         xx = yy = zz = 0.;
@@ -122,6 +126,7 @@ class Run
       y_vel = c.y_vel;
       z_vel = c.z_vel;
       angle_vel = c.angle_vel;
+      no_diag = c.no_diag;
     }  
 
     void run()
