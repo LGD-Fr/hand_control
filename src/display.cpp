@@ -1,3 +1,4 @@
+// library to be used by "keyboard_cmd.cpp"
 #include <ncurses.h>
 #include <string>
 #include <geometry_msgs/Twist.h>

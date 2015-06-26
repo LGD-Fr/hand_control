@@ -1,3 +1,4 @@
+// library to be used by "keyboard_cmd.cpp"
 #ifndef CURSES_DISPLAY
 #define CURSES_DISPLAY
 
