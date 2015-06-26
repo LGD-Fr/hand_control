@@ -1,3 +1,4 @@
+// a not very useful test programm
 #include <ros/ros.h>
 #include <time.h>
 #include <pcl_ros/point_cloud.h>

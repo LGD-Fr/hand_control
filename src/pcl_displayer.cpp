@@ -1,3 +1,4 @@
+// a not very useful test tool
 #include <ros/ros.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
