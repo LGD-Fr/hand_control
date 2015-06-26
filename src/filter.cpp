@@ -14,9 +14,11 @@ class Callback {
   public:
     void
     callback(const PointCloud::ConstPtr& msg)
+    // handles and filters the received PointCloud and
+    // publishes the filtered PointCloud
     {
       PointCloud::Ptr pcl(new PointCloud());
-      copy_info(msg, pcl);
+      copy_info(msg, pcl); // copy the header
       BOOST_FOREACH (const Point& pt, msg->points)
       {
         float hue_dist, sat, val;
@@ -34,7 +36,9 @@ class Callback {
     {}
 
   void
-  reconfigure(const hand_control::FilterConfig& c, const uint32_t& level) { 
+  reconfigure(const hand_control::FilterConfig& c, const uint32_t& level)
+  // updates the parameters
+  { 
     z_max = c.z_max;
     hue = c.hue;
     delta_hue = c.delta_hue;
@@ -52,6 +56,7 @@ class Callback {
     void
     copy_info(const PointCloud::ConstPtr& a,
               PointCloud::Ptr& b)
+    // copy the header info (useful in order to use rviz)
     {
       b->header = a->header;
       b->sensor_origin_ = a->sensor_origin_;
@@ -62,11 +67,14 @@ class Callback {
     inline
     void
     hdist_s_v(const Point& pt, float& h_dist, float& s, float& v)
+    // calculate the distance from the wished hue, the saturation and the value 
+    // of the point
     {
       float h, diff1, diff2;
       pcl::tracking::RGB2HSV(pt.r, pt.g, pt.b, h, s, v);
       h *= 360.0f ;
       diff1 = std::fabs(h - hue);
+      // hue is periodic
       if (h < hue)
         diff2 = std::fabs(360.0f + h - hue);
       else
@@ -80,18 +88,17 @@ main(int argc, char** argv)
 {
   ros::init(argc, argv, "filter");
   ros::NodeHandle node("filter");
-
-  // initialisation
   ros::Publisher  publisher = node.advertise<PointCloud>("output", 1);
   Callback my_callback(publisher);
   ros::Subscriber subscriber = node.subscribe<PointCloud>("input", 1, &Callback::callback, &my_callback);
 
+  // sets up dynamic_reconfigure
   dynamic_reconfigure::Server<hand_control::FilterConfig> server;
   dynamic_reconfigure::Server<hand_control::FilterConfig>::CallbackType f;
   f = boost::bind(&Callback::reconfigure, &my_callback, _1, _2);
   server.setCallback(f);
 
-  // démarrage
+  // begins working
   ROS_INFO("node started");
   ros::spin();
   ROS_INFO("exit");
