@@ -38,12 +38,6 @@ pkg_check_modules ( ncursesw REQUIRED ncursesw)
   add_executable(filter src/filter.cpp)
 target_link_libraries(filter ${catkin_LIBRARIES})
 
-  add_executable(random_pcl_publisher src/random_pcl_publisher.cpp)
-target_link_libraries(random_pcl_publisher ${catkin_LIBRARIES})
-
-  add_executable(pcl_displayer src/pcl_displayer.cpp)
-target_link_libraries(pcl_displayer ${catkin_LIBRARIES})
-
 add_library(display src/display.cpp)
 
   add_executable(keyboard_cmd src/keyboard_cmd.cpp)
@@ -52,10 +46,6 @@ target_link_libraries(keyboard_cmd display ${catkin_LIBRARIES} ${ncursesw_LIBRAR
   add_executable(estimator src/estimator.cpp)
 target_link_libraries(estimator ${catkin_LIBRARIES})
 add_dependencies(estimator hand_control_generate_messages_cpp)
-
-  add_executable(commander_atan src/commander_atan.cpp)
-target_link_libraries(commander_atan ${catkin_LIBRARIES})
-add_dependencies(commander_atan hand_control_generate_messages_cpp)
 
   add_executable(commander src/commander.cpp)
 target_link_libraries(commander ${catkin_LIBRARIES})
@@ -66,13 +56,11 @@ generate_dynamic_reconfigure_options(
   cfg/Filter.cfg
   cfg/Commander.cfg
   cfg/Estimator.cfg
-  cfg/Commander_atan.cfg
   )
 
 add_dependencies(filter ${PROJECT_NAME}_gencfg)
 add_dependencies(commander ${PROJECT_NAME}_gencfg)
 add_dependencies(estimator ${PROJECT_NAME}_gencfg)
-add_dependencies(commander_atan ${PROJECT_NAME}_gencfg)
 
   catkin_package(
                  CATKIN_DEPENDS message_runtime
