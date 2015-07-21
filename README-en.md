@@ -72,7 +72,7 @@ The parameters of the filter (that can be changed thanks to `dynamic_reconfigure
     - `delta_hue` : between 10 and 20 ;
     - `sat/val_min` : 0.0 ;
     - `sat/val_max` : 1.0 ;
-* pour un gant *noir* :
+* for a *black* glove :
     - `hue` : 0 ;
     - `delta_hue` : 180 ;
     - `sat_min` : 0.0 ;
@@ -90,7 +90,7 @@ Always with `rqt_reconfigure`, but with the `estimator` node :
 
 * Connect the computer to the wifi network of the drone ;
 * Launch the "launchfile" ardrone.launch : `roslaunch hand_control ardrone.launch` ;
-* Taking of : 
+* Taking off : 
     - whether `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
     - or launch the node keyboard_cmd : `rosrun hand_control keyboard_cmd` and use *t* on the keyboard.
 * Landing :
@@ -102,16 +102,15 @@ Always with `rqt_reconfigure`, but with the `estimator` node :
 
 ### Hand steering ###
 
-*
-* Forward/Reverse & side translations : hand tilt ;
+* Forward/backward & side translations : hand tilt ;
 * Rotate (around the vertical axis z) : angle of the hand with the the axis parallel to the ground and perpendicular to the kinect ;
-* Climb/Descend : hand height.
+* go up/go down : hand height.
 
 ### Options and parameters of the command ###
 
 To edit the options of the command, change (if not already) `rosrun rqt_reconfigure rqt_reconfigure` :
 
-- `max_curvature` : not used today ;
+- `max_curvature` : not used for the moment ;
 - `x/y/z/theta_minimal_deviation` : thresholds required above which the movement of the hand is not taken into account. If all are 0.0, the drone responds linearly.
     * x, y : between 0. and 1. (corresponding to the x and y of the normal to the plane);
     * z : in meters ;
@@ -138,8 +137,8 @@ To quit : CTRL+C and press "Enter" to return to the console.
 
 # Problems - Possible improvements #
 
-- Si des commandes sont publiées sur `cmd_vel` (depuis la Kinect par exemple) après le lancement du fichier `ardrone.launch` et avant le décollage du drone, alors, après le décollage, de drone semble obéir aux commandes publiées avant le décollage.
+- If commands are published on `cmd_vel` (from the Kinect for instance) after the launch of `ardrone.launch` and before the takeoff, then, after the takeoff, the drone seems to obey to commands published before the takeoff.
 
-- Comme écrit plus haut, l’affichage des informations reçues du drone sur `keyboard_cmd` n’est mise à jour qu’à l’occasion de l’appui sur une touche, et peut donc rester fixe quand on n’utilise pas la commande au clavier.
+- As written above, the display of navigation data on `keyboard_cmd` is only updated when a key is pressed, and can therefore stay fixed when the keyboard commander is not used.
 
-- Le décollage/atterrissage n’est pas possible à commander avec la main. Il faut utiliser le clavier (`keyboard_cmd` ou `rostopic pub`) à la place. Il est possible de de remédier à cela en créant deux nouveaux seuils, minimaux et maximaux, pour la hauteur de la main : une main très basse ferait atterrir le drone, une main très haute le ferait décoller.
+- The takeoff/landing is not controllable with the hand. The keyboard must be used (`keyboard_cmd` or `rostopic pub`) instead. We can correct this by creating two new thresholds, minimal and maximal, for the hand height : a very low hand would make the drone land and a very high hand would make the drone take off.
