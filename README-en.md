@@ -53,23 +53,23 @@ echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 ## Connection and setting up of the Kinect ##
 
 1. Connect the Kinect (under voltage) to the computer via USB ;
-2. Put the Kinect on the ground, pointed toward the ceilling ; be aware that your arm must be perpendicular to the Kinect in order to control the drone properly ;
-2. Lancer le "launchfile" kinect_commander.launch : `roslaunch hand_control kinect_commander.launch` ;
-3. Vérifier les paramètres du filtre :
-    - lancer rviz :  `rosrun rqt_rviz rqt_rviz`
-    - visualiser la sortie du filtrage (topic : `/filter/output` ; frame : `/camera_depth_optical_frame`) et repérer la main ;
-    - lancer rqt_reconfigure : `rosrun rqt_reconfigure rqt_reconfigure` pour :
-      - modifier les paramètres du filtre jusqu’à ne voir que les points de la main/gant/pancarte sur rviz (voir ci-dessous).
-      - modifier le paramètre `neutral_alt` du nœud `commander` à la hauteur souhaitée (en mètres). C’est la hauteur de la main qui correspondra à l’immobilité de l’altitude.
+2. Put the Kinect on the ground, pointed toward the roof ; be aware that your arm must be perpendicular to the Kinect in order to control the drone properly ;
+2. Launch the "launchfile" kinect_commander.launch : `roslaunch hand_control kinect_commander.launch` ;
+3. Check the drone parameters :
+    - launch rviz :  `rosrun rqt_rviz rqt_rviz`
+    - display the output of the filtering (topic : `/filter/output` ; frame : `/camera_depth_optical_frame`) and locate the hand ;
+    - launch rqt_reconfigure : `rosrun rqt_reconfigure rqt_reconfigure` in order to :
+      - change the filter parameters until you only see the points of the hand/glove/panel on rviz (see above).
+      - change the parameter `neutral_alt` of the node `commander` to the wanted height (in meters), correponding to the height of the hand for which the height of the drone will be stable.
     
-### Paramètres du filtre ###
+### Parameters of the filter ###
 
-Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particulier `rqt_reconfigure`) sont :
+The parameters of the filter (that can be changed thanks to `dynamic_reconfigure` and in particular `rqt_reconfigure`) are :
 
-* `z_max` : en mètres, altitude maximale de la main, doit être inférieure à la hauteur du plafond.
-* pour un gant ou un carton *coloré* (vert, bleu etc.), on a généralement :
-    - `hue` : par exemple 220 (bleu ciel) ou 150 (vert) ou 0 (rose/rouge) ;
-    - `delta_hue` : entre 10 et 20 ;
+* `z_max` : in meters, maximal height of the hand. It must be lower than the height of the roof.
+* for a glove or a *colored$* panel (green, blue, etc.), we generaly have :
+    - `hue` : for example 220 (sky blue) or 150 (green) or 0 (pink/red) ;
+    - `delta_hue` : between 10 and 20 ;
     - `sat/val_min` : 0.0 ;
     - `sat/val_max` : 1.0 ;
 * pour un gant *noir* :
@@ -78,17 +78,17 @@ Les paramètres du filtre (modifiables avec `dynamic_reconfigure` et en particul
     - `sat_min` : 0.0 ;
     - `sat_max` : 1.0 ;
     - `val_min` : 0.0 ;
-    - `val_max` : 0.3 (à modifier à votre convenance);
+    - `val_max` : 0.3 (at your convenience);
 
-### Autres paramètres ###
+### Other parameters ###
 
-Toujours avec `rqt_reconfigure`, cette fois pour le nœud `estimator` :
-- `reverse` : échange x et y (axes de la Kinect) (valeur par défaut pour une utilisation normale : faux [décoché])
-- `reverse_angle` : modifie l’axe choisi pour calculer l’angle de la main (valeur par défaut pour un utilisation normale : faux [décoché])
+Always with `rqt_reconfigure`, but with the `estimator` node :
+- `reverse` : swap x and y, the axes of the Kinect (default : false, ie. unchecked)
+- `reverse_angle` : change the angle choosen for the compute of the angle of the hand (default : false, ie. unchecked)
 
-## Connexion au drone et pilotage ##
+## Connection to the drone and steering ##
 
-* Connecter l’ordinateur au réseau wifi du drone ;
+* Connect the computer to the wifi network of the drone ;
 * Lancer le "launchfile" ardrone.launch : `roslaunch hand_control ardrone.launch` ;
 * Pour décoller : 
     - soit `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
