@@ -1,3 +1,6 @@
+Une version française de ce fichier est disponible (README-fr.md)
+A french version of this file is available (README-fr.md)
+
 # Installation #
 
 This package was developped with the Indigo version of ROS.
