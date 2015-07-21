@@ -26,11 +26,11 @@ catkin_init_workspace
 
 ### Code location ###
 
-Renommer si besoin est le dossier qui contient ce fichier en `hand_control`, et le déplacer dans `~/hand_control_ws/src/`, ou dans le sous-dossier `src` de votre espace de travail catkin.
+If necessary, rename the folder with the file named `hand_control`, and move it in `~/hand_control_ws/src/` or in the subfolder `src` of your catkin workspace.
 
 ## Compilation ##
 
-Il est ensuite possible de compiler :
+You're now able to compile :
 
 ```
 #!sh
