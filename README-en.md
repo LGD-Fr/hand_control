@@ -34,11 +34,11 @@ You're now able to compile :
 
 ```
 #!sh
-cd ~/hand_control_ws # ou votre espace de travail catkin
+cd ~/hand_control_ws # or your catkin workspace
 catkin_make
 ```
 
-Puis pour pouvoir utiliser les commandes ROS, en remplaçant si besoin "hand_control_ws" par votre espace de travail catkin :
+Then you can run the following commands to be able to use the ROS commands. If necessary replace "hand_control_ws" by the name of your catkin workspace.
 
 ```
 #!sh
@@ -48,12 +48,12 @@ echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 ```
 
-# Utilisation #
+# Use #
 
-## Branchement de la Kinect et paramétrage ##
+## Connection and setting up of the Kinect ##
 
-1. Brancher la Kinect (sous tension) à l’ordinateur par USB ;
-2. Poser la Kinect sur le sol, pointant le plafond, votre bras devra être perpendiculaire à la Kinect pour pouvoir bien piloter le drone ;
+1. Connect the Kinect (under voltage) to the computer via USB ;
+2. Put the Kinect on the ground, pointed toward the ceilling ; be aware that your arm must be perpendicular to the Kinect in order to control the drone properly ;
 2. Lancer le "launchfile" kinect_commander.launch : `roslaunch hand_control kinect_commander.launch` ;
 3. Vérifier les paramètres du filtre :
     - lancer rviz :  `rosrun rqt_rviz rqt_rviz`
