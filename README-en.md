@@ -67,7 +67,7 @@ echo "source ~/hand_control_ws/devel/setup.bash" >> ~/.bashrc
 The parameters of the filter (that can be changed thanks to `dynamic_reconfigure` and in particular `rqt_reconfigure`) are :
 
 * `z_max` : in meters, maximal height of the hand. It must be lower than the height of the roof.
-* for a glove or a *colored$* panel (green, blue, etc.), we generaly have :
+* for a glove or a *colored* panel (green, blue, etc.), we generaly have :
     - `hue` : for example 220 (sky blue) or 150 (green) or 0 (pink/red) ;
     - `delta_hue` : between 10 and 20 ;
     - `sat/val_min` : 0.0 ;
@@ -89,53 +89,54 @@ Always with `rqt_reconfigure`, but with the `estimator` node :
 ## Connection to the drone and steering ##
 
 * Connect the computer to the wifi network of the drone ;
-* Lancer le "launchfile" ardrone.launch : `roslaunch hand_control ardrone.launch` ;
-* Pour décoller : 
-    - soit `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
-    - soit lancer le nœud keyboard_cmd : `rosrun hand_control keyboard_cmd` et utiliser la touche *t* du clavier.
-* Pour atterrir :
-    - soit `rostopic pub /ardrone/land std_msgs/Empty` ;
-    - soit, avec keyboard_cmd, utiliser la touche *b* du clavier.
-* Arrêt d’urgence :
-    - soit `rostopic pub /ardrone/reset std_msgs/Empty` ;
-    - soit, avec keyboard_cmd, utiliser la touche *g* du clavier.
+* Launch the "launchfile" ardrone.launch : `roslaunch hand_control ardrone.launch` ;
+* Taking of : 
+    - whether `rostopic pub /ardrone/takeoff std_msgs/Empty` ;
+    - or launch the node keyboard_cmd : `rosrun hand_control keyboard_cmd` and use *t* on the keyboard.
+* Landing :
+    - whether `rostopic pub /ardrone/land std_msgs/Empty` ;
+    - or, launch the node keyboard_cmd, and use *b* on the keyboard.
+* Emergency stop :
+    - whether `rostopic pub /ardrone/reset std_msgs/Empty` ;
+    - or, launch the node keyboard_cmd, and use *g* on the keyboard.
 
-### Commande à la main ###
+### Hand steering ###
 
-* Avancer/reculer & translations latérales : inclinaison de la main ;
-* Tourner (rotation autours de l’axe z) : angle de l’axe de la main avec l’axe parallèle au sol et perpendiculaire à la Kinect ;
-* Monter/descendre : altitude de la main.
+*
+* Forward/Reverse & side translations : hand tilt ;
+* Rotate (around the vertical axis z) : angle of the hand with the the axis parallel to the ground and perpendicular to the kinect ;
+* Climb/Descend : hand height.
 
-### Options et paramètres de la commande ###
+### Options and parameters of the command ###
 
-Pour éditer les options de la commande, lancer si ce n’est déjà fait `rosrun rqt_reconfigure rqt_reconfigure` :
+To edit the options of the command, change (if not already) `rosrun rqt_reconfigure rqt_reconfigure` :
 
-- `max_curvature` : non utilisé pour l’instantt ;
-- `x/y/z/theta_minimal_deviation` : seuils à partir desquels le mouvement de la main est pris en compte. Tout mettre à 0.0 rend le comportement complétement linéaire.
-    * x, y : entre 0. et 1. (il s’agit des composantes x et y de la normale au plan);
-    * z : en mètre ;
-    * theta : en degrés.
-- `neutral_alt` : hauteur de la main qui correspond à l’immobilité de l’altitude du drone ;
-- `min_points_number` : nombre minimal de points (du nuage de points qui a servi à régresser le plan reçu) nécessaire pour qu’une commande soit envoyé au drone.
-- `angle/x/y/z_vel` : coefficients de proportionnalité à appliquer aux données en entrée pour établir la commande envoyée au drone. Les augmenter augmentera la vitesse du drone.
-- `up_fact` : coefficient de proportionnalité à appliquer à la commande augmentant l’altitude du drone, par rapport à la commande équivalente la diminuant (pour corriger l’effet de la gravité).
+- `max_curvature` : not used today ;
+- `x/y/z/theta_minimal_deviation` : thresholds required above which the movement of the hand is not taken into account. If all are 0.0, the drone responds linearly.
+    * x, y : between 0. and 1. (corresponding to the x and y of the normal to the plane);
+    * z : in meters ;
+    * theta : in degrees.
+- `neutral_alt` : height of the hand for the immobility of the height of the drone ;
+- `min_points_number` : minimal number of points (for the point cloud used for the regression) necessary in order to send a command to the drone ;
+- `angle/x/y/z_vel` : proportionality coefficients to apply to the inputs in order to establish the command sent to the drone. Increase it will increase the speed of the drone ;
+- `up_fact` : proportionality coefficients to apply to the command that increases the height of the drone, compared to the equivalent command to reduce it (in order to correct the effect of gravity).
 
-### Notes sur `keyboard_cmd` ###
+### About `keyboard_cmd` ###
 
-Il permet de publier des commandes sur le topic `cmd_vel` et ainsi de piloter le drone. Il est prévu pour les claviers azerty. Pour le lancer :
+It allows you to publish commands on the topic `cmd_vel` and so to steer the drone. It is scheduled for azerty keyboards. To launch it, run :
 
 ```
 #!sh
 rosrun hand_control keyboard_cmd
 ```
 
-Pour augmenter/diminuer les vitesses (expliqué sur l’affichage du programme) : touches a,z,e,r et w,x,c,v
+To increase/decrease the speed (there is an explication on the controlpanel) : a,z,e,r and w,x,c,v
 
-L’affichage des informations reçues du drone n’est mise à jour qu’à l’occasion de l’appui sur une touche. 
+The informations of the drone are updated when a key is pressed.
 
-Pour quitter : Ctr+C, et appui sur "Entrée" pour retrouver l’affichage de la console.
+To quit : CTRL+C and press "Enter" to return to the console.
 
-# Problème(s) rencontré(s) — Améliorations souhaitables #
+# Problems - Possible improvements #
 
 - Si des commandes sont publiées sur `cmd_vel` (depuis la Kinect par exemple) après le lancement du fichier `ardrone.launch` et avant le décollage du drone, alors, après le décollage, de drone semble obéir aux commandes publiées avant le décollage.
 
