@@ -1,3 +1,7 @@
+An english version of this file is available (README.md)
+
+Une version anglaise de ce fichier est disponible (README.md)
+
 # Installation #
 
 ## Installation des dépendances ##

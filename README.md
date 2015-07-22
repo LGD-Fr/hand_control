@@ -1,6 +1,6 @@
-Une version française de ce fichier est disponible (README-fr.md)
+La documentation originale est en français : LISEZMOI.md. La documentation ci-dessous n’est qu’une traduction.
 
-A french version of this file is available (README-fr.md)
+The original manual is the french "LISEZMOI.md", you read below a translation of this file.
 
 # Installation #
 
