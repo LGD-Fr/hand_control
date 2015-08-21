@@ -1,5 +1,7 @@
 Copyright (C) 2015 CentraleSupélec
+
 All rights reserved
+
 
 An english version of this file is available (README.md)
 
