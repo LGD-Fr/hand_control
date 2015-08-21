@@ -1,3 +1,6 @@
+Copyright (C) 2015 CentraleSupélec
+All rights reserved
+
 An english version of this file is available (README.md)
 
 Une version anglaise de ce fichier est disponible (README.md)

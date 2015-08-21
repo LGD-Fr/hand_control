@@ -1,3 +1,6 @@
+/* Copyright (C) 2015 CentraleSupélec
+ * All rights reserved
+ */
 // library to be used by "keyboard_cmd.cpp"
 #include <ncurses.h>
 #include <string>

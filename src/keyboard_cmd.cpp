@@ -1,3 +1,6 @@
+/* Copyright (C) 2015 CentraleSupélec
+ * All rights reserved
+ */
 #include <ros/ros.h>
 #include <ros/time.h>
 #include <locale.h>

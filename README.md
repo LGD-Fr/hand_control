@@ -1,3 +1,6 @@
+Copyright (C) 2015 CentraleSupélec
+All rights reserved
+
 La documentation originale est en français : LISEZMOI.md. La documentation ci-dessous n’est qu’une traduction.
 
 The original manual is the french "LISEZMOI.md", you read below a translation of this file.
