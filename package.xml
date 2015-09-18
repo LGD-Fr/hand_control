@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
-<package>
+<package format="2">
   <name>hand_control</name>
-  <version>1.0.0</version>
-  <description>Contrôle d’un drone "Parrot AR Drone" par les mouvements de la main mesurés par une Kinect</description>
+  <version>1.1.0</version>
+  <description>
+	Controling a "Parrot AR Drone" with the hand movements measured by a Microsoft Kinect sensor.
+  </description>
+  <license>GPLv3+</license>
 
   <maintainer email="luc.absil@supelec.fr">Luc ABSIL</maintainer>
   <maintainer email="contact@lgdubois.fr">Louis-Guillaume DUBOIS</maintainer>
   <maintainer email="paul.janin@supelec.fr">Paul JANIN</maintainer>
-
-  <license>All rights reserved</license>
 
   <author email="luc.absil@supelec.fr">Luc ABSIL</author>
   <author email="contact@lgdubois.fr">Louis-Guillaume DUBOIS</author>
@@ -16,23 +17,17 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>pcl_ros</build_depend>
-  <build_depend>pcl_msgs</build_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>geometry_msgs</build_depend>
+  <depend>pcl_ros</depend>
+  <depend>pcl_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>dynamic_reconfigure</depend>
+
   <build_depend>message_generation</build_depend>
-  <build_depend>dynamic_reconfigure</build_depend>
 
-  <run_depend>pcl_ros</run_depend>
-  <run_depend>pcl_msgs</run_depend>
-  <run_depend>roscpp</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>message_runtime</run_depend>
-  <run_depend>ardrone_autonomy</run_depend>
-  <run_depend>freenect_launch</run_depend>
-  <run_depend>dynamic_reconfigure</run_depend>
-  <run_depend>rqt_reconfigure</run_depend>
-
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>ardrone_autonomy</exec_depend>
+  <exec_depend>freenect_launch</exec_depend>
+  <exec_depend>rqt_reconfigure</exec_depend>
 </package>
