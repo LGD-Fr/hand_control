@@ -49,11 +49,6 @@ class Callback {
         float x, y, z, th, h, c;
         x = y = z = th = h = c = 0.;
 
-        // we want to consider the whole PointCloud
-        std::vector<int> indices;
-        for (int i = 0; i < msg->points.size(); ++i)
-          indices.push_back(i);
-
         // v = eg_1 ^ eg_2 is the plan normal
         Eigen::Vector3f v = eg.col(0).cross(eg.col(1));
         v.normalize(); // to have norm(v) == 1
