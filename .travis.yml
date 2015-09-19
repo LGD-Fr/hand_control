@@ -1,35 +1,35 @@
 language:
-  - python
   - cpp
 python:
   - "2.7"
 compiler:
   - gcc
 env:
-  - ros_distro=indigo
-  - ros_distro=jade
+  - ros_distro=hydro
+  # - ros_distro=indigo
 before_install:
   - export CI_SOURCE_PATH="`pwd`"
   - export ROS_DISTRO=$ros_distro
-  - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+  - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
   - sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-key 0xB01FA116
-  - sudo apt-get update
-  - sudo apt-get install python-rosdep python-rosinstall-generator python-wstool python-rosinstall build-essential ros-${ROS_DISTRO}-base
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq -y python-rosdep python-rosinstall-generator python-wstool python-rosinstall build-essential python-catkin-pkg python-rosdep
   - sudo rosdep init
   - rosdep update
+  - sudo apt-get install ros-${ROS_DISTRO}-ros-base
 install: # Use this to install any prerequisites or dependencies necessary to run your build
   - source /opt/ros/${ROS_DISTRO}/setup.bash
   - mkdir -p ~/hand_control_ws/src
   - cd ~/hand_control_ws/src
   - catkin_init_workspace
-  - curl -L 'https://github.com/AutonomyLab/ardrone_autonomy/archive/master.tar.gz' | tar -xz
-  - curl -L 'https://github.com/ros-drivers/rgbd_launch/archive/master.tar.gz' | tar -xz
-  - curl -L 'https://github.com/ros-drivers/freenect_stack/archive/master.tar.gz' | tar -xz
-  - ln -S "$CI_SOURCE_PATH" .
+  # - curl -L 'https://github.com/AutonomyLab/ardrone_autonomy/archive/master.tar.gz' | tar -xz
+  # - curl -L 'https://github.com/ros-drivers/rgbd_launch/archive/2.1.0.tar.gz' | tar -xz
+  # - curl -L 'https://github.com/ros-drivers/freenect_stack/archive/master.tar.gz' | tar -xz
+  - ln -s "$CI_SOURCE_PATH" .
   - cd ..
   - sudo rosdep install --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 before_script: # Use this to prepare your build for testing e.g. copy database configurations, environment variables, etc.
-  - source ~/ros_catkin_ws/install_isolated/setup.bash
+  - source /opt/ros/${ROS_DISTRO}/setup.bash
   - cd ~/hand_control_ws
 script: # All commands must exit with code 0 on success. Anything else is considered failure.
   - catkin_make -j2
