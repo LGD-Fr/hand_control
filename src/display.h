@@ -16,16 +16,15 @@
  * along with Hand Control.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CURSES_DISPLAY
-#define CURSES_DISPLAY
+#ifndef SRC_DISPLAY_H_
+#define SRC_DISPLAY_H_
 
 #include <ncurses.h>
-#include <string>
 #include <geometry_msgs/Twist.h>
+#include <string>
 
-class Curses
-{
-  private:
+class Curses {
+ private:
     static const int cmd_kbd_lines;
     static const int cmd_kbd_columns;
     WINDOW* cmd_kbd;
@@ -50,18 +49,17 @@ class Curses
     static const int nav_data_columns;
     WINDOW* nav_data;
     void print_nav_data();
-  
+
     static const int topic_lines;
     static const int topic_columns;
     WINDOW* topic;
     void print_topic();
 
-  public:
+ public:
     Curses();
     ~Curses();
     char getchar();
 
-    // TODO
     void update_cmd_speed(const char& coord, const float& v);
     void update_nav_data(const float& batteryPercent,
                         const int& state,
@@ -70,4 +68,4 @@ class Curses
     void update_topic(const geometry_msgs::Twist::ConstPtr& twist);
 };
 
-#endif
+#endif  // SRC_DISPLAY_H_

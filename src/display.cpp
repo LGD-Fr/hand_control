@@ -17,10 +17,12 @@
  */
 
 // library used by "keyboard_cmd.cpp"
+
+#include "./display.h"
+
 #include <ncurses.h>
-#include <string>
 #include <geometry_msgs/Twist.h>
-#include "display.h"
+#include <string>
 
 const int Curses::cmd_kbd_lines = 8;
 const int Curses::cmd_kbd_columns = 55;
@@ -41,110 +43,110 @@ const int Curses::topic_lines = 8;
 const int Curses::topic_columns = 22;
 
 Curses::Curses() {
-  initscr();
-  cbreak();
-  start_color();
-  //noecho();
+    initscr();
+    cbreak();
+    start_color();
+    // noecho();
 
-  cmd_kbd = newwin(cmd_kbd_lines, cmd_kbd_columns, 0, 0);
+    cmd_kbd = newwin(cmd_kbd_lines, cmd_kbd_columns, 0, 0);
 
-  get = newwin(get_lines, get_columns,
+    get = newwin(get_lines, get_columns,
                cmd_kbd_lines, cmd_kbd_columns/2);
 
-  cmd_speed = newwin(cmd_speed_lines, cmd_speed_columns,
+    cmd_speed = newwin(cmd_speed_lines, cmd_speed_columns,
                 cmd_kbd_lines + get_lines, 0);
 
-  log_sent_title = newwin(1, log_sent_w_columns,
+    log_sent_title = newwin(1, log_sent_w_columns,
                           0, cmd_kbd_columns + 1);
-  waddstr(log_sent_title, "SENT COMMANDS");
-  wrefresh(log_sent_title);
-  log_sent_w = newwin(log_sent_w_lines - 1, log_sent_w_columns,
+    waddstr(log_sent_title, "SENT COMMANDS");
+    wrefresh(log_sent_title);
+    log_sent_w = newwin(log_sent_w_lines - 1, log_sent_w_columns,
                       1, cmd_kbd_columns + 1);
-  log_line_number = log_sent_w_lines - 2; 
-  wattron(log_sent_w, A_BOLD);
-  init_pair(1, COLOR_GREEN, COLOR_BLACK);
-  wattron(log_sent_w, COLOR_PAIR(1));
-  scrollok(log_sent_w, TRUE);
+    log_line_number = log_sent_w_lines - 2;
+    wattron(log_sent_w, A_BOLD);
+    init_pair(1, COLOR_GREEN, COLOR_BLACK);
+    wattron(log_sent_w, COLOR_PAIR(1));
+    scrollok(log_sent_w, TRUE);
 
-  nav_data = newwin(nav_data_lines, nav_data_columns,
+    nav_data = newwin(nav_data_lines, nav_data_columns,
                     cmd_kbd_lines + get_lines + cmd_speed_lines + 1, 0);
-  init_pair(2, COLOR_RED, COLOR_BLACK);
-  wattron(nav_data, COLOR_PAIR(2));
-  wattron(nav_data, A_BOLD);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+    wattron(nav_data, COLOR_PAIR(2));
+    wattron(nav_data, A_BOLD);
 
-  topic = newwin(topic_lines, topic_columns,
+    topic = newwin(topic_lines, topic_columns,
       cmd_kbd_lines + get_lines + cmd_speed_lines + 1,
       nav_data_columns + 1);
-  init_pair(3, COLOR_BLUE, COLOR_BLACK);
-  wattron(topic, COLOR_PAIR(3));
-  wattron(topic, A_BOLD);
+    init_pair(3, COLOR_BLUE, COLOR_BLACK);
+    wattron(topic, COLOR_PAIR(3));
+    wattron(topic, A_BOLD);
 
-  print_nav_data();
-  print_cmd_kbd();
-  print_cmd_speed();
-  print_topic();
+    print_nav_data();
+    print_cmd_kbd();
+    print_cmd_speed();
+    print_topic();
 
-  wmove(get, 0, 0);
-  wrefresh(get);
+    wmove(get, 0, 0);
+    wrefresh(get);
 }
 
 Curses::~Curses() {
-  delwin(cmd_kbd);
-  delwin(cmd_speed);
-  delwin(log_sent_w);
-  delwin(log_sent_title);
-  delwin(nav_data);
-  delwin(get);
-  delwin(topic);
-  endwin();
+    delwin(cmd_kbd);
+    delwin(cmd_speed);
+    delwin(log_sent_w);
+    delwin(log_sent_title);
+    delwin(nav_data);
+    delwin(get);
+    delwin(topic);
+    endwin();
 }
 
 char Curses::getchar() {
-  return wgetch(get);
+    return wgetch(get);
 }
 
 void Curses::print_cmd_kbd() {
-  wmove(cmd_kbd, 0, 0);
-   waddstr(cmd_kbd, "         ---------------------\n");
-   waddstr(cmd_kbd, " takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|\n");
-   waddstr(cmd_kbd, "         |---|---|---|---|---|----\n");
-   waddstr(cmd_kbd, "   reset>|  g|⇐ h|← j|  k|→ l|⇒ m|\n");
-   waddstr(cmd_kbd, "         |---|---|---|---|---|----\n");
-   waddstr(cmd_kbd, "    land>|  b|⇓ n|↙ ,|↓ ;|↘ :|\n");
-   waddstr(cmd_kbd, "         ---------------------\n");
-   waddstr(cmd_kbd, "        Press ctrl + C to quit");
-  wrefresh(cmd_kbd);
+    wmove(cmd_kbd, 0, 0);
+    waddstr(cmd_kbd, "         ---------------------\n");
+    waddstr(cmd_kbd, " takeoff>|  t|⇑ y|↖ u|↑ i|↗ o|\n");
+    waddstr(cmd_kbd, "         |---|---|---|---|---|----\n");
+    waddstr(cmd_kbd, "   reset>|  g|⇐ h|← j|  k|→ l|⇒ m|\n");
+    waddstr(cmd_kbd, "         |---|---|---|---|---|----\n");
+    waddstr(cmd_kbd, "    land>|  b|⇓ n|↙ ,|↓ ;|↘ :|\n");
+    waddstr(cmd_kbd, "         ---------------------\n");
+    waddstr(cmd_kbd, "        Press ctrl + C to quit");
+    wrefresh(cmd_kbd);
 }
 
 void Curses::print_cmd_speed() {
-  wmove(cmd_speed, 0, 0);
-  waddstr(cmd_speed, " `x` cmd speed :         (a/w : increase/decrease)\n");
-  waddstr(cmd_speed, " `y` cmd speed :         (z/x : increase/decrease)\n");
-  waddstr(cmd_speed, " `z` cmd speed :         (e/c : increase/decrease)\n");
-  waddstr(cmd_speed, "rotation speed :         (r/v : increase/decrease)\n");
-  wrefresh(cmd_speed);
+    wmove(cmd_speed, 0, 0);
+    waddstr(cmd_speed, " `x` cmd speed :         (a/w : increase/decrease)\n");
+    waddstr(cmd_speed, " `y` cmd speed :         (z/x : increase/decrease)\n");
+    waddstr(cmd_speed, " `z` cmd speed :         (e/c : increase/decrease)\n");
+    waddstr(cmd_speed, "rotation speed :         (r/v : increase/decrease)\n");
+    wrefresh(cmd_speed);
 }
 
 void Curses::update_cmd_speed(const char& coord, const float& v) {
-  switch(coord) {
-    case 'x':
-      wmove(cmd_speed, 0, 16);
-      wprintw(cmd_speed, "%f", v);
-      break;
-    case 'y':
-      wmove(cmd_speed, 1, 16);
-      wprintw(cmd_speed, "%f", v);
-      break;
-    case 'z':
-      wmove(cmd_speed, 2, 16);
-      wprintw(cmd_speed, "%f", v);
-      break;
-    case 't':
-      wmove(cmd_speed, 3, 16);
-      wprintw(cmd_speed, "%f", v);
-      break;
-    default:
-      ;
+    switch (coord) {
+        case 'x':
+            wmove(cmd_speed, 0, 16);
+            wprintw(cmd_speed, "%f", v);
+            break;
+        case 'y':
+              wmove(cmd_speed, 1, 16);
+              wprintw(cmd_speed, "%f", v);
+              break;
+        case 'z':
+            wmove(cmd_speed, 2, 16);
+            wprintw(cmd_speed, "%f", v);
+            break;
+        case 't':
+            wmove(cmd_speed, 3, 16);
+            wprintw(cmd_speed, "%f", v);
+            break;
+        default:
+            {}
   }
   wrefresh(cmd_speed);
 }
@@ -170,39 +172,39 @@ void Curses::update_nav_data(const float& batteryPercent,
   wmove(nav_data, 2, 10);
   wprintw(nav_data, "%f %", time);
   wmove(nav_data, 1, 10);
-  switch(state) {
+  switch (state) {
     case 0:
-      waddstr(nav_data, "unknown    ");
-      break;
+        waddstr(nav_data, "unknown    ");
+        break;
     case 1:
-      waddstr(nav_data, "inited     ");
-      break;
+        waddstr(nav_data, "inited     ");
+        break;
     case 2:
-      waddstr(nav_data, "landed     ");
-      break;
+        waddstr(nav_data, "landed     ");
+        break;
     case 3:
-      waddstr(nav_data, "flying     ");
-      break;
+        waddstr(nav_data, "flying     ");
+        break;
     case 4:
-      waddstr(nav_data, "hovering   ");
-      break;
+        waddstr(nav_data, "hovering   ");
+        break;
     case 5:
-      waddstr(nav_data, "test       ");
-      break;
+        waddstr(nav_data, "test       ");
+        break;
     case 6:
-      waddstr(nav_data, "taking off ");
-      break;
+        waddstr(nav_data, "taking off ");
+        break;
     case 7:
-      waddstr(nav_data, "flying     ");
-      break;
+        waddstr(nav_data, "flying     ");
+        break;
     case 8:
-      waddstr(nav_data, "landing    ");
-      break;
+        waddstr(nav_data, "landing    ");
+        break;
     case 9:
-      waddstr(nav_data, "looping    ");
-      break;
+        waddstr(nav_data, "looping    ");
+        break;
     default:
-      ;
+        {}
   }
   wrefresh(nav_data);
 }
