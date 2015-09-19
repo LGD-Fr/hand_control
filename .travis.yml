@@ -17,6 +17,7 @@ before_install:
   - sudo rosdep init
   - rosdep update
   - sudo apt-get install ros-${ROS_DISTRO}-ros-base
+  - sudo pip install cpplint
 install: # Use this to install any prerequisites or dependencies necessary to run your build
   - source /opt/ros/${ROS_DISTRO}/setup.bash
   - mkdir -p ~/hand_control_ws/src
@@ -31,5 +32,8 @@ install: # Use this to install any prerequisites or dependencies necessary to ru
 before_script: # Use this to prepare your build for testing e.g. copy database configurations, environment variables, etc.
   - source /opt/ros/${ROS_DISTRO}/setup.bash
   - cd ~/hand_control_ws
+  - cd src
+  - cpplint *.hpp *.cpp
+  - cd ..
 script: # All commands must exit with code 0 on success. Anything else is considered failure.
   - catkin_make -j2
