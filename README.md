@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/LGD-Fr/hand_control.svg)](https://travis-ci.org/LGD-Fr/hand_control)
+
 Copyright © 2015 CentraleSupélec
 
 Permission is granted to copy, distribute and/or modify this document
