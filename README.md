@@ -12,6 +12,10 @@ La documentation originale est en français : LISEZMOI.md. La documentation ci-d
 
 The original manual is the french "LISEZMOI.md", you read below a translation of this file.
 
+# Video demonstration #
+
+[here](https://archive.org/details/hand_control)
+
 # Installation #
 
 This package was developped with the Indigo version of ROS.

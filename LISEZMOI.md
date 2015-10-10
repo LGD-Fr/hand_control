@@ -10,6 +10,10 @@ An english version of this file is available (README.md)
 
 Une version anglaise de ce fichier est disponible (README.md)
 
+# Vidéo de démonstration #
+
+[à cette addresse](https://archive.org/details/hand_control)
+
 # Installation #
 
 ## Installation des dépendances ##
