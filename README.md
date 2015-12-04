@@ -14,7 +14,7 @@ The original manual is the french "LISEZMOI.md", you read below a translation of
 
 # Video demonstration #
 
-[here](https://archive.org/details/hand_control)
+<iframe src="https://archive.org/embed/hand_control" width="640" height="480" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
 
 # Installation #
 
